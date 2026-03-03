@@ -7,7 +7,7 @@ This repository is used for our CITS5505 Agile Web Development group project.
 | Name          | Student ID | GitHub Username |
 | ------------- | ---------- | --------------- |
 | Junlong Huang | 24041892   | Hjl2065889707   |
-|               |            |                 |
+| Raega Tanadi  | 24761312   | Chrommanito     |
 |               |            |                 |
 |               |            |                 |
 
