@@ -41,3 +41,6 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 ## Some awsome idea about this project
 
 eingojsnoANHUOGNR[OGNAEGIR]
+wuadwuidawndojs
+wdidjaiodwaoja
+awddjiawdjiwaj
