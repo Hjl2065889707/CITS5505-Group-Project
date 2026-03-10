@@ -15,7 +15,7 @@ This repository is used for our CITS5505 Agile Web Development group project.
 
 test
 
-test 2
+test 2 by Ega
 
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
