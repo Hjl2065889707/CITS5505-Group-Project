@@ -8,7 +8,7 @@ This repository is used for our CITS5505 Agile Web Development group project.
 | ------------- | ---------- | --------------- |
 | Junlong Huang | 24041892   | Hjl2065889707   |
 | Raega Tanadi  | 24761312   | Chrommanito     |
-|    shuo ma    | 23914891   | Felix-Ma1209    |
+| shuo ma       | 23914891   | Felix-Ma1209    |
 |               |            |                 |
 
 ## Random Test
@@ -41,3 +41,8 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 ## Some awsome idea about this project
 
 Drop **any** idea that you want to do in this project!
+test
+test
+test
+test
+test
