@@ -13,6 +13,8 @@ This repository is used for our CITS5505 Agile Web Development group project.
 
 ## Random Test
 
+test
+
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
 Checkpoint Preparation
