@@ -40,4 +40,4 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 
 ## Some awsome idea about this project
 
-Drop **any** idea that you want to do in this project!
+eingojsnoANHUOGNR[OGNAEGIR]
