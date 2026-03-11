@@ -19,7 +19,7 @@ test 3 by Ega
 
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
-Checkpoint Preparation
+CHECKPOINT PREP! DONT FORGET TO MAKE A BRANCH!
 
 Before the group attends Checkpoint 1 meeting, please carry out the following steps:
 
@@ -44,3 +44,5 @@ a new thing! drop any ideas
 test line for oliver
 
 test
+
+another test but with branch first
