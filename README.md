@@ -12,11 +12,9 @@ This repository is used for our CITS5505 Agile Web Development group project.
 |               |            |                 |
 
 ## Random Test
-test 3 by oliver
-
 test
 
-test 2 by Ega
+test 3 by Ega
 
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
