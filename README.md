@@ -9,17 +9,20 @@ This repository is used for our CITS5505 Agile Web Development group project.
 | Junlong Huang | 24041892   | Hjl2065889707   |
 | Raega Tanadi  | 24761312   | Chrommanito     |
 | shuo ma       | 23914891   | Felix-Ma1209    |
-|               |            |                 |
+| Lizhou Xiong              |  24258175          |    Oliver24258175             |
 
 ## Random Test
 
 test
 
-test 24 by Ega
+
+
+test 2 by Ega
+
 
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
-Checkpoint Preparation
+CHECKPOINT PREP! DONT FORGET TO MAKE A BRANCH!
 
 Before the group attends Checkpoint 1 meeting, please carry out the following steps:
 
@@ -41,4 +44,6 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 ## Some awsome idea about this project
 
 a new thing! drop any ideas
+
 test line 
+
