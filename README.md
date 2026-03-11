@@ -9,7 +9,7 @@ This repository is used for our CITS5505 Agile Web Development group project.
 | Junlong Huang | 24041892   | Hjl2065889707   |
 | Raega Tanadi  | 24761312   | Chrommanito     |
 | shuo ma       | 23914891   | Felix-Ma1209    |
-|               |            |                 |
+|  Lizhou Xiong             |  24258175          |     Oliver24258175            |
 
 ## Random Test
 
