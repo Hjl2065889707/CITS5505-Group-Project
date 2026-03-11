@@ -15,7 +15,10 @@ This repository is used for our CITS5505 Agile Web Development group project.
 
 test
 
-test 3 by Ega
+
+
+test 2 by Ega
+
 
 Just test any git command here or you can add more files to this project or even delete this markdown file!
 
@@ -41,8 +44,6 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 ## Some awsome idea about this project
 
 a new thing! drop any ideas
-test line for oliver
 
-test
+test line 
 
-another test but with branch first
