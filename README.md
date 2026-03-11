@@ -41,3 +41,4 @@ If a member of the group is unable to demonstrate that they can use Git/GitHub, 
 ## Some awsome idea about this project
 
 a new thing! drop any ideas
+test line for oliver
