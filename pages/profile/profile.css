@@ -1,0 +1,72 @@
+/* Profile Page Base Styles */
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+#profile-container {
+  max-width: 935px; /* Common profile container width */
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px; /* Space between avatar and details */
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+/* User Details styles */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.username-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.username {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.user-id,
+.bio {
+  font-size: 16px;
+  color: #262626;
+}
+
+.bio {
+  line-height: 1.4;
+}
+
+/* Posts section placeholder */
+#user-posts {
+  border-top: 1px solid #dbdbdb;
+  padding-top: 20px;
+}
