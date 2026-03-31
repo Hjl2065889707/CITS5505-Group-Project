@@ -21,8 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Fetch and render both sets of posts
-  loadPosts("../../mockdata/posts.json", "my-posts").then((data) => myPosts = data);
-  loadPosts("../../mockdata/savedPosts.json", "saved-posts").then((data) => savedPosts = data);
+  loadPosts("../../mockdata/myPosts.json", "my-posts").then(
+    (data) => (myPosts = data),
+  );
+  loadPosts("../../mockdata/savedPosts.json", "saved-posts").then(
+    (data) => (savedPosts = data),
+  );
 });
 
 async function loadPosts(url, containerId) {
