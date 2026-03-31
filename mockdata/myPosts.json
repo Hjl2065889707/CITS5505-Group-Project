@@ -1,0 +1,86 @@
+[
+  {
+    "id": "post_001",
+    "author": {
+      "userId": "user_101",
+      "username": "BassHunter99",
+      "avatarUrl": "https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg"
+    },
+    "content": "Great weekend out on the river! The weather was perfect and the fish were biting early in the morning. Best catch of the season so far.",
+    "photos": [
+      "https://images.pexels.com/photos/3220790/pexels-photo-3220790.jpeg"
+    ],
+    "catchDetails": {
+      "species": "Largemouth Bass",
+      "weight": "4.5 lbs",
+      "bait": "Plastic Worm",
+      "location": {
+        "name": "Swan River, Perth",
+        "latitude": -31.95,
+        "longitude": 115.86
+      }
+    },
+    "metrics": {
+      "likes": 24,
+      "commentsCount": 5
+    },
+    "createdAt": "2026-03-30T08:30:00Z"
+  },
+  {
+    "id": "post_002",
+    "author": {
+      "userId": "user_102",
+      "username": "OceanExplorer",
+      "avatarUrl": "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg"
+    },
+    "content": "First time deep sea fishing and it did not disappoint. Fought this beauty for 20 minutes before bringing it on board.",
+    "photos": [
+      "https://images.pexels.com/photos/2132007/pexels-photo-2132007.jpeg",
+      "https://images.pexels.com/photos/4576101/pexels-photo-4576101.jpeg"
+    ],
+    "catchDetails": {
+      "species": "Yellowfin Tuna",
+      "weight": "32 kg",
+      "bait": "Live Squid",
+      "location": {
+        "name": "Rottnest Island Trench",
+        "latitude": -32.0,
+        "longitude": 115.5
+      }
+    },
+    "metrics": {
+      "likes": 156,
+      "commentsCount": 18
+    },
+    "createdAt": "2026-03-31T06:15:00Z"
+  },
+  {
+    "id": "post_003",
+    "author": {
+      "userId": "user_103",
+      "username": "QuietAngler",
+      "avatarUrl": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg"
+    },
+    "content": "Just a small one today, but the peacefulness of the lake makes up for it. Catch and release!",
+    "photos": [
+      "https://images.pexels.com/photos/17250336/pexels-photo-17250336.jpeg",
+      "https://images.pexels.com/photos/17250336/pexels-photo-17250336.jpeg",
+      "https://images.pexels.com/photos/17250336/pexels-photo-17250336.jpeg"
+    ],
+    "catchDetails": {
+      "species": "Rainbow Trout",
+      "weight": "1.2 lbs",
+      "bait": "Fly",
+      "location": {
+        "name": "Serpentine Dam",
+        "latitude": -32.4,
+        "longitude": 116.1
+      }
+    },
+    "metrics": {
+      "likes": 8,
+      "commentsCount": 1
+    },
+    "createdAt": "2026-03-31T10:45:00Z"
+  }
+]

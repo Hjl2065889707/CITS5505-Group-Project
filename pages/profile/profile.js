@@ -1,5 +1,5 @@
 let myPosts = [];
-loadUserPosts();
+let savedPosts = []; // Add variable for saved posts
 
 document.addEventListener("DOMContentLoaded", () => {
   const navTabs = document.querySelectorAll(".nav-tab");
@@ -19,21 +19,26 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById(targetId).classList.add("active");
     });
   });
+
+  // Fetch and render both sets of posts
+  loadPosts("../../mockdata/posts.json", "my-posts").then((data) => myPosts = data);
+  loadPosts("../../mockdata/savedPosts.json", "saved-posts").then((data) => savedPosts = data);
 });
 
-async function loadUserPosts() {
+async function loadPosts(url, containerId) {
   try {
-    // Using relative path to access mockdata from pages/profile
-    const response = await fetch("../../mockdata/posts.json");
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    myPosts = await response.json();
-    renderPostsGrid(myPosts, "my-posts");
+    const posts = await response.json();
+    renderPostsGrid(posts, containerId);
+    return posts;
   } catch (error) {
-    console.error("Failed to fetch posts:", error);
-    document.getElementById("my-posts").innerHTML =
+    console.error(`Failed to fetch posts from ${url}:`, error);
+    document.getElementById(containerId).innerHTML =
       `<p>Error loading posts.</p>`;
+    return [];
   }
 }
 
