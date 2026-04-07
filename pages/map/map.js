@@ -4,24 +4,24 @@ import { openSidebar, closeSidebar, showEmptySidebar } from "./sidebar.js";
 
 import { groupPosts } from "./utils.js";
 
-function createMarkerIcon(count) {
-  return L.divIcon({
-    className: "custom-marker",
-    html: `
-      <div class="marker-pin">
-        ${count > 1 ? `<span class="marker-count">${count}</span>` : ""}
-      </div>
-    `,
-    iconSize: [30, 30],
-    iconAnchor: [15, 38]
-  });
-}
+import { renderMarkers } from "./marker.js";
+
 
 function updateTabDirection() {
   sidebarTab.textContent = sidebar.classList.contains("open") ? "❮" : "❯";
 }
 
-let lastOpenedGroup = null;
+function openSidebarWithUI(group) {
+  openSidebar(group, sidebar, closeSidebar);
+  updateTabDirection();
+}
+
+function closeSidebarWithUI() {
+  closeSidebar(sidebar);
+  updateTabDirection();
+}
+
+
 
 // Initialize map
 const map = L.map('map', {
@@ -32,11 +32,20 @@ const map = L.map('map', {
 L.control.zoom({ position: 'topright' }).addTo(map);
 
 // Add tiles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-}).addTo(map);
+L.tileLayer(
+  'https://tiles.stadiamaps.com/tiles/stamen_toner_dark/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '&copy; OpenStreetMap contributors &copy; Stadia Maps',
+    maxZoom: 20
+  }
+).addTo(map);
+
+
 
 // Sidebar
+
+let lastOpenedGroup = null;
+
 const sidebar = document.getElementById("sidebar");
 
 const sidebarTab = document.getElementById("sidebar-tab");
@@ -44,43 +53,48 @@ const sidebarTab = document.getElementById("sidebar-tab");
 sidebarTab.addEventListener("click", () => {
 
   if (sidebar.classList.contains("open")) {
-    closeSidebar(sidebar);   // ✅ FIXED
-    updateTabDirection();    // ✅ add this
+    closeSidebarWithUI();
     return;
   }
 
   if (lastOpenedGroup) {
-    openSidebar(lastOpenedGroup, sidebar, closeSidebar);  // ✅ FIXED
+    openSidebarWithUI(lastOpenedGroup);
   } else {
-    showEmptySidebar(sidebar, closeSidebar);  // ✅ FIXED
+    showEmptySidebar(sidebar, closeSidebar);
+    updateTabDirection(); 
   }
-
-  updateTabDirection();   // ✅ add this
 });
 
-// marker rendering
-const groups = groupPosts(posts);
 
-groups.forEach(group => {
-  const { lat, lng } = group[0];
+// Markers Rendering
 
-  const marker = L.marker([lat, lng], {
-    icon: createMarkerIcon(group.length)
-  }).addTo(map);
+let markerLayer = L.layerGroup().addTo(map);
 
-  marker.on("click", (e) => {
-  L.DomEvent.stopPropagation(e);
+function renderMarkersDynamic() {
+  markerLayer.clearLayers();
 
-  lastOpenedGroup = group;
+  const zoom = map.getZoom();
 
-  openSidebar(group, sidebar, closeSidebar);
-  updateTabDirection();   // ✅ ADD THIS
-});
-});
+  const threshold =
+    zoom >= 15 ? 30 :
+    zoom >= 13 ? 50 :
+    80;
+
+  const groups = groupPosts(posts, threshold);
+
+  renderMarkers(markerLayer, groups, (group) => {
+    lastOpenedGroup = group;
+    openSidebar(group, sidebar, closeSidebar);
+    updateTabDirection();
+  });
+}
+
+renderMarkersDynamic();
+
+map.on("zoomend", renderMarkersDynamic);
 
 
 // Click map → close
 map.on("click", () => {
-  closeSidebar(sidebar);   // ✅ FIXED
-  updateTabDirection();    // ✅ ADD THIS
+  closeSidebarWithUI();
 });

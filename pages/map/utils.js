@@ -14,16 +14,26 @@ export function getDistance(p1, p2) {
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-export function groupPosts(posts) {
+// Grouping logic
+export function groupPosts(posts, threshold = 50) {
   const groups = [];
 
   posts.forEach(post => {
     let found = false;
 
     for (let group of groups) {
-      const dist = getDistance(post, group[0]);
+      const dist = getDistance(
+        {
+            lat: post.catchDetails.location.latitude,
+            lng: post.catchDetails.location.longitude
+        },
+        {
+            lat: group[0].catchDetails.location.latitude,
+            lng: group[0].catchDetails.location.longitude
+        }
+        );
 
-      if (dist < 50) {
+      if (dist < threshold) {
         group.push(post);
         found = true;
         break;
