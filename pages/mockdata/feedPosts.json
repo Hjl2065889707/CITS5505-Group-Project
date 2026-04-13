@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "username": "MikeFishing",
+    "avatar": "https://i.pravatar.cc/150?img=1",
+    "time": "2 hours ago",
+    "content": "Caught this bass near the lake this morning!",
+    "images": [
+      "https://picsum.photos/300/300?random=1",
+      "https://picsum.photos/300/300?random=2"
+    ],
+    "likes": 12,
+    "comments": 4,
+    "tags": ["Bass", "Freshwater"]
+  },
+  {
+    "id": 2,
+    "username": "AnnaReels",
+    "avatar": "https://i.pravatar.cc/150?img=2",
+    "time": "5 hours ago",
+    "content": "Any good rod recommendations?",
+    "images": [
+      "https://picsum.photos/300/300?random=3"
+    ],
+    "likes": 5,
+    "comments": 2,
+    "tags": ["Gear", "Question"]
+  }
+]
