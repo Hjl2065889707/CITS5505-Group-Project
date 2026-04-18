@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Detail</title>
+    <link rel="stylesheet" href="post.css" />
+  </head>
+  <body>
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <a href="../profile/index.html" class="back-btn">← Back</a>
+      <h1 class="nav-title">Post</h1>
+    </header>
+
+    <main class="detail-container">
+      <!-- The Main Post Card -->
+      <article class="post-card">
+        <div class="post-header">
+          <img
+            src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg"
+            alt="Author Avatar"
+            class="post-avatar"
+          />
+          <div class="post-user-info">
+            <div class="post-username">BassHunter99</div>
+            <div class="post-time">10/30/2026</div>
+          </div>
+        </div>
+
+        <div class="post-content">
+          Great weekend out on the river! The weather was perfect and the fish
+          were biting early in the morning. Best catch of the season so far.
+          Used a plastic worm on a drop shot rig.
+        </div>
+
+        <!-- Carousel Container -->
+        <div class="carousel-container">
+          <div class="carousel-indicator" id="carousel-indicator">1/2</div>
+          <button class="carousel-btn prev-btn hidden" id="prev-btn">❮</button>
+          <button class="carousel-btn next-btn" id="next-btn">❯</button>
+
+          <div class="carousel-track" id="carousel-track">
+            <!-- Image 1 -->
+            <div class="carousel-slide">
+              <img
+                src="https://images.pexels.com/photos/3220790/pexels-photo-3220790.jpeg"
+                alt="Catch photo 1"
+                class="carousel-image"
+              />
+            </div>
+            <!-- Image 2 -->
+            <div class="carousel-slide">
+              <img
+                src="https://images.pexels.com/photos/17275414/pexels-photo-17275414.jpeg"
+                alt="Catch photo 2"
+                class="carousel-image"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="post-footer">
+          <span class="post-metric">❤️ 24 Likes</span>
+          <span class="post-metric">💬 1 Comments</span>
+        </div>
+      </article>
+
+      <!-- Comments Section -->
+      <section class="comments-section">
+        <h2 class="comments-title">Comments</h2>
+
+        <div class="comment-list">
+          <!-- Hardcoded Comment Item -->
+          <div class="comment-item">
+            <img
+              src="https://images.pexels.com/photos/775358/pexels-photo-775358.jpeg"
+              alt="Commenter Avatar"
+              class="comment-avatar"
+            />
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-username">RiverKing</span>
+                <span class="comment-time">2 hours ago</span>
+              </div>
+              <div class="comment-text">
+                Nice catch man! I was near that same bend yesterday but didn't
+                have much luck. You must have hit the tide just right.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Load JS for the post page interactions -->
+    <script src="post.js"></script>
+  </body>
+</html>
