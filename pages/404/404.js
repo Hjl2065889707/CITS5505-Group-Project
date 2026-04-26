@@ -11,7 +11,7 @@ function initBackButton() {
     if (window.history.length > 1) {
       window.history.back();
     } else {
-      window.location.href = "../post/index.html";
+      window.location.href = "../main/index.html";
     }
   });
 }
