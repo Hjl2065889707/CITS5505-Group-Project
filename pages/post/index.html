@@ -4,10 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post Detail</title>
+    <link rel="stylesheet" href="../shared/navbar.css" />
     <link rel="stylesheet" href="post.css" />
   </head>
   <body>
-    <!-- Top Navigation Bar -->
+    <!-- Shared Site Navigation Bar -->
+    <div id="site-navbar" data-base-path=".." data-active="post"></div>
+
+    <!-- Page Navigation Bar -->
     <header class="top-nav">
       <a href="../profile/index.html" class="back-btn">← Back</a>
       <h1 class="nav-title">Post</h1>
@@ -49,6 +53,7 @@
                 class="carousel-image"
               />
             </div>
+
             <!-- Image 2 -->
             <div class="carousel-slide">
               <img
@@ -93,7 +98,8 @@
       </section>
     </main>
 
-    <!-- Load JS for the post page interactions -->
+    <!-- Load shared navbar JS first, then page-specific JS -->
+    <script src="../shared/navbar.js"></script>
     <script src="post.js"></script>
   </body>
 </html>
