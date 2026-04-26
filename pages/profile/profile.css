@@ -1,0 +1,212 @@
+/* Profile Page Base Styles */
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+#profile-container {
+  max-width: 935px; /* Common profile container width */
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px; /* Space between avatar and details */
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dbdbdb;
+}
+
+/* User Details styles */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.username-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.username {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.user-id,
+.bio {
+  font-size: 16px;
+  color: #262626;
+}
+
+.bio {
+  line-height: 1.4;
+}
+
+/* Posts section placeholder */
+#user-posts {
+  border-top: 1px solid #dbdbdb;
+}
+
+/* Posts Navbar styles */
+.posts-navbar {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  border-top: 1px solid transparent; /* Placeholder for active border */
+  padding: 15px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #8e8e8e;
+  cursor: pointer;
+  letter-spacing: 1px;
+  margin-top: -1px; /* Overlap the top border of the section */
+}
+
+.nav-tab.active {
+  color: #262626;
+  border-top: 1px solid #262626;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  text-align: center;
+  color: #8e8e8e;
+  padding: 40px 0;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Feed Layout Styles */
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 10px 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feed-card {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  gap: 12px;
+}
+
+.feed-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #efefef;
+}
+
+.feed-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.feed-username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+}
+
+.feed-time {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-top: 2px;
+}
+
+.feed-content {
+  padding: 0 15px 15px 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #262626;
+  white-space: pre-wrap; /* Keeps formatting from text */
+  text-align: left;
+}
+
+.feed-image-grid {
+  display: grid;
+  /* Automatically create columns that are at least 150px wide */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 0 15px 15px 15px;
+}
+
+.image-link {
+  display: block;
+  aspect-ratio: 1 / 1; /* Makes every thumbnail a perfect square */
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid #efefef;
+  background-color: #efefef;
+}
+
+.feed-image-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+
+.image-link:hover .feed-image-thumb {
+  opacity: 0.8; /* Subtle hover effect to indicate it's clickable */
+}
+
+.feed-footer {
+  padding: 15px;
+  border-top: 1px solid #dbdbdb;
+  display: flex;
+  gap: 20px;
+  background-color: #fff;
+}
+
+.feed-metric {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+  cursor: pointer;
+}
