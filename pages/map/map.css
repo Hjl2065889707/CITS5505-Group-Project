@@ -1,0 +1,294 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#map {
+  height: 100vh;
+  width: 100%;
+}
+
+.custom-marker {
+  background: none;
+  border: none;
+}
+
+.marker-pin {
+  width: 30px;
+  height: 30px;
+
+  background: #2c7be5;             
+  border-radius: 50%;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);   
+}
+
+/* pointy tip */
+.marker-pin::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 0;
+  height: 0;
+
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 14px solid #2c7be5; ;  
+}
+
+.marker-count {
+  font-size: 14px;
+}
+
+#sidebar {
+  position: absolute;
+  top: 0;
+  left: -350px;
+  width: 350px;
+  height: 100vh;
+  background: #f5f6f8;
+  z-index: 1000;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+#sidebar.open {
+  left: 0;
+}
+
+#sidebar-tab {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  
+  width: 25px;
+  height: 60px;
+  
+  background: #2c7be5;
+  color: white;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  
+  z-index: 1100;
+  transition: left 0.3s ease;
+}
+
+#sidebar.open + #sidebar-tab {
+  left: 350px;
+}
+
+/* Sidebar header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  justify-content: center;
+}
+
+/* Feed container */
+.sidebar-feed {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #f5f6f8;
+}
+
+/* Post card */
+.post-card {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+  transition: transform 0.15s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Header */
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+
+.post-header div {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-content {
+  padding: 0 12px 12px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #262626;
+}
+
+.post-username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+}
+
+.post-time {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-top: 2px;
+}
+
+/* Text */
+.post-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Image */
+.post-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  object-fit: cover;
+}
+
+/* Footer */
+.post-footer {
+  display: flex;
+  justify-content: space-between;   
+  align-items: center;
+  padding: 12px;
+}
+
+/* Buttons */
+.action-btn {
+  background: #f0f2f5;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #e4e6eb;
+  color: #2c7be5;
+}
+
+.comments-preview {
+  padding: 10px 12px;
+  border-top: 1px solid #efefef;
+}
+
+.view-comments-btn:hover {
+  color: #262626;
+  text-decoration: underline;
+}
+
+.comment-item {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.comment-username {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.comment-text {
+  color: #262626;
+}
+
+.view-comments-btn {
+  background: none;
+  border: none;
+  color: #8e8e8e;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.view-comments-btn:hover {
+  color: #262626;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #efefef;
+}
+
+.carousel-container {
+  width: 100%;
+  background-color: #efefef;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  height: 250px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.like-btn {
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+
+.like-btn:active {
+  transform: scale(0.9);
+}
+
+.like-btn.liked {
+  color: #e0245e;
+}
