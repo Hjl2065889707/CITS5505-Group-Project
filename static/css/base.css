@@ -1,0 +1,111 @@
+/* Base Styles */
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fafafa;
+  color: #262626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Shared Navbar */
+.site-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: white;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.site-navbar__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.site-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #262626;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.site-navbar__logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1f7a54;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.site-navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.site-navbar__link {
+  color: #262626;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.site-navbar__link:hover {
+  background-color: #efefef;
+}
+
+.site-navbar__link.active {
+  background-color: #e8f5ef;
+  color: #1f7a54;
+  font-weight: 700;
+}
+
+.site-navbar__login {
+  color: white;
+  background-color: #1f7a54;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+.site-navbar__login:hover {
+  background-color: #176342;
+}
+
+@media (max-width: 700px) {
+  .site-navbar__inner {
+    flex-wrap: wrap;
+  }
+
+  .site-navbar__links {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
