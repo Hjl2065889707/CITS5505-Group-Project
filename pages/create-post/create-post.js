@@ -2,6 +2,8 @@ const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
 
 let uploadedImages = []; // base64 strings
+const MAX_IMAGE_BYTES = 500 * 1024;
+const MAX_TOTAL_IMAGE_CHARS = 2 * 1024 * 1024;
 
 /* Image upload preview */
 imageInput.addEventListener("change", () => {
@@ -15,12 +17,25 @@ imageInput.addEventListener("change", () => {
   }
 
   files.forEach(file => {
+    if (file.size > MAX_IMAGE_BYTES) {
+      alert(`${file.name} is too large. Please choose images under 500KB.`);
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = e => {
-      uploadedImages.push(e.target.result);
+      const imageData = e.target.result;
+      const nextTotalSize = uploadedImages.join("").length + imageData.length;
+
+      if (nextTotalSize > MAX_TOTAL_IMAGE_CHARS) {
+        alert("Selected images are too large to save. Please remove some images.");
+        return;
+      }
+
+      uploadedImages.push(imageData);
 
       const img = document.createElement("img");
-      img.src = e.target.result;
+      img.src = imageData;
       img.className = "preview-img";
       imagePreview.appendChild(img);
     };
@@ -31,7 +46,7 @@ imageInput.addEventListener("change", () => {
 /* Submit post */
 document.querySelector(".post-btn").addEventListener("click", () => {
   const content = document.querySelector(".post-text").value.trim();
-  const location = document.querySelector(".location-input").value.trim();
+  const postLocation = document.querySelector(".location-input").value.trim();
   const category = document.querySelector(".category-select").value;
 
   if (!content) {
@@ -49,7 +64,7 @@ document.querySelector(".post-btn").addEventListener("click", () => {
     username: "You",
     avatar: "https://i.pravatar.cc/150?img=10",
     time: "Just now",
-    content: content + (location ? `\n📍 ${location}` : ""),
+    content: content + (postLocation ? `\n📍 ${postLocation}` : ""),
     images: uploadedImages,
     likes: 0,
     comments: 0,
@@ -58,7 +73,14 @@ document.querySelector(".post-btn").addEventListener("click", () => {
 
   const existing = JSON.parse(localStorage.getItem("userPosts") || "[]");
   existing.unshift(newPost);
-  localStorage.setItem("userPosts", JSON.stringify(existing));
+
+  try {
+    localStorage.setItem("userPosts", JSON.stringify(existing));
+  } catch (err) {
+    console.error("Failed to save post:", err);
+    alert("Unable to save this post. Please use smaller images or remove some images.");
+    return;
+  }
 
   alert("Post submitted!");
   location.href = "../feed/feed.html";

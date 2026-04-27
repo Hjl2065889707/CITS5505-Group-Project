@@ -2,14 +2,17 @@ let allPosts = [];
 let currentSearch = "";
 let currentTag = "All";
 
-/* Load data: merge mock JSON + localStorage posts */
-fetch("../mockdata/feedPosts.json")
-  .then(res => {
+function loadPosts(path) {
+  return fetch(path).then(res => {
     if (!res.ok) {
       throw new Error(`Failed to load mock posts: ${res.status}`);
     }
     return res.json();
-  })
+  });
+}
+
+/* Load data: merge mock JSON + localStorage posts */
+loadPosts("../../mockdata/feedPosts.json")
   .then(jsonPosts => {
     const localPosts = JSON.parse(localStorage.getItem("userPosts") || "[]");
     allPosts = [...localPosts, ...jsonPosts];
