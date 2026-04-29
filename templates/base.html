@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}CatchLog{% endblock %}</title>
+
+    <!-- Base styles (navbar + global reset) -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+
+    <!-- Page-specific CSS -->
+    {% block styles %}{% endblock %}
+  </head>
+
+  <body>
+    <!-- Shared Site Navigation Bar -->
+    <nav class="site-navbar" aria-label="Main navigation">
+      <div class="site-navbar__inner">
+        <a class="site-navbar__brand" href="{{ url_for('feed') }}">
+          <span class="site-navbar__logo" aria-hidden="true">🎣</span>
+          <span>CatchLog</span>
+        </a>
+
+        <button
+          class="site-navbar__toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+
+        <div class="site-navbar__links">
+          <a
+            class="site-navbar__link {{ 'active' if active_page == 'feed' }}"
+            href="{{ url_for('feed') }}"
+          >
+            Feed
+          </a>
+          <a
+            class="site-navbar__link {{ 'active' if active_page == 'map' }}"
+            href="{{ url_for('map_page') }}"
+          >
+            Map
+          </a>
+          <a
+            class="site-navbar__link {{ 'active' if active_page == 'profile' }}"
+            href="{{ url_for('profile') }}"
+          >
+            Profile
+          </a>
+        </div>
+
+        <div class="site-navbar__actions">
+          <a class="site-navbar__login" href="#">Login</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Navbar toggle script (mobile menu) -->
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+
+    <!-- Page-specific JS -->
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
