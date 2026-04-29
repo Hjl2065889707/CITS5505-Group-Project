@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings - Fishing Forum</title>
+    <!-- Use Inter font for a modern look -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Link to our stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}" />
+  </head>
+  <body>
+    <div class="settings-container">
+      <!-- Header -->
+      <header class="settings-header">
+        <button class="icon-button back-button" aria-label="Go back">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <h1>Settings</h1>
+        <!-- Placeholder for center-aligning title -->
+        <div class="header-placeholder"></div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="settings-content">
+        <!-- Edit Profile Form -->
+        <form class="edit-profile-form">
+          <!-- Avatar Section -->
+          <div class="form-group avatar-group">
+            <div class="avatar-wrapper">
+              <img
+                src="https://ui-avatars.com/api/?name=Master+Angler&background=0ea5e9&color=fff&size=200"
+                alt="Profile avatar"
+                class="profile-pic"
+                id="avatarPreview"
+              />
+              <!-- Upload Overlay Icon -->
+              <label
+                for="avatarUpload"
+                class="avatar-edit-overlay"
+                aria-label="Change Avatar"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </label>
+              <!-- Hidden file input for future implementation -->
+              <input
+                type="file"
+                id="avatarUpload"
+                accept="image/png, image/jpeg, image/jpg"
+                hidden
+              />
+            </div>
+            <p class="avatar-hint">Update your profile picture</p>
+          </div>
+
+          <!-- Username Section -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              value="MasterAngler99"
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <!-- Personal Bio Section -->
+          <div class="form-group">
+            <label for="bio">Personal Bio</label>
+            <textarea
+              id="bio"
+              rows="5"
+              placeholder="Tell the forum about yourself, your favorite fishing gear or locations..."
+            >
+A passionate angler focusing mostly on catch-and-release fly fishing. Found often by the rivers during the weekends.</textarea
+            >
+          </div>
+
+          <!-- Confirm Action -->
+          <button type="button" class="save-btn">Save Changes</button>
+        </form>
+
+        <div class="section-divider"></div>
+
+        <!-- Logout Section -->
+        <div class="danger-zone">
+          <button type="button" class="logout-btn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            Log Out
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+  </body>
+</html>

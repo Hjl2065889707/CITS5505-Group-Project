@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <!-- Style for profile page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+  </head>
+  <body>
+    <main id="profile-container">
+      <section id="user-info">
+        <div class="avatar-wrapper">
+          <img
+            src="https://images.pexels.com/photos/13747516/pexels-photo-13747516.jpeg"
+            alt="user-image"
+            class="avatar"
+          />
+        </div>
+        <div class="user-details">
+          <div class="username-row">
+            <span class="username">User-name</span>
+            <button class="settings-btn">⚙️</button>
+          </div>
+          <div class="user-id">ID: 1234567</div>
+          <div class="bio">Say something about yourself...</div>
+        </div>
+      </section>
+
+      <section id="user-posts">
+        <div class="posts-navbar">
+          <button class="nav-tab active" data-target="my-posts">
+            My Posts
+          </button>
+          <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
+        </div>
+
+        <div id="my-posts" class="tab-content active">
+          <!-- My posts grid/list will go here -->
+          <p>You haven't posted anything yet.</p>
+        </div>
+
+        <div id="saved-posts" class="tab-content">
+          <!-- Saved posts grid/list will go here -->
+          <p>No saved posts to show.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Script for profile page -->
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+  </body>
+</html>
