@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, jsonify
 
 app = Flask(__name__)
 
@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
 POSTS_FILE = BASE_DIR / "mockdata" / "myPosts.json"
+FEED_POSTS_FILE = BASE_DIR / "mockdata" / "feedPosts.json"
 
 
 def load_posts():
@@ -72,6 +73,35 @@ def map_page():
 def page_not_found(e):
     """Custom 404 error page."""
     return render_template("404.html", active_page=""), 404
+
+
+# ---------- API (JSON endpoints for JS) ----------
+
+
+@app.route("/api/feed-posts")
+def api_feed_posts():
+    """Return feed posts as JSON for the frontend JS."""
+    with FEED_POSTS_FILE.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    return jsonify(data)
+
+
+@app.route("/api/my-posts")
+def api_my_posts():
+    """Return user's own posts as JSON."""
+    path = BASE_DIR / "mockdata" / "myPosts.json"
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    return jsonify(data)
+
+
+@app.route("/api/saved-posts")
+def api_saved_posts():
+    """Return user's saved posts as JSON."""
+    path = BASE_DIR / "mockdata" / "savedPosts.json"
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    return jsonify(data)
 
 
 # ---------- Run ----------

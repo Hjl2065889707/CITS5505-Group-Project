@@ -21,10 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Fetch and render both sets of posts
-  loadPosts("../../mockdata/myPosts.json", "my-posts").then(
+  loadPosts("/api/my-posts", "my-posts").then(
     (data) => (myPosts = data),
   );
-  loadPosts("../../mockdata/savedPosts.json", "saved-posts").then(
+  loadPosts("/api/saved-posts", "saved-posts").then(
     (data) => (savedPosts = data),
   );
 });
@@ -85,7 +85,7 @@ function renderPostsGrid(posts, containerId) {
       htmlContent += `<div class="feed-image-grid">`;
       photos.forEach((photo) => {
         htmlContent += `
-          <a href="../post/index.html?id=${post.id}" class="image-link">
+          <a href="/posts/${post.id}" class="image-link">
             <img src="${photo}" alt="Post image" class="feed-image-thumb" />
           </a>
         `;

@@ -12,7 +12,7 @@ function loadPosts(path) {
 }
 
 /* Load data: merge mock JSON + localStorage posts */
-loadPosts("../../mockdata/feedPosts.json")
+loadPosts("/api/feed-posts")
   .then(jsonPosts => {
     const localPosts = JSON.parse(localStorage.getItem("userPosts") || "[]");
     allPosts = [...localPosts, ...jsonPosts];
