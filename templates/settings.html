@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}Settings | CatchLog{% endblock %}
-
-{% block styles %}
+{% extends "base.html" %} {% block title %}Settings | CatchLog{% endblock %} {%
+block styles %}
 <!-- Use Inter font for a modern look -->
 <link
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -13,16 +10,17 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 />
-<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}" />
-{% endblock %}
-
-{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/settings.css') }}"
+/>
+{% endblock %} {% block content %}
 <div class="settings-container">
   <!-- Header -->
   <header class="settings-header">
-    <button class="icon-button back-button" aria-label="Go back">
+    <a class="icon-button back-button" href="{{ url_for('profile') }}">
       <i class="fa-solid fa-arrow-left"></i>
-    </button>
+    </a>
     <h1>Settings</h1>
     <!-- Placeholder for center-aligning title -->
     <div class="header-placeholder"></div>
@@ -98,8 +96,6 @@ A passionate angler focusing mostly on catch-and-release fly fishing. Found ofte
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 {% endblock %}

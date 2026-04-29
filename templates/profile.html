@@ -1,12 +1,10 @@
-{% extends "base.html" %}
-
-{% block title %}Profile | CatchLog{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Profile | CatchLog{% endblock %} {%
+block styles %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/profile.css') }}"
+/>
+{% endblock %} {% block content %}
 <div id="profile-container">
   <section id="user-info">
     <div class="avatar-wrapper">
@@ -19,7 +17,7 @@
     <div class="user-details">
       <div class="username-row">
         <span class="username">User-name</span>
-        <button class="settings-btn">⚙️</button>
+        <a href="{{ url_for('settings') }}" class="settings-btn">⚙️</a>
       </div>
       <div class="user-id">ID: 1234567</div>
       <div class="bio">Say something about yourself...</div>
@@ -28,9 +26,7 @@
 
   <section id="user-posts">
     <div class="posts-navbar">
-      <button class="nav-tab active" data-target="my-posts">
-        My Posts
-      </button>
+      <button class="nav-tab active" data-target="my-posts">My Posts</button>
       <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
     </div>
 
@@ -45,8 +41,6 @@
     </div>
   </section>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 {% endblock %}
