@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}404 Page Not Found | CatchLog{% endblock %}
+
+{% block extra_css %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/404.css') }}"
+  />
+{% endblock %}
+
+{% block content %}
+  <main class="error-page">
+    <section class="error-card">
+      <div class="error-illustration" aria-hidden="true">
+        <span class="water-line"></span>
+        <span class="hook">〰️</span>
+        <span class="fish">🐟</span>
+      </div>
+
+      <p class="error-label">404 Error</p>
+      <h1>Looks like this catch swam away.</h1>
+
+      <p class="error-message">
+        The page you are looking for could not be found. It may have been moved,
+        deleted, or the link may be incorrect.
+      </p>
+
+      <div class="error-actions">
+        <a class="primary-btn" href="{{ url_for('feed') }}">Back to Feed</a>
+        <button class="secondary-btn" type="button" id="go-back-btn">
+          Go Back
+        </button>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/404.js') }}"></script>
+{% endblock %}

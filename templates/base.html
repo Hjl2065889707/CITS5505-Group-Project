@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}CatchLog{% endblock %}</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+
+    {% block extra_css %}{% endblock %}
+  </head>
+
+  <body>
+    <header class="site-navbar">
+      <div class="site-navbar__inner">
+        <a class="site-navbar__brand" href="{{ url_for('feed') }}">
+          <span class="site-navbar__logo" aria-hidden="true">🎣</span>
+          <span>CatchLog</span>
+        </a>
+
+        <nav class="site-navbar__links" aria-label="Main navigation">
+          <a
+            class="site-navbar__link {% if active_page == 'feed' %}active{% endif %}"
+            href="{{ url_for('feed') }}"
+          >
+            Feed
+          </a>
+
+          <a class="site-navbar__link" href="#">Map</a>
+
+          <a
+            class="site-navbar__link {% if active_page == 'post' %}active{% endif %}"
+            href="{{ url_for('feed') }}"
+          >
+            Posts
+          </a>
+
+          <a class="site-navbar__link" href="#">Profile</a>
+        </nav>
+
+        <a class="site-navbar__login" href="#">Login</a>
+      </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

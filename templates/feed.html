@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Feed | CatchLog{% endblock %}
+
+{% block extra_css %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/feed.css') }}"
+  />
+{% endblock %}
+
+{% block content %}
+  <main class="feed-container">
+    <section class="feed-header">
+      <h1>Latest Catches</h1>
+      <p>Explore fishing posts shared by other anglers.</p>
+    </section>
+
+    <section class="post-list">
+      {% for post in posts %}
+        <article class="feed-card">
+          <div class="feed-card__header">
+            <img
+              src="{{ post.author.avatarUrl }}"
+              alt="{{ post.author.username }} avatar"
+              class="feed-card__avatar"
+            />
+
+            <div>
+              <h2>{{ post.author.username }}</h2>
+              <p>{{ post.displayDate }}</p>
+            </div>
+          </div>
+
+          <p class="feed-card__content">{{ post.content }}</p>
+
+          {% if post.photos and post.photos|length > 0 %}
+            <a href="{{ url_for('post_detail', post_id=post.id) }}">
+              <img
+                src="{{ post.photos[0] }}"
+                alt="{{ post.catchDetails.species }} catch photo"
+                class="feed-card__image"
+              />
+            </a>
+          {% endif %}
+
+          <div class="catch-details">
+            <span>{{ post.catchDetails.species }}</span>
+            <span>{{ post.catchDetails.weight }}</span>
+            <span>{{ post.catchDetails.location.name }}</span>
+          </div>
+
+          <div class="feed-card__footer">
+            <span>❤️ {{ post.metrics.likes }} Likes</span>
+            <span>💬 {{ post.metrics.commentsCount }} Comments</span>
+            <a href="{{ url_for('post_detail', post_id=post.id) }}">
+              View Details
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  </main>
+{% endblock %}
