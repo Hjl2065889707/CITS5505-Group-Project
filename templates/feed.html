@@ -1,44 +1,41 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Feed</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/feed.css') }}"
-    />
-  </head>
+{% extends "base.html" %}
 
-  <body>
-    <div class="create-post-bar">
-      <button
-        class="create-post-btn"
-        onclick="location.href = '{{ url_for('create_post') }}'"
-      >
-        + Create Post
-      </button>
-    </div>
+{% block title %}Feed | CatchLog{% endblock %}
 
-    <!--  2.2  -->
-    <div class="search-bar">
-      <input type="text" placeholder="Search posts..." id="searchInput" />
-    </div>
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}" />
+{% endblock %}
 
-    <!--  2.2  -->
-    <div class="tag-filter">
-      <button class="tag active">All</button>
-      <button class="tag">Bass</button>
-      <button class="tag">Trout</button>
-      <button class="tag">Gear</button>
-      <button class="tag">Question</button>
-    </div>
+{% block content %}
+<div class="create-post-bar">
+  <button
+    class="create-post-btn"
+    onclick="location.href = '{{ url_for('create_post') }}'"
+  >
+    + Create Post
+  </button>
+</div>
 
-    <!-- 2.1 Feed -->
-    <div class="feed-container" id="feedContainer">
-      <!-- JS  -->
-    </div>
+<!-- Search bar -->
+<div class="search-bar">
+  <input type="text" placeholder="Search posts..." id="searchInput" />
+</div>
 
-    <script src="{{ url_for('static', filename='js/feed.js') }}"></script>
-  </body>
-</html>
+<!-- Tag filter -->
+<div class="tag-filter">
+  <button class="tag active">All</button>
+  <button class="tag">Bass</button>
+  <button class="tag">Trout</button>
+  <button class="tag">Gear</button>
+  <button class="tag">Question</button>
+</div>
+
+<!-- Feed posts -->
+<div class="feed-container" id="feedContainer">
+  <!-- JS will render posts here -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/feed.js') }}"></script>
+{% endblock %}
