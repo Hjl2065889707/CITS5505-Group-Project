@@ -1,36 +1,96 @@
 {% extends "base.html" %}
 
-{% block title %}404 — Page Not Found | CatchLog{% endblock %}
+{% block title %}404 Page Not Found | CatchLog{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}" />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/404.css') }}"
+  />
 {% endblock %}
 
 {% block content %}
-<section class="error-card">
-  <div class="error-illustration" aria-hidden="true">
-    <span class="water-line"></span>
-    <span class="hook">〰️</span>
-    <span class="fish">🐟</span>
-  </div>
+  <section class="error-page">
+    <section class="error-hero">
+      <div class="error-visual" aria-hidden="true">
+        <div class="lake-scene">
+          <div class="cloud cloud-one"></div>
+          <div class="cloud cloud-two"></div>
 
-  <p class="error-label">404 Error</p>
-  <h1>Looks like this catch swam away.</h1>
+          <div class="mountain mountain-one"></div>
+          <div class="mountain mountain-two"></div>
 
-  <p class="error-message">
-    The page you are looking for could not be found. It may have been
-    moved, deleted, or the link may be incorrect.
-  </p>
+          <div class="water">
+            <div class="bobber"></div>
+            <div class="ripple ripple-one"></div>
+            <div class="ripple ripple-two"></div>
+            <div class="fish-shadow">🐟</div>
+          </div>
+        </div>
+      </div>
 
-  <div class="error-actions">
-    <a class="primary-btn" href="{{ url_for('feed') }}">Back to Feed</a>
-    <button class="secondary-btn" type="button" id="go-back-btn">
-      Go Back
-    </button>
-  </div>
-</section>
+      <div class="error-content">
+        <p class="error-label">404 Error</p>
+
+        <h1>Looks like this catch swam away.</h1>
+
+        <p class="error-message">
+          The page you are looking for could not be found. It may have been
+          moved, deleted, or the link may be incorrect.
+        </p>
+
+        <div class="error-actions">
+          <a class="primary-btn" href="{{ url_for('feed') }}">
+            <span aria-hidden="true">🐟</span>
+            Back to Feed
+          </a>
+
+          <button class="secondary-btn" type="button" id="go-back-btn">
+            <span aria-hidden="true">←</span>
+            Go Back
+          </button>
+        </div>
+
+        <section class="quick-links" aria-label="Suggested pages">
+          <p class="quick-links-title">Where would you like to go?</p>
+
+          <div class="quick-link-grid">
+            <a class="quick-link-card" href="{{ url_for('feed') }}">
+              <span class="quick-link-icon" aria-hidden="true">📰</span>
+              <strong>Feed</strong>
+              <span>See latest catches.</span>
+            </a>
+
+            <a class="quick-link-card" href="{{ url_for('map_page') }}">
+              <span class="quick-link-icon" aria-hidden="true">📍</span>
+              <strong>Map</strong>
+              <span>Explore nearby spots.</span>
+            </a>
+
+            <a class="quick-link-card" href="{{ url_for('profile') }}">
+              <span class="quick-link-icon" aria-hidden="true">👤</span>
+              <strong>Profile</strong>
+              <span>View your logs.</span>
+            </a>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="help-strip">
+      <div>
+        <strong>Need help?</strong>
+        <p>
+          If you believe this is a mistake, please return to the feed or
+          contact the team.
+        </p>
+      </div>
+
+      <a href="{{ url_for('feed') }}">Return Home →</a>
+    </section>
+  </section>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/404.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/404.js') }}"></script>
 {% endblock %}
