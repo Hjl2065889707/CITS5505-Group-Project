@@ -2,8 +2,13 @@ import json
 from pathlib import Path
 
 from flask import Flask, render_template, abort, jsonify
+from models import db, User, Post, PostImage, Comment, PostLike, SavedPost
 
 app = Flask(__name__)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///fishing_app.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
 
 # ---------- Load mock data from JSON ----------
 
