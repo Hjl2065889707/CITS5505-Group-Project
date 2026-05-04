@@ -8,10 +8,21 @@ function initBackButton() {
   if (!backButton) return;
 
   backButton.addEventListener("click", () => {
-    if (window.history.length > 1) {
+    if (hasSameOriginReferrer()) {
       window.history.back();
     } else {
-      window.location.href = "../main/index.html";
+      window.location.href = "/";
     }
   });
+}
+
+function hasSameOriginReferrer() {
+  if (!document.referrer) return false;
+
+  try {
+    const referrerUrl = new URL(document.referrer);
+    return referrerUrl.origin === window.location.origin;
+  } catch {
+    return false;
+  }
 }
