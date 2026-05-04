@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Feed | CatchLog{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="create-post-bar">
+  <button
+    class="create-post-btn"
+    onclick="location.href = '{{ url_for('create_post') }}'"
+  >
+    + Create Post
+  </button>
+</div>
+
+<!-- Search bar -->
+<div class="search-bar">
+  <input type="text" placeholder="Search posts..." id="searchInput" />
+</div>
+
+<!-- Tag filter -->
+<div class="tag-filter">
+  <button class="tag active">All</button>
+  <button class="tag">Bass</button>
+  <button class="tag">Trout</button>
+  <button class="tag">Gear</button>
+  <button class="tag">Question</button>
+</div>
+
+<!-- Feed posts -->
+<div class="feed-container" id="feedContainer">
+  <!-- JS will render posts here -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/feed.js') }}"></script>
+{% endblock %}
