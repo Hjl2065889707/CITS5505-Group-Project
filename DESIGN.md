@@ -1,329 +1,466 @@
-# Design System Inspired by Uber
+# CatchLog — Design System
 
 ## 1. Visual Theme & Atmosphere
 
-Uber's design language is a masterclass in confident minimalism -- a black-and-white universe where every pixel serves a purpose and nothing decorates without earning its place. The entire experience is built on a stark duality: jet black (`#000000`) and pure white (`#ffffff`), with virtually no mid-tone grays diluting the message. This isn't the sterile minimalism of a startup that hasn't finished designing -- it's the deliberate restraint of a brand so established it can afford to whisper.
+CatchLog is a fishing community platform where anglers share their catches, discover new spots, and connect with fellow fishers. The design draws inspiration from the outdoors — the teal-green of river water, the warm orange of a sunrise over a lake, and the clear blue of an open sky. It feels like opening a well-worn field journal: warm, trustworthy, and alive with stories.
 
-The signature typeface, UberMove, is a proprietary geometric sans-serif with a distinctly square, engineered quality. Headlines in UberMove Bold at 52px carry the weight of a billboard -- authoritative, direct, unapologetic. The companion face UberMoveText handles body copy and buttons with a slightly softer, more readable character at medium weight (500). Together, they create a typographic system that feels like a transit map: clear, efficient, built for scanning at speed.
-
-What makes Uber's design truly distinctive is its use of full-bleed photography and illustration paired with pill-shaped interactive elements (999px border-radius). Navigation chips, CTA buttons, and category selectors all share this capsule shape, creating a tactile, thumb-friendly interface language that's unmistakably Uber. The illustrations -- warm, slightly stylized scenes of drivers, riders, and cityscapes -- inject humanity into what could otherwise be a cold, monochrome system. The site alternates between white content sections and a full-black footer, with card-based layouts using the gentlest possible shadows (rgba(0,0,0,0.12-0.16)) to create subtle lift without breaking the flat aesthetic.
+The interface balances **nature-inspired warmth** with **modern clarity**. Generous photography of catches and landscapes anchors the emotional experience, while clean card-based layouts and a structured grid keep things scannable. The overall mood is: _welcoming community lodge meets modern social app_.
 
 **Key Characteristics:**
 
-- Pure black-and-white foundation with virtually no mid-tone grays in the UI chrome
-- UberMove (headlines) + UberMoveText (body/UI) -- proprietary geometric sans-serif family
-- Pill-shaped everything: buttons, chips, nav items all use 999px border-radius
-- Warm, human illustrations contrasting the stark monochrome interface
-- Card-based layout with whisper-soft shadows (0.12-0.16 opacity)
-- 8px spacing grid with compact, information-dense layouts
-- Bold photography integrated as full-bleed hero backgrounds
-- Black footer anchoring the page with a dark, high-contrast environment
+- Teal-green primary palette evoking water and nature, with warm orange accents for energy
+- Clean, modern sans-serif typography (Inter + DM Sans) — legible in any context
+- Rounded, friendly UI elements — soft corners, gentle shadows, approachable feel
+- Card-based social feed layout inspired by Instagram and Fishbrain
+- Map-centric discovery page with rich location markers
+- Photography-forward: large catch images and scenic fishing spots take center stage
+- Subtle depth through layered shadows — never harsh, always natural
+- Organic micro-animations: gentle fades, smooth slides, natural easing curves
 
 ## 2. Color Palette & Roles
 
 ### Primary
 
-- **Uber Black** (`#000000`): The defining brand color -- used for primary buttons, headlines, navigation text, and the footer. Not "near-black" or "off-black," but true, uncompromising black.
-- **Pure White** (`#ffffff`): The primary surface color and inverse text. Used for page backgrounds, card surfaces, and text on black elements.
+- **Teal** (`#0F766E`): The core brand color — used for primary buttons, active navigation, map pins, key icons, and brand accents. Evokes river water and lush vegetation.
+- **Teal Dark** (`#0D6560`): Hover/pressed state for primary buttons.
+- **Teal Light** (`#E0F5F2`): Subtle teal tint for active nav backgrounds, selected states, and highlights.
 
-### Interactive & Button States
+### Secondary / Accent
 
-- **Hover Gray** (`#e2e2e2`): White button hover state -- a clean, cool light gray that provides clear feedback without warmth.
-- **Hover Light** (`#f3f3f3`): Subtle hover for elevated white buttons -- barely-there gray for gentle interaction feedback.
-- **Chip Gray** (`#efefef`): Background for secondary/filter buttons and navigation chips -- a neutral, ultra-light gray.
+- **Sunset Orange** (`#F97316`): High-energy accent for CTAs, featured trips, notification badges, and promotional elements. Evokes warmth, sunrise over water.
+- **Orange Dark** (`#EA6C10`): Hover state for orange CTAs.
+- **Orange Light** (`#FFF3E8`): Subtle warm tint for featured card backgrounds.
+
+### Tertiary
+
+- **Sky Blue** (`#0EA5E9`): Links, informational accents, sky/water imagery accents, and secondary interactive elements.
+- **Sky Blue Dark** (`#0B8DC7`): Hover state for blue links.
+
+### Surfaces & Backgrounds
+
+- **White** (`#FFFFFF`): Page background, card surfaces, modals.
+- **Off-White** (`#F8FAFB`): Subtle alternate background for sections (e.g., alternating feed sections, settings panels).
+- **Light Gray** (`#F1F5F9`): Input field backgrounds, disabled surfaces.
 
 ### Text & Content
 
-- **Body Gray** (`#4b4b4b`): Secondary text and footer links -- a true mid-gray with no warm or cool bias.
-- **Muted Gray** (`#afafaf`): Tertiary text, de-emphasized footer links, and placeholder content.
+- **Text Primary** (`#1E293B`): Headlines, primary body text — dark slate for excellent readability.
+- **Text Secondary** (`#64748B`): Descriptions, metadata, timestamps, secondary labels.
+- **Text Muted** (`#94A3B8`): Placeholders, disabled text, tertiary information.
+- **Text Inverse** (`#FFFFFF`): Text on dark/colored backgrounds.
 
 ### Borders & Separation
 
-- **Border Black** (`#000000`): Thin 1px borders for structural containment -- used sparingly on dividers and form containers.
+- **Border Default** (`#E2E8F0`): Card borders, input borders, dividers.
+- **Border Strong** (`#CBD5E1`): Focused input borders, emphasized dividers.
+
+### Semantic / Feedback
+
+- **Success** (`#059669`): Successful actions, catch logged confirmations, online indicators.
+- **Warning** (`#D97706`): Caution states, weather alerts on map.
+- **Error** (`#EF4444`): Form validation errors, delete confirmations, destructive actions.
+- **Info** (`#0EA5E9`): Informational banners, tips, help text (same as Sky Blue).
 
 ### Shadows & Depth
 
-- **Shadow Light** (`rgba(0, 0, 0, 0.12)`): Standard card elevation -- a featherweight lift for content cards.
-- **Shadow Medium** (`rgba(0, 0, 0, 0.16)`): Slightly stronger elevation for floating action buttons and overlays.
-- **Button Press** (`rgba(0, 0, 0, 0.08)`): Inset shadow for active/pressed states on secondary buttons.
-
-### Link States
-
-- **Default Link Blue** (`#0000ee`): Standard browser blue for text links with underline -- used in body content.
-- **Link White** (`#ffffff`): Links on dark surfaces -- used in footer and dark sections.
-- **Link Black** (`#000000`): Links on light surfaces with underline decoration.
+- **Shadow XS** (`rgba(15, 118, 110, 0.04)`): Barely-there tint lift for flat cards.
+- **Shadow SM** (`0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06)`): Default card elevation.
+- **Shadow MD** (`0 4px 12px rgba(0, 0, 0, 0.10)`): Hovered cards, dropdown menus.
+- **Shadow LG** (`0 8px 24px rgba(0, 0, 0, 0.12)`): Modals, floating action buttons.
+- **Shadow Orange Glow** (`0 4px 14px rgba(249, 115, 22, 0.25)`): Featured/promoted card glow effect.
 
 ### Gradient System
 
-- Uber's design is **entirely gradient-free**. The black/white duality and flat color blocks create all visual hierarchy. No gradients appear anywhere in the system -- every surface is a solid color, every transition is a hard edge or a shadow.
+- **Hero Overlay**: `linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%)` — dark overlay on hero images for text readability.
+- **Teal Gradient**: `linear-gradient(135deg, #0F766E 0%, #0EA5E9 100%)` — used sparingly for premium banners or empty-state illustrations.
+- **Sunrise Gradient**: `linear-gradient(135deg, #F97316 0%, #FBBF24 100%)` — for featured badges and promotional tags.
 
 ## 3. Typography Rules
 
 ### Font Family
 
-- **Headline / Display**: `UberMove`, with fallbacks: `UberMoveText, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif`
-- **Body / UI**: `UberMoveText`, with fallbacks: `system-ui, Helvetica Neue, Helvetica, Arial, sans-serif`
+- **Headline / Display**: `'DM Sans'`, with fallbacks: `'Inter', system-ui, -apple-system, sans-serif`
+- **Body / UI**: `'Inter'`, with fallbacks: `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
 
-_Note: UberMove and UberMoveText are proprietary typefaces. For external implementations, use `system-ui` or Inter as the closest available substitute. The geometric, square-proportioned character of UberMove can be approximated with Inter or DM Sans._
+_Both fonts are available from Google Fonts and are free to use. Load via:_
+
+```html
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700&family=Inter:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+```
 
 ### Hierarchy
 
-| Role            | Font         | Size           | Weight  | Line Height    | Notes                               |
-| --------------- | ------------ | -------------- | ------- | -------------- | ----------------------------------- |
-| Display / Hero  | UberMove     | 52px (3.25rem) | 700     | 1.23 (tight)   | Maximum impact, billboard presence  |
-| Section Heading | UberMove     | 36px (2.25rem) | 700     | 1.22 (tight)   | Major section anchors               |
-| Card Title      | UberMove     | 32px (2rem)    | 700     | 1.25 (tight)   | Card and feature headings           |
-| Sub-heading     | UberMove     | 24px (1.5rem)  | 700     | 1.33           | Secondary section headers           |
-| Small Heading   | UberMove     | 20px (1.25rem) | 700     | 1.40           | Compact headings, list titles       |
-| Nav / UI Large  | UberMoveText | 18px (1.13rem) | 500     | 1.33           | Navigation links, prominent UI text |
-| Body / Button   | UberMoveText | 16px (1rem)    | 400-500 | 1.25-1.50      | Standard body text, button labels   |
-| Caption         | UberMoveText | 14px (0.88rem) | 400-500 | 1.14-1.43      | Metadata, descriptions, small links |
-| Micro           | UberMoveText | 12px (0.75rem) | 400     | 1.67 (relaxed) | Fine print, legal text              |
+| Role            | Font    | Size             | Weight | Line Height | Letter Spacing | Notes                            |
+| --------------- | ------- | ---------------- | ------ | ----------- | -------------- | -------------------------------- |
+| Display / Hero  | DM Sans | 40px (2.5rem)    | 700    | 1.2         | -0.02em        | Hero headlines, splash text      |
+| Page Title      | DM Sans | 30px (1.875rem)  | 700    | 1.27        | -0.01em        | Page-level headings (h1)         |
+| Section Heading | DM Sans | 24px (1.5rem)    | 700    | 1.33        | -0.01em        | Section anchors (h2)             |
+| Card Title      | DM Sans | 18px (1.125rem)  | 700    | 1.33        | 0              | Card headings, post titles       |
+| Sub-heading     | DM Sans | 16px (1rem)      | 500    | 1.5         | 0              | Sub-section headers (h4)         |
+| Nav / UI Large  | Inter   | 15px (0.9375rem) | 600    | 1.33        | 0              | Navigation links, tab labels     |
+| Body            | Inter   | 15px (0.9375rem) | 400    | 1.6         | 0              | Standard body text, descriptions |
+| Body Small      | Inter   | 14px (0.875rem)  | 400    | 1.5         | 0              | Secondary info, metadata         |
+| Button Label    | Inter   | 14px (0.875rem)  | 600    | 1           | 0.01em         | Button text, action labels       |
+| Caption         | Inter   | 13px (0.8125rem) | 500    | 1.38        | 0              | Timestamps, tags, helper text    |
+| Micro           | Inter   | 12px (0.75rem)   | 400    | 1.33        | 0.01em         | Fine print, badges, counters     |
 
 ### Principles
 
-- **Bold headlines, medium body**: UberMove headings are exclusively weight 700 (bold) -- every headline hits with billboard force. UberMoveText body and UI text uses 400-500, creating a clear visual hierarchy through weight contrast.
-- **Tight heading line-heights**: All headlines use line-heights between 1.22-1.40 -- compact and punchy, designed for scanning rather than reading.
-- **Functional typography**: There is no decorative type treatment anywhere. No letter-spacing, no text-transform, no ornamental sizing. Every text element serves a direct communication purpose.
-- **Two fonts, strict roles**: UberMove is exclusively for headings. UberMoveText is exclusively for body, buttons, links, and UI. The boundary is never crossed.
+- **DM Sans for headings only**: Rounded geometric character gives headlines warmth and personality without sacrificing clarity.
+- **Inter for everything else**: Supreme readability at all sizes, neutral enough to let content shine.
+- **Comfortable line-heights**: Body text at 1.5-1.6 for easy reading of fishing stories and descriptions.
+- **Negative letter-spacing on headlines**: Tightens large text for visual impact.
+- **Weight contrast creates hierarchy**: Headlines bold (700), body regular (400), UI elements semi-bold (600).
 
 ## 4. Component Stylings
 
 ### Buttons
 
-**Primary Black (CTA)**
+**Primary (Teal CTA)**
 
-- Background: Uber Black (`#000000`)
-- Text: Pure White (`#ffffff`)
-- Padding: 10px 12px
-- Radius: 999px (full pill)
-- Outline: none
-- Focus: inset ring `rgb(255,255,255) 0px 0px 0px 2px`
-- The primary action button -- bold, high-contrast, unmissable
+- Background: Teal (`#0F766E`)
+- Text: White (`#FFFFFF`)
+- Padding: 10px 20px
+- Radius: 8px
+- Font: Inter 14px weight 600
+- Hover: background darkens to `#0D6560`, shadow SM appears
+- Active: background `#0B5650`, translateY(1px)
+- Focus: 2px outline `#0F766E` with 2px offset
+- Transition: all 0.2s ease
 
-**Secondary White**
+**Secondary (Outlined)**
 
-- Background: Pure White (`#ffffff`)
-- Text: Uber Black (`#000000`)
-- Padding: 10px 12px
-- Radius: 999px (full pill)
-- Hover: background shifts to Hover Gray (`#e2e2e2`)
-- Focus: background shifts to Hover Gray, inset ring appears
-- Used on dark surfaces or as a secondary action alongside Primary Black
+- Background: White (`#FFFFFF`)
+- Text: Teal (`#0F766E`)
+- Border: 1.5px solid `#0F766E`
+- Padding: 10px 20px
+- Radius: 8px
+- Hover: background shifts to Teal Light (`#E0F5F2`)
+- Active: background `#CCE8E5`
 
-**Chip / Filter**
+**Accent (Orange CTA)**
 
-- Background: Chip Gray (`#efefef`)
-- Text: Uber Black (`#000000`)
-- Padding: 14px 16px
-- Radius: 999px (full pill)
-- Active: inset shadow `rgba(0,0,0,0.08)`
-- Navigation chips, category selectors, filter toggles
+- Background: Sunset Orange (`#F97316`)
+- Text: White (`#FFFFFF`)
+- Padding: 10px 20px
+- Radius: 8px
+- Hover: background `#EA6C10`, Shadow Orange Glow
+- Used for: featured actions, "Start Fishing Trip", promotional CTAs
 
-**Floating Action**
+**Ghost / Tertiary**
 
-- Background: Pure White (`#ffffff`)
-- Text: Uber Black (`#000000`)
-- Padding: 14px
-- Radius: 999px (full pill)
-- Shadow: `rgba(0,0,0,0.16) 0px 2px 8px 0px`
-- Transform: `translateY(2px)` slight offset
-- Hover: background shifts to `#f3f3f3`
-- Map controls, scroll-to-top, floating CTAs
+- Background: transparent
+- Text: Text Secondary (`#64748B`)
+- Padding: 8px 16px
+- Radius: 8px
+- Hover: background `#F1F5F9`
+- Used for: cancel actions, less prominent options
+
+**Icon Button**
+
+- Background: White or transparent
+- Size: 40px × 40px
+- Radius: 50% (circle)
+- Icon color: Text Secondary (`#64748B`)
+- Hover: background `#F1F5F9`, icon color darkens to `#1E293B`
+- Used for: like, comment, share, bookmark, map controls
 
 ### Cards & Containers
 
-- Background: Pure White (`#ffffff`) on white pages; no distinct card background differentiation
-- Border: none by default -- cards are defined by shadow, not stroke
-- Radius: 8px for standard content cards; 12px for featured/promoted cards
-- Shadow: `rgba(0,0,0,0.12) 0px 4px 16px 0px` for standard lift
-- Cards are content-dense with minimal internal padding
-- Image-led cards use full-bleed imagery with text overlay or below
+- Background: White (`#FFFFFF`)
+- Border: 1px solid `#E2E8F0`
+- Radius: 12px
+- Shadow: Shadow SM by default; Shadow MD on hover
+- Transition: `box-shadow 0.2s ease, transform 0.15s ease`
+- Hover: subtle lift with `transform: translateY(-2px)` + Shadow MD
+- Internal padding: 16px (compact) or 20px (comfortable)
+- Image-led cards use full-bleed imagery at top with 12px radius on top corners only
+
+**Featured Card Variant:**
+
+- Border: 1px solid `rgba(249, 115, 22, 0.3)`
+- Shadow: Shadow Orange Glow
+- Small "Featured" badge with Sunrise Gradient background
 
 ### Inputs & Forms
 
-- Text: Uber Black (`#000000`)
-- Background: Pure White (`#ffffff`)
-- Border: 1px solid Black (`#000000`) -- the only place visible borders appear prominently
+- Background: Light Gray (`#F1F5F9`)
+- Text: Text Primary (`#1E293B`)
+- Placeholder: Text Muted (`#94A3B8`)
+- Border: 1.5px solid transparent (default) → `#CBD5E1` (hover) → `#0F766E` (focus)
 - Radius: 8px
-- Padding: standard comfortable spacing
-- Focus: no extracted custom focus state -- relies on standard browser focus ring
+- Padding: 12px 14px
+- Font: Inter 15px weight 400
+- Focus: border color `#0F766E`, background White, shadow `0 0 0 3px rgba(15, 118, 110, 0.1)`
+- Label: Inter 14px weight 500, Text Primary, margin-bottom 6px
+- Error state: border `#EF4444`, helper text in Error red below field
 
 ### Navigation
 
-- Sticky top navigation with white background
-- Logo: Uber wordmark/icon at 24x24px in black
-- Links: UberMoveText at 14-18px, weight 500, in Uber Black
-- Pill-shaped nav chips with Chip Gray (`#efefef`) background for category navigation ("Ride", "Drive", "Business", "Uber Eats")
-- Menu toggle: circular button with 50% border-radius
-- Mobile: hamburger menu pattern
+- Sticky top navigation with white background and bottom border `#E2E8F0`
+- Logo: 🎣 emoji in a 34px teal circle + "CatchLog" in DM Sans 20px weight 700
+- Nav links: Inter 15px weight 500, color `#64748B`
+- Active nav link: color `#0F766E`, background `#E0F5F2`, weight 600, radius 999px
+- Hover: background `#F1F5F9`, radius 999px
+- Link padding: 8px 14px
+- Login button: Teal background, white text, radius 999px, padding 8px 16px
+- Mobile: hamburger menu toggle, vertical slide-down nav panel
+- Max inner width: 960px, centered
+
+### Tags & Chips
+
+- Background: `#F1F5F9`
+- Text: `#64748B`
+- Padding: 6px 14px
+- Radius: 999px (pill)
+- Font: Inter 13px weight 500
+- Active: background `#0F766E`, text White
+- Hover: background `#E2E8F0`
+- Used for: fish species filters, post categories, location tags
+
+**Species Tag Variant:**
+
+- Background: `#E0F5F2`
+- Text: `#0F766E`
+- Small fish icon prefix (optional)
+- Used specifically for fish species labels on posts
 
 ### Image Treatment
 
-- Warm, hand-illustrated scenes (not photographs for feature sections)
-- Illustration style: slightly stylized people, warm color palette within illustrations, contemporary vibe
-- Hero sections use bold photography or illustration as full-width backgrounds
-- QR codes for app download CTAs
-- All imagery uses standard 8px or 12px border-radius when contained in cards
+- Catch photos displayed prominently — hero-sized in post detail, grid in feed
+- All contained images: 8px radius (in cards) or 12px radius (standalone)
+- Image grid in feed: 2-column with 4px gap, 6px radius on each image
+- Aspect ratio: 4:3 for landscape catches, 1:1 for grid thumbnails
+- Empty state: teal-tinted illustration placeholder
+- Avatar images: 40px circle (feed), 80px circle (profile), border `2px solid #E2E8F0`
+- Map pin images: 32px circle with `2px solid #FFFFFF` and Shadow SM
 
 ### Distinctive Components
 
-**Category Pill Navigation**
+**Post Card (Feed)**
 
-- Horizontal row of pill-shaped buttons for top-level navigation ("Ride", "Drive", "Business", "Uber Eats", "About")
-- Each pill: Chip Gray background, black text, 999px radius
-- Active state indicated by black background with white text (inversion)
+- Card with 12px radius, border, Shadow SM
+- Header: avatar (40px circle) + username (Inter 14px/600) + timestamp (Inter 13px/400 muted) + location pin icon + location text
+- Body: post text in Inter 15px/400
+- Image area: full-bleed images, 2-column grid if multiple
+- Species tag: pill tag below images
+- Footer: like, comment, share, bookmark icon buttons with counts
+- Separator: 1px `#E2E8F0` between body and footer
 
-**Hero with Dual Action**
+**Map Pin / Marker**
 
-- Split hero: text/CTA on left, map/illustration on right
-- Two input fields side by side for pickup/destination
-- "See prices" CTA button in black pill
+- Circular teal pin with white fish icon center
+- Active/selected: larger pin with orange ring and Shadow MD
+- Cluster: teal circle with white count text, size scales with count
 
-**Plan-Ahead Cards**
+**Catch Detail Modal / Page**
 
-- Cards promoting features like "Uber Reserve" and trip planning
-- Illustration-heavy with warm, human-centric imagery
-- Black CTA buttons with white text at bottom
+- Large hero image at top (full width, 16:9 or 4:3)
+- Semi-transparent gradient overlay at bottom of image for title text
+- Details grid below: species, weight, bait, method — in 2-column layout
+- Location shown with inline mini-map
+- Comments section below
+
+**Empty States**
+
+- Centered layout with teal-tinted illustration
+- DM Sans 20px/700 heading: "No catches yet!"
+- Inter 15px/400 body in Text Secondary
+- Teal primary CTA: "Log Your First Catch"
 
 ## 5. Layout Principles
 
 ### Spacing System
 
-- Base unit: 8px
-- Scale: 4px, 6px, 8px, 10px, 12px, 14px, 16px, 18px, 20px, 24px, 32px
-- Button padding: 10px 12px (compact) or 14px 16px (comfortable)
-- Card internal padding: approximately 24-32px
-- Section vertical spacing: generous but efficient -- approximately 64-96px between major sections
+- Base unit: 4px
+- Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80px
+- Component internal padding: 16px (compact), 20px (standard), 24px (spacious)
+- Section vertical spacing: 48-64px between major sections
+- Card gap in feed: 16px
+- Form field gap: 20px
 
 ### Grid & Container
 
-- Max container width: approximately 1136px, centered
-- Hero: split layout with text left, visual right
-- Feature sections: 2-column card grids or full-width single-column
-- Footer: multi-column link grid on black background
-- Full-width sections extending to viewport edges
+- Max container width: 960px, centered with `margin: 0 auto`
+- Feed: single-column, max-width 600px, centered
+- Map page: full-viewport map with floating sidebar/cards
+- Profile: single-column header + tabbed content (My Posts / Saved / Stats)
+- Settings: single-column form, max-width 640px
+- Side padding: 20px (mobile), 24px (tablet+)
 
 ### Whitespace Philosophy
 
-- **Efficient, not airy**: Uber's whitespace is functional -- enough to separate, never enough to feel empty. This is transit-system spacing: compact, clear, purpose-driven.
-- **Content-dense cards**: Cards pack information tightly with minimal internal spacing, relying on shadow and radius to define boundaries.
-- **Section breathing room**: Major sections get generous vertical spacing, but within sections, elements are closely grouped.
+- **Breathable but purposeful**: more generous than Uber's density — fishing stories need room to breathe. But not wastefully airy.
+- **Content hierarchy through spacing**: more space before section headings, tighter spacing within related groups.
+- **Cards define content blocks**: shadow + border + radius create clear boundaries without relying on heavy dividers.
 
 ### Border Radius Scale
 
-- Sharp (0px): No square corners used in interactive elements
-- Standard (8px): Content cards, input fields, listboxes
-- Comfortable (12px): Featured cards, larger containers, link cards
-- Full Pill (999px): All buttons, chips, navigation items, pills
-- Circle (50%): Avatar images, icon containers, circular controls
+- Small (6px): Image grid thumbnails, small chips
+- Standard (8px): Buttons, input fields, inline tags
+- Comfortable (12px): Cards, containers, modals, larger images
+- Large (16px): Hero sections, promotional banners
+- Full Pill (999px): Nav chips, tags, filter pills, avatar images
+- Circle (50%): Icon buttons, avatar containers, map pins
 
 ## 6. Depth & Elevation
 
-| Level              | Treatment                                        | Use                                            |
-| ------------------ | ------------------------------------------------ | ---------------------------------------------- |
-| Flat (Level 0)     | No shadow, solid background                      | Page background, inline content, text sections |
-| Subtle (Level 1)   | `rgba(0,0,0,0.12) 0px 4px 16px`                  | Standard content cards, feature blocks         |
-| Medium (Level 2)   | `rgba(0,0,0,0.16) 0px 4px 16px`                  | Elevated cards, overlay elements               |
-| Floating (Level 3) | `rgba(0,0,0,0.16) 0px 2px 8px` + translateY(2px) | Floating action buttons, map controls          |
-| Pressed (Level 4)  | `rgba(0,0,0,0.08) inset` (999px spread)          | Active/pressed button states                   |
-| Focus Ring         | `rgb(255,255,255) 0px 0px 0px 2px inset`         | Keyboard focus indicators                      |
+| Level              | Treatment                            | Use                                 |
+| ------------------ | ------------------------------------ | ----------------------------------- |
+| Flat (Level 0)     | No shadow, border only (`#E2E8F0`)   | Default cards, static containers    |
+| Subtle (Level 1)   | Shadow SM                            | Feed cards, form containers         |
+| Raised (Level 2)   | Shadow MD                            | Hovered cards, dropdowns, popovers  |
+| Floating (Level 3) | Shadow LG                            | Modals, floating map controls, FABs |
+| Featured           | Shadow Orange Glow                   | Featured/promoted content           |
+| Focus Ring         | `0 0 0 3px rgba(15, 118, 110, 0.15)` | Keyboard focus indicators           |
 
-**Shadow Philosophy**: Uber uses shadow purely as a structural tool, never decoratively. Shadows are always black at very low opacity (0.08-0.16), creating the bare minimum lift needed to separate content layers. The blur radii are moderate (8-16px) -- enough to feel natural but never dramatic. There are no colored shadows, no layered shadow stacks, and no ambient glow effects. Depth is communicated more through the black/white section contrast than through shadow elevation.
+**Shadow Philosophy**: Shadows are soft and natural — they mimic the gentle diffusion of outdoor light. No harsh edges, no dramatic drops. The teal-tinted focus ring subtly reinforces brand identity even at the interaction level.
 
 ## 7. Do's and Don'ts
 
 ### Do
 
-- Use true black (`#000000`) and pure white (`#ffffff`) as the primary palette -- the stark contrast IS Uber
-- Use 999px border-radius for all buttons, chips, and pill-shaped navigation elements
-- Keep all headings in UberMove Bold (700) for billboard-level impact
-- Use whisper-soft shadows (0.12-0.16 opacity) for card elevation -- barely visible
-- Maintain the compact, information-dense layout style -- Uber prioritizes efficiency over airiness
-- Use warm, human-centric illustrations to soften the monochrome interface
-- Apply 8px radius for content cards and 12px for featured containers
-- Use UberMoveText at weight 500 for navigation and prominent UI text
-- Pair black primary buttons with white secondary buttons for dual-action layouts
+- Use Teal (`#0F766E`) as the dominant brand color — it anchors the outdoor identity
+- Use Sunset Orange (`#F97316`) sparingly as an energizing accent for key CTAs and featured content
+- Keep cards rounded (12px) and shadows soft — the interface should feel friendly and approachable
+- Use generous, comfortable spacing — fishing stories and photos need breathing room
+- Show catch photography prominently — images are the hero content
+- Use species tags (teal pills) to make content filterable and scannable
+- Maintain clear visual hierarchy: DM Sans bold headings → Inter regular body
+- Use semantic colors consistently: green=success, orange=warning, red=error
+- Design map elements to be tap-friendly with clear active/selected states
+- Add hover transitions (0.2s ease) to all interactive elements for a polished feel
 
 ### Don't
 
-- Don't introduce color into the UI chrome -- Uber's interface is strictly black, white, and gray
-- Don't use rounded corners less than 999px on buttons -- the full-pill shape is a core identity element
-- Don't apply heavy shadows or drop shadows with high opacity -- depth is whisper-subtle
-- Don't use serif fonts anywhere -- Uber's typography is exclusively geometric sans-serif
-- Don't create airy, spacious layouts with excessive whitespace -- Uber's density is intentional
-- Don't use gradients or color overlays -- every surface is a flat, solid color
-- Don't mix UberMove into body text or UberMoveText into headlines -- the hierarchy is strict
-- Don't use decorative borders -- borders are functional (inputs, dividers) or absent entirely
-- Don't soften the black/white contrast with off-whites or near-blacks -- the duality is deliberate
+- Don't use Teal and Orange together in equal amounts — Teal is 70%, Orange is 10%
+- Don't use pure black (`#000000`) for text — use slate `#1E293B` for a softer feel
+- Don't apply heavy or colored drop shadows — keep everything soft and natural
+- Don't use more than two font families — stick to DM Sans + Inter
+- Don't make cards completely flat (no border, no shadow) — they need subtle definition
+- Don't use sharp corners (0px radius) on interactive elements — this app should feel rounded and friendly
+- Don't overuse the Sunrise Gradient — reserve it for badges and small featured tags
+- Don't make images too small — catches are the star of the content
+- Don't forget hover and focus states — every interactive element needs feedback
+- Don't use generic placeholder images — show realistic fishing content or themed empty states
 
 ## 8. Responsive Behavior
 
 ### Breakpoints
 
-| Name          | Width  | Key Changes                                                       |
-| ------------- | ------ | ----------------------------------------------------------------- |
-| Mobile Small  | 320px  | Minimum layout, single column, stacked inputs, compact typography |
-| Mobile        | 600px  | Standard mobile, stacked layout, hamburger nav                    |
-| Tablet Small  | 768px  | Two-column grids begin, expanded card layouts                     |
-| Tablet        | 1119px | Full tablet layout, side-by-side hero content                     |
-| Desktop Small | 1120px | Desktop grid activates, horizontal nav pills                      |
-| Desktop       | 1136px | Full desktop layout, maximum container width, split hero          |
+| Name    | Width   | Key Changes                                                        |
+| ------- | ------- | ------------------------------------------------------------------ |
+| Mobile  | < 640px | Single column, hamburger nav, stacked forms, full-width cards      |
+| Tablet  | 640px   | Two-column grids begin, expanded card layouts, side-by-side inputs |
+| Desktop | 960px   | Full desktop layout, horizontal nav, max-width container activates |
 
 ### Touch Targets
 
-- All pill buttons: minimum 44px height (10-14px vertical padding + line-height)
-- Navigation chips: generous 14px 16px padding for comfortable thumb tapping
-- Circular controls (menu, close): 50% radius ensures large, easy-to-hit targets
+- All buttons: minimum 44px height
+- Icon buttons: 40px × 40px minimum
+- Nav links with padding: comfortable thumb tapping at 44px+ hit area
+- Tags/chips: minimum 32px height with generous padding
 - Card surfaces serve as full-area touch targets on mobile
 
 ### Collapsing Strategy
 
-- **Navigation**: Horizontal pill nav collapses to hamburger menu with circular toggle
-- **Hero**: Split layout (text + map/visual) stacks to single column -- text above, visual below
-- **Input fields**: Side-by-side pickup/destination inputs stack vertically
-- **Feature cards**: 2-column grid collapses to full-width stacked cards
-- **Headings**: 52px display scales down through 36px, 32px, 24px, 20px
-- **Footer**: Multi-column link grid collapses to accordion or stacked single column
-- **Category pills**: Horizontal scroll with overflow on smaller screens
+- **Navigation**: Horizontal links collapse to hamburger menu with slide-down panel
+- **Feed cards**: maintain single-column, full-width on all sizes
+- **Image grids**: 2-column on all sizes, images scale proportionally
+- **Profile**: stats row stacks if needed, tabs remain horizontal with scroll
+- **Map**: full viewport on all sizes, floating controls reposition
+- **Forms**: inputs stack vertically on mobile, side-by-side on tablet+
+- **Typography**: Display 40px → 30px on mobile; Page Title 30px → 24px
 
 ### Image Behavior
 
-- Illustrations scale proportionally within their containers
-- Hero imagery maintains aspect ratio, may crop on smaller screens
-- QR code sections hide on mobile (app download shifts to direct store links)
-- Card imagery maintains 8-12px border radius at all sizes
+- Catch photos maintain aspect ratio, may crop slightly on smaller screens
+- Avatar sizes remain consistent across breakpoints
+- Map pins scale with zoom level, not screen size
+- Image grid thumbnails: fixed 2-column layout, height scales with width
 
-## 9. Agent Prompt Guide
+## 9. Implementation Quick Reference
 
-### Quick Color Reference
+### CSS Custom Properties
 
-- Primary Button: "Uber Black (#000000)"
-- Page Background: "Pure White (#ffffff)"
-- Button Text (on black): "Pure White (#ffffff)"
-- Button Text (on white): "Uber Black (#000000)"
-- Secondary Text: "Body Gray (#4b4b4b)"
-- Tertiary Text: "Muted Gray (#afafaf)"
-- Chip Background: "Chip Gray (#efefef)"
-- Hover State: "Hover Gray (#e2e2e2)"
-- Card Shadow: "rgba(0,0,0,0.12) 0px 4px 16px"
-- Footer Background: "Uber Black (#000000)"
+```css
+:root {
+  /* Brand Colors */
+  --color-primary: #0f766e;
+  --color-primary-dark: #0d6560;
+  --color-primary-light: #e0f5f2;
+  --color-secondary: #f97316;
+  --color-secondary-dark: #ea6c10;
+  --color-secondary-light: #fff3e8;
+  --color-tertiary: #0ea5e9;
 
-### Example Component Prompts
+  /* Surfaces */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8fafb;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f5f9;
 
-- "Create a hero section on Pure White (#ffffff) with a headline at 52px UberMove Bold (700), line-height 1.23. Use Uber Black (#000000) text. Add a subtitle in Body Gray (#4b4b4b) at 16px UberMoveText weight 400 with 1.50 line-height. Place an Uber Black (#000000) pill CTA button with Pure White text, 999px radius, padding 10px 12px."
-- "Design a category navigation bar with horizontal pill buttons. Each pill: Chip Gray (#efefef) background, Uber Black (#000000) text, 14px 16px padding, 999px border-radius. Active pill inverts to Uber Black background with Pure White text. Use UberMoveText at 14px weight 500."
-- "Build a feature card on Pure White (#ffffff) with 8px border-radius and shadow rgba(0,0,0,0.12) 0px 4px 16px. Title in UberMove at 24px weight 700, description in Body Gray (#4b4b4b) at 16px UberMoveText. Add a black pill CTA button at the bottom."
-- "Create a dark footer on Uber Black (#000000) with Pure White (#ffffff) heading text in UberMove at 20px weight 700. Footer links in Muted Gray (#afafaf) at 14px UberMoveText. Links hover to Pure White. Multi-column grid layout."
-- "Design a floating action button with Pure White (#ffffff) background, 999px radius, 14px padding, and shadow rgba(0,0,0,0.16) 0px 2px 8px. Hover shifts background to #f3f3f3. Use for scroll-to-top or map controls."
+  /* Text */
+  --color-text: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
 
-### Iteration Guide
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
 
-1. Focus on ONE component at a time
-2. Reference the strict black/white palette -- "use Uber Black (#000000)" not "make it dark"
-3. Always specify 999px radius for buttons and pills -- this is non-negotiable for the Uber identity
-4. Describe the font family explicitly -- "UberMove Bold for the heading, UberMoveText Medium for the label"
-5. For shadows, use "whisper shadow (rgba(0,0,0,0.12) 0px 4px 16px)" -- never heavy drop shadows
-6. Keep layouts compact and information-dense -- Uber is efficient, not airy
-7. Illustrations should be warm and human -- describe "stylized people in warm tones" not abstract shapes
-8. Pair black CTAs with white secondaries for balanced dual-action layouts
+  /* Semantic */
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #ef4444;
+  --color-info: #0ea5e9;
+
+  /* Typography */
+  --font-display: "DM Sans", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 4px 14px rgba(249, 115, 22, 0.25);
+  --shadow-focus: 0 0 0 3px rgba(15, 118, 110, 0.15);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+```
+
+### Example Component Patterns
+
+- **Primary Button**: `background: var(--color-primary); color: var(--color-text-inverse); border-radius: var(--radius-md); padding: 10px 20px; font: 600 14px var(--font-body);`
+- **Feed Card**: `background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);`
+- **Species Tag**: `background: var(--color-primary-light); color: var(--color-primary); border-radius: var(--radius-pill); padding: 6px 14px; font: 500 13px var(--font-body);`
+- **Nav Link Active**: `background: var(--color-primary-light); color: var(--color-primary); font-weight: 600; border-radius: var(--radius-pill);`
+- **Input Focus**: `border-color: var(--color-primary); background: var(--color-bg); box-shadow: var(--shadow-focus);`
