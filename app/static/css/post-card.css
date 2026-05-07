@@ -1,0 +1,260 @@
+/* ========== Post Card Component ========== */
+
+.post-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base), transform var(--transition-fast);
+  margin-bottom: var(--space-5);
+  font-family: var(--font-body);
+}
+
+.post-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ── Compact variant ── */
+.post-card--compact {
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+/* ── Header ── */
+.post-card__header {
+  display: flex;
+  align-items: center;
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+.post-card--compact .post-card__header {
+  padding: var(--space-3);
+}
+
+.post-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
+.post-card__meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card__username {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.post-card__username:hover {
+  text-decoration: underline;
+}
+
+.post-card__time {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* ── Body ── */
+.post-card__body {
+  padding: 0 var(--space-4) var(--space-4) var(--space-4);
+}
+
+.post-card--compact .post-card__body {
+  padding: 0 var(--space-3) var(--space-3) var(--space-3);
+}
+
+.post-card__content-link {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  text-decoration: none;
+  display: block;
+}
+
+/* ── Images & Carousel ── */
+.post-card__images {
+  width: 100%;
+  background-color: var(--color-bg-alt);
+  position: relative;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.carousel-container {
+  /* Using standard carousel classes for existing JS compatibility */
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  height: 400px;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-card--compact .carousel-slide {
+  height: 200px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover is usually better for feeds */
+}
+
+/* Carousel Controls */
+.carousel-indicator {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--color-text);
+  opacity: 0;
+  transition: opacity var(--transition-base), background-color var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.carousel-container:hover .carousel-btn:not(.hidden) {
+  opacity: 1;
+}
+
+.carousel-btn:hover {
+  background-color: white;
+}
+
+.prev-btn { left: var(--space-2); }
+.next-btn { right: var(--space-2); }
+.carousel-btn.hidden { opacity: 0 !important; pointer-events: none; }
+
+
+/* ── Tags ── */
+.post-card__tags {
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.post-card--compact .post-card__tags {
+  padding: var(--space-2) var(--space-3);
+}
+
+.species-tag, .detail-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.species-tag {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.detail-tag {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+}
+
+/* ── Actions ── */
+.post-card__actions {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--space-4);
+}
+
+.post-card--compact .post-card__actions {
+  padding: var(--space-2) var(--space-3);
+  gap: var(--space-3);
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  transition: color var(--transition-fast);
+  text-decoration: none;
+}
+
+.action-btn:hover {
+  color: var(--color-primary);
+}
+
+.action-btn i {
+  font-size: 16px;
+}
+
+.action-btn--active {
+  color: var(--color-accent);
+}
+
+.action-btn--active:hover {
+  color: var(--color-accent);
+}
+
+/* Save button goes to the right */
+.save-btn {
+  margin-left: auto;
+}
