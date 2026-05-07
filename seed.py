@@ -1,25 +1,29 @@
+"""Seed the database with mock data for development."""
+
 import json
 import re
 from datetime import datetime
 from pathlib import Path
-from werkzeug.security import generate_password_hash
-from app import app
+from typing import Optional
 
-from models import db, User, Post, PostImage, Comment, PostLike, SavedPost
+from werkzeug.security import generate_password_hash
+
+from app import app, db
+from app.models import User, Post, PostImage, Comment, PostLike, SavedPost
 
 
 BASE_DIR = Path(__file__).resolve().parent
 POSTS_FILE = BASE_DIR / "mockdata" / "myPosts.json"
 
 
-def parse_date(value: str | None) -> datetime | None:
+def parse_date(value: Optional[str]) -> Optional[datetime]:
     """Parse an ISO 8601 string into a timezone-aware datetime."""
     if not value:
         return None
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
-def parse_weight(value: str | None) -> float | None:
+def parse_weight(value: Optional[str]) -> Optional[float]:
     """
     Parse a weight string from JSON into a float (kg).
     Handles values like "2.5", "2.5kg", "2.5 kg", etc.
@@ -91,6 +95,6 @@ with app.app_context():
             user_id=demo_user.id,
             post_id=post.id,
         ))
-        
+
     db.session.commit()
     print(f"Seeded {len(posts_data)} posts for user '{demo_user.username}'.")

@@ -9,3 +9,17 @@ venv/
 
 # OS
 .DS_Store
+
+# Environment variables (secrets — never commit)
+.env
+
+# Database files (regenerated locally via seed.py)
+instance/
+*.db
+
+# Flask-Migrate (generated per-environment)
+migrations/
+
+# User uploads (generated at runtime)
+app/static/uploads/*
+!app/static/uploads/.gitkeep
