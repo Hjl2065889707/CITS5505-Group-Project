@@ -67,10 +67,4 @@
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 <!-- Post card interaction logic (carousel, like, save) -->
 <script src="{{ url_for('static', filename='js/post-card.js') }}"></script>
-{# Mocking current_user for the macro since Auth isn't done #}
-<script>
-  // A small hack to let the event delegation know we are "logged in"
-  // This will be replaced when Oliver finishes true authentication.
-  window.currentUser = { id: {{ user.id }} };
-</script>
 {% endblock %}
