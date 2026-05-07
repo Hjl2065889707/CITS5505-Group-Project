@@ -97,9 +97,13 @@ body {
 /* Tab Content */
 .tab-content {
   display: none;
-  text-align: center;
   color: #8e8e8e;
   padding: 40px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
 }
 
 .tab-content.active {

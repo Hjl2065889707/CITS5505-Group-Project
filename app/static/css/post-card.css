@@ -9,6 +9,7 @@
   transition: box-shadow var(--transition-base), transform var(--transition-fast);
   margin-bottom: var(--space-5);
   font-family: var(--font-body);
+  text-align: left;
 }
 
 .post-card:hover {

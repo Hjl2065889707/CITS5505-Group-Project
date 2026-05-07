@@ -83,9 +83,10 @@
   {% if show_actions %}
   <div class="post-card__actions">
     {# We determine if the current user liked/saved this post. 
-       Note: current_user is injected by Flask-Login into templates. #}
-    {% set is_liked = current_user.is_authenticated and post.likes | selectattr("user_id", "equalto", current_user.id) | list | length > 0 %}
-    {% set is_saved = current_user.is_authenticated and post.saved_by | selectattr("user_id", "equalto", current_user.id) | list | length > 0 %}
+       Fallback to user ID 1 (demo_user) since Auth is not yet fully implemented. #}
+    {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else 1 %}
+    {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
+    {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
 
     <button class="action-btn like-btn {{ 'action-btn--active' if is_liked else '' }}" 
             data-post-id="{{ post.id }}" aria-label="Like" aria-pressed="{{ 'true' if is_liked else 'false' }}">
