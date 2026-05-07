@@ -112,10 +112,17 @@
             </a>
             <div class="comment-body">
               <div class="comment-header">
-                <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}" class="comment-username">
-                  {{ comment.user.username if comment.user else 'Unknown' }}
-                </a>
-                <span class="comment-time">{{ comment.created_at.strftime('%b %d, %H:%M') if comment.created_at else '' }}</span>
+                <div class="comment-header-left">
+                  <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}" class="comment-username">
+                    {{ comment.user.username if comment.user else 'Unknown' }}
+                  </a>
+                  <span class="comment-time">{{ comment.created_at.strftime('%b %d, %H:%M') if comment.created_at else '' }}</span>
+                </div>
+                {% if comment.user_id == current_user_id %}
+                <button class="comment-delete-btn" data-comment-id="{{ comment.id }}" data-post-id="{{ post.id }}" aria-label="Delete comment">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+                {% endif %}
               </div>
               <div class="comment-text">{{ comment.content }}</div>
             </div>
@@ -143,9 +150,6 @@
 {% block scripts %}
 <!-- Post card interactions (delegated Like/Save) & Carousel -->
 <script src="{{ url_for('static', filename='js/post-card.js') }}"></script>
-<!-- Post detail specific logic (Comment submission) -->
+<!-- Post detail specific logic (Comment submission & deletion) -->
 <script src="{{ url_for('static', filename='js/post.js') }}"></script>
-<script>
-  window.currentUser = { id: {{ current_user_id | default(1) }} };
-</script>
 {% endblock %}
