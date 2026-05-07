@@ -59,7 +59,21 @@
         </div>
 
         <div class="site-navbar__actions">
-          <a class="site-navbar__login" href="#">Login</a>
+          {% if current_user.is_authenticated %}
+            <a class="site-navbar__link" href="{{ url_for('profile') }}">
+              {{ current_user.username }}
+            </a>
+            <a class="site-navbar__login" href="{{ url_for('logout') }}">
+              Logout
+            </a>
+          {% else %}
+            <a class="site-navbar__link" href="{{ url_for('register') }}">
+              Register
+            </a>
+            <a class="site-navbar__login" href="{{ url_for('login') }}">
+              Login
+            </a>
+          {% endif %}
         </div>
       </div>
     </nav>

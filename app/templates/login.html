@@ -3,9 +3,63 @@
 {% block title %}Login | CatchLog{% endblock %}
 
 {% block content %}
-<div style="max-width:400px;margin:80px auto;text-align:center;">
-  <h1>Login</h1>
-  <p style="color:#64748b;">TODO — Oliver will build this page.</p>
-  <a href="{{ url_for('feed') }}">← Back to Feed</a>
+<div style="max-width: 420px; margin: 80px auto; padding: 24px;">
+  <h1 style="text-align: center; margin-bottom: 8px;">Log in</h1>
+  <p style="text-align: center; color: #64748b; margin-bottom: 24px;">
+    Welcome back to CatchLog.
+  </p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div style="margin-bottom: 16px;">
+        {% for category, message in messages %}
+          <div
+            style="
+              padding: 10px 12px;
+              margin-bottom: 8px;
+              border-radius: 8px;
+              background: {% if category == 'error' %}#fee2e2{% else %}#dcfce7{% endif %};
+              color: {% if category == 'error' %}#991b1b{% else %}#166534{% endif %};
+            "
+          >
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('login') }}">
+    {{ form.hidden_tag() }}
+
+    <div style="margin-bottom: 16px;">
+      {{ form.username_or_email.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
+      {{ form.username_or_email(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
+
+      {% for error in form.username_or_email.errors %}
+        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div style="margin-bottom: 16px;">
+      {{ form.password.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
+      {{ form.password(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
+
+      {% for error in form.password.errors %}
+        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(style="width:100%; padding:11px 16px; border:none; border-radius:999px; background:#0f766e; color:white; font-weight:700; cursor:pointer;") }}
+  </form>
+
+  <p style="text-align:center; margin-top:18px;">
+    Don't have an account?
+    <a href="{{ url_for('register') }}">Create one</a>
+  </p>
+
+  <p style="text-align:center; margin-top:8px;">
+    <a href="{{ url_for('feed') }}">← Back to Feed</a>
+  </p>
 </div>
 {% endblock %}
