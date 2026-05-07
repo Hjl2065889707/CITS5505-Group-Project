@@ -1,7 +1,11 @@
-from datetime import datetime, timezone
-from flask_sqlalchemy import SQLAlchemy
+"""Database models (M in MVC)."""
 
-db = SQLAlchemy()
+from datetime import datetime, timezone
+
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from app import db
 
 
 def utcnow():
@@ -12,7 +16,7 @@ def utcnow():
 # =====================
 # User
 # =====================
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +35,14 @@ class User(db.Model):
     comments = db.relationship("Comment", backref="user", lazy=True)
     likes = db.relationship("PostLike", backref="user", lazy=True)
     saved_posts = db.relationship("SavedPost", backref="user", lazy=True)
+
+    def set_password(self, password):
+        """Hash and store the user's password."""
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        """Verify a plaintext password against the stored hash."""
+        return check_password_hash(self.password_hash, password)
 
 
 # =====================
@@ -133,5 +145,21 @@ class SavedPost(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
+
+    created_at = db.Column(db.DateTime(timezone=True), default=utcnow)
+
+
+# =====================
+# Follow (user-to-user relationship)
+# =====================
+class Follow(db.Model):
+    __tablename__ = "follows"
+
+    follower_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"), primary_key=True
+    )
+    followed_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"), primary_key=True
+    )
 
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow)
