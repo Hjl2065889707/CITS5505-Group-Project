@@ -3,67 +3,98 @@
 {% block title %}Post Detail | CatchLog{% endblock %}
 
 {% block styles %}
+<!-- We reuse the post-card CSS for consistency, but add specific tweaks for the detail page -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post-card.css') }}" />
 <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}" />
 {% endblock %}
 
 {% block content %}
 <!-- Page Navigation Bar -->
 <header class="top-nav">
-  <a href="{{ url_for('feed') }}" class="back-btn">← Back</a>
+  <a href="{{ url_for('feed') }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
   <h1 class="nav-title">Post</h1>
 </header>
 
 <div class="detail-container">
-  <!-- The Main Post Card -->
-  <article class="post-card">
-    <div class="post-header">
-      <img
-        src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg"
-        alt="Author Avatar"
-        class="post-avatar"
-      />
-      <div class="post-user-info">
-        <div class="post-username">BassHunter99</div>
-        <div class="post-time">10/30/2026</div>
+  <!-- Main Post Content -->
+  <article class="post-card" data-post-id="{{ post.id }}">
+    
+    <div class="post-card__header">
+      <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}">
+        <img src="{{ post.user.avatar_url if post.user and post.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
+             alt="{{ post.user.username if post.user else 'Unknown' }}" 
+             class="post-card__avatar" />
+      </a>
+      <div class="post-card__meta">
+        <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}" class="post-card__username">
+          {{ post.user.username if post.user else 'Unknown User' }}
+        </a>
+        <time class="post-card__time" datetime="{{ post.created_at.isoformat() if post.created_at else '' }}">
+          {{ post.created_at.strftime('%b %d, %Y - %H:%M') if post.created_at else 'Unknown Date' }}
+        </time>
       </div>
     </div>
 
-    <div class="post-content">
-      Great weekend out on the river! The weather was perfect and the fish
-      were biting early in the morning. Best catch of the season so far.
-      Used a plastic worm on a drop shot rig.
-    </div>
+    <div class="post-card__body">{{ post.content }}</div>
 
-    <!-- Carousel Container -->
-    <div class="carousel-container">
-      <div class="carousel-indicator" id="carousel-indicator">1/2</div>
-      <button class="carousel-btn prev-btn hidden" id="prev-btn">❮</button>
-      <button class="carousel-btn next-btn" id="next-btn">❯</button>
-
-      <div class="carousel-track" id="carousel-track">
-        <!-- Image 1 -->
-        <div class="carousel-slide">
-          <img
-            src="https://images.pexels.com/photos/3220790/pexels-photo-3220790.jpeg"
-            alt="Catch photo 1"
-            class="carousel-image"
-          />
-        </div>
-
-        <!-- Image 2 -->
-        <div class="carousel-slide">
-          <img
-            src="https://images.pexels.com/photos/17275414/pexels-photo-17275414.jpeg"
-            alt="Catch photo 2"
-            class="carousel-image"
-          />
+    <!-- Images Carousel -->
+    {% set images = post.images | sort(attribute='display_order') if post.images else [] %}
+    {% if images | length > 0 %}
+      <div class="post-card__images carousel-container">
+        {% if images | length > 1 %}
+          <div class="carousel-indicator">1/{{ images | length }}</div>
+          <button class="carousel-btn prev-btn hidden" aria-label="Previous">❮</button>
+          <button class="carousel-btn next-btn" aria-label="Next">❯</button>
+        {% endif %}
+        <div class="carousel-track">
+          {% for img in images %}
+            <div class="carousel-slide">
+              <img src="{{ img.image_url }}" alt="Catch photo {{ loop.index }}" class="carousel-image" loading="lazy" />
+            </div>
+          {% endfor %}
         </div>
       </div>
-    </div>
+    {% endif %}
 
-    <div class="post-footer">
-      <span class="post-metric">❤️ 24 Likes</span>
-      <span class="post-metric">💬 1 Comments</span>
+    <!-- Catch Details Tags -->
+    {% if post.species or post.weight_kg or post.location_name or post.bait %}
+    <div class="post-card__tags">
+      {% if post.species %}
+        <span class="species-tag"><i class="fa-solid fa-fish"></i> {{ post.species }}</span>
+      {% endif %}
+      {% if post.weight_kg %}
+        <span class="detail-tag"><i class="fa-solid fa-weight-scale"></i> {{ post.weight_kg }} kg</span>
+      {% endif %}
+      {% if post.bait %}
+        <span class="detail-tag"><i class="fa-solid fa-worm"></i> {{ post.bait }}</span>
+      {% endif %}
+      {% if post.location_name %}
+        <span class="detail-tag"><i class="fa-solid fa-location-dot"></i> {{ post.location_name }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Action Bar -->
+    <div class="post-card__actions">
+      {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else 1 %}
+      {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
+      {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
+
+      <button class="action-btn like-btn {{ 'action-btn--active' if is_liked else '' }}" 
+              data-post-id="{{ post.id }}" aria-label="Like" aria-pressed="{{ 'true' if is_liked else 'false' }}">
+        <i class="{{ 'fa-solid' if is_liked else 'fa-regular' }} fa-heart like-icon"></i>
+        <span class="like-count">{{ post.likes | length }}</span>
+      </button>
+      
+      <span class="action-btn comment-btn" aria-label="Comment">
+        <i class="fa-regular fa-comment"></i>
+        <span class="comment-count-display">{{ post.comments | length }}</span>
+      </span>
+      
+      <button class="action-btn save-btn {{ 'action-btn--active' if is_saved else '' }}" 
+              data-post-id="{{ post.id }}" aria-label="Save" aria-pressed="{{ 'true' if is_saved else 'false' }}">
+        <i class="{{ 'fa-solid' if is_saved else 'fa-regular' }} fa-bookmark save-icon"></i>
+      </button>
     </div>
   </article>
 
@@ -71,30 +102,50 @@
   <section class="comments-section">
     <h2 class="comments-title">Comments</h2>
 
-    <div class="comment-list">
-      <!-- Hardcoded Comment Item -->
-      <div class="comment-item">
-        <img
-          src="https://images.pexels.com/photos/775358/pexels-photo-775358.jpeg"
-          alt="Commenter Avatar"
-          class="comment-avatar"
-        />
-        <div class="comment-body">
-          <div class="comment-header">
-            <span class="comment-username">RiverKing</span>
-            <span class="comment-time">2 hours ago</span>
+    <div class="comment-list" id="comment-list">
+      {% if comments %}
+        {% for comment in comments %}
+          <div class="comment-item">
+            <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}">
+              <img src="{{ comment.user.avatar_url if comment.user and comment.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
+                   alt="Avatar" class="comment-avatar" />
+            </a>
+            <div class="comment-body">
+              <div class="comment-header">
+                <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}" class="comment-username">
+                  {{ comment.user.username if comment.user else 'Unknown' }}
+                </a>
+                <span class="comment-time">{{ comment.created_at.strftime('%b %d, %H:%M') if comment.created_at else '' }}</span>
+              </div>
+              <div class="comment-text">{{ comment.content }}</div>
+            </div>
           </div>
-          <div class="comment-text">
-            Nice catch man! I was near that same bend yesterday but didn't
-            have much luck. You must have hit the tide just right.
-          </div>
-        </div>
-      </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-state" id="no-comments-msg">No comments yet. Be the first to comment!</p>
+      {% endif %}
     </div>
   </section>
+
+  <!-- Fixed Comment Input Area -->
+  <div class="comment-input-area">
+    <form id="comment-form" data-post-id="{{ post.id }}">
+      <input type="text" id="comment-text" placeholder="Add a comment..."
+             class="comment-input" autocomplete="off" required />
+      <button type="submit" class="comment-submit-btn">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<!-- Post card interactions (delegated Like/Save) & Carousel -->
+<script src="{{ url_for('static', filename='js/post-card.js') }}"></script>
+<!-- Post detail specific logic (Comment submission) -->
 <script src="{{ url_for('static', filename='js/post.js') }}"></script>
+<script>
+  window.currentUser = { id: {{ current_user_id | default(1) }} };
+</script>
 {% endblock %}

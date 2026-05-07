@@ -91,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
   
       // Update count
-      if (countSpan && data.count !== undefined) {
-        countSpan.textContent = data.count;
+      if (countSpan && data.likesCount !== undefined) {
+        countSpan.textContent = data.likesCount;
       }
     } 
     else if (type === "save") {

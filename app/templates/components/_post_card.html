@@ -28,9 +28,7 @@
 
   {# ── Content ── #}
   <div class="post-card__body">
-    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card__content-link">
-      {{ post.content }}
-    </a>
+    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card__content-link">{{ post.content }}</a>
   </div>
 
   {# ── Images (Carousel) ── #}

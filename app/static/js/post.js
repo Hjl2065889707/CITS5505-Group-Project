@@ -1,72 +1,128 @@
+/**
+ * post.js — Logic specific to the Post Detail page.
+ * 
+ * Note: Like, Save, and Carousel interactions are handled
+ * globally by post-card.js using event delegation.
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
-  initCarousel();
+  const commentForm = document.getElementById("comment-form");
+  
+  if (commentForm) {
+    commentForm.addEventListener("submit", handleCommentSubmit);
+  }
 });
 
-function initCarousel() {
-  const track = document.getElementById("carousel-track");
-  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
-  const nextBtn = document.getElementById("next-btn");
-  const prevBtn = document.getElementById("prev-btn");
-  const indicator = document.getElementById("carousel-indicator");
-
-  if (!track || slides.length === 0) return;
-
-  // Hide controls entirely if there's only 1 image
-  if (slides.length <= 1) {
-    if (nextBtn) nextBtn.style.display = 'none';
-    if (prevBtn) prevBtn.style.display = 'none';
-    if (indicator) indicator.style.display = 'none';
-    return;
+async function handleCommentSubmit(event) {
+  event.preventDefault();
+  
+  const form = event.target;
+  const postId = form.dataset.postId;
+  const input = document.getElementById("comment-text");
+  const submitBtn = form.querySelector(".comment-submit-btn");
+  const text = input.value.trim();
+  
+  if (!text) return;
+  
+  // Disable form while submitting
+  input.disabled = true;
+  submitBtn.disabled = true;
+  
+  try {
+    const response = await fetch(`/api/posts/${postId}/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ content: text })
+    });
+    
+    if (response.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
+    
+    if (!response.ok) {
+      throw new Error(`Failed to post comment: ${response.statusText}`);
+    }
+    
+    const newComment = await response.json();
+    
+    // Clear input
+    input.value = "";
+    
+    // Dynamically insert the new comment into the DOM
+    appendCommentToDOM(newComment);
+    
+    // Update comment count
+    updateCommentCount();
+    
+  } catch (error) {
+    console.error("Error submitting comment:", error);
+    alert("Failed to submit comment. Please try again.");
+  } finally {
+    // Re-enable form
+    input.disabled = false;
+    submitBtn.disabled = false;
+    input.focus();
   }
+}
 
-  const updateUI = () => {
-    // Determine current index by checking the scroll position
-    const slideWidth = slides[0].getBoundingClientRect().width;
-    // Calculate which slide we are mostly viewing
-    const currentIndex = Math.round(track.scrollLeft / slideWidth);
-
-    // Update indicator text (e.g., 1/2)
-    if (indicator) {
-      indicator.textContent = `${currentIndex + 1}/${slides.length}`;
-    }
-
-    // Toggle visibility of Previous button
-    if (currentIndex === 0) {
-      prevBtn.classList.add('hidden');
-    } else {
-      prevBtn.classList.remove('hidden');
-    }
-
-    // Toggle visibility of Next button
-    if (currentIndex === slides.length - 1) {
-      nextBtn.classList.add('hidden');
-    } else {
-      nextBtn.classList.remove('hidden');
-    }
-  };
-
-  // Listen to the scroll event so the UI updates even if the user swipes instead of clicking
-  track.addEventListener('scroll', () => {
-    // Debounce to improve performance
-    clearTimeout(track.scrollTimeout);
-    track.scrollTimeout = setTimeout(updateUI, 50);
+function appendCommentToDOM(comment) {
+  const commentList = document.getElementById("comment-list");
+  const noCommentsMsg = document.getElementById("no-comments-msg");
+  
+  // Remove the "no comments yet" message if it exists
+  if (noCommentsMsg) {
+    noCommentsMsg.remove();
+  }
+  
+  // Build the HTML for the new comment
+  // We use the same structure as in post_detail.html
+  const commentHTML = `
+    <div class="comment-item" style="animation: fadeIn 0.3s ease;">
+      <a href="/profile/${comment.userId || '#'}">
+        <img src="${comment.avatarUrl}" alt="Avatar" class="comment-avatar" />
+      </a>
+      <div class="comment-body">
+        <div class="comment-header">
+          <a href="/profile/${comment.userId || '#'}" class="comment-username">
+            ${comment.username}
+          </a>
+          <span class="comment-time">Just now</span>
+        </div>
+        <div class="comment-text">${escapeHTML(comment.content)}</div>
+      </div>
+    </div>
+  `;
+  
+  // Insert at the top of the list
+  commentList.insertAdjacentHTML("afterbegin", commentHTML);
+  
+  // Scroll to the comment (optional, but good UX since input is fixed at bottom)
+  window.scrollTo({
+    top: document.querySelector('.comments-section').offsetTop - 60,
+    behavior: 'smooth'
   });
+}
 
-  // Handle button clicks to programmatically scroll
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      const slideWidth = slides[0].getBoundingClientRect().width;
-      track.scrollBy({ left: slideWidth, behavior: 'smooth' });
-    });
+function updateCommentCount() {
+  const countDisplay = document.querySelector(".comment-count-display");
+  if (countDisplay) {
+    const currentCount = parseInt(countDisplay.textContent) || 0;
+    countDisplay.textContent = currentCount + 1;
   }
+}
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      const slideWidth = slides[0].getBoundingClientRect().width;
-      track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
-    });
-  }
-
-  // Set initial state
-  updateUI();
+// Simple HTML escaper to prevent XSS if the user types HTML
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag)
+  );
 }
