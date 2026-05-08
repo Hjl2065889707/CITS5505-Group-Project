@@ -24,9 +24,11 @@
     <div class="user-details">
       <div class="username-row">
         <span class="username">{{ user.username }}</span>
+        {% if current_user and user.id == current_user.id %}
         <a href="{{ url_for('settings') }}" class="settings-btn" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </a>
+        {% endif %}
       </div>
       <div class="user-id">ID: {{ user.id }}</div>
       <div class="bio">{{ user.bio or "Say something about yourself..." }}</div>
@@ -35,8 +37,12 @@
 
   <section id="user-posts">
     <div class="posts-navbar">
-      <button class="nav-tab active" data-target="my-posts">My Posts</button>
+      <button class="nav-tab active" data-target="my-posts">
+        {% if current_user and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
+      </button>
+      {% if current_user and user.id == current_user.id %}
       <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
+      {% endif %}
     </div>
 
     <div id="my-posts" class="tab-content active">
@@ -49,6 +55,7 @@
       {% endif %}
     </div>
 
+    {% if current_user and user.id == current_user.id %}
     <div id="saved-posts" class="tab-content">
       {% if saved_posts %}
         {% for post in saved_posts %}
@@ -58,6 +65,7 @@
         <p class="empty-state">No saved posts to show.</p>
       {% endif %}
     </div>
+    {% endif %}
   </section>
 </div>
 {% endblock %} 
