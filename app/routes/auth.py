@@ -5,10 +5,16 @@ Owner: Oliver24258175
 
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import func
 
 from app import app, db
 from app.forms import LoginForm, RegisterForm
 from app.models import User
+
+
+def is_safe_redirect_url(target):
+    """Allow redirects only to local app paths."""
+    return target and target.startswith("/") and not target.startswith("//")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -21,22 +27,23 @@ def login():
 
     if form.validate_on_submit():
         username_or_email = form.username_or_email.data.strip()
+        identity = username_or_email.lower()
         password = form.password.data
 
         user = User.query.filter(
-            (User.username == username_or_email) | (User.email == username_or_email)
+            (func.lower(User.username) == identity)
+            | (func.lower(User.email) == identity)
         ).first()
 
         if user is None or not user.check_password(password):
-            flash("Invalid username/email or password.", "error")
+            flash("Invalid username/email or password. Please try again.", "error")
             return render_template("login.html", form=form, active_page="login")
 
         login_user(user)
-
-        flash("You have successfully logged in.", "success")
+        flash(f"Welcome back, {user.username}!", "success")
 
         next_page = request.args.get("next")
-        if next_page:
+        if is_safe_redirect_url(next_page):
             return redirect(next_page)
 
         return redirect(url_for("feed"))
@@ -57,14 +64,16 @@ def register():
         email = form.email.data.strip().lower()
         password = form.password.data
 
-        existing_username = User.query.filter_by(username=username).first()
+        existing_username = User.query.filter(
+            func.lower(User.username) == username.lower()
+        ).first()
         if existing_username:
-            flash("This username is already taken.", "error")
+            flash("This username is already taken. Please choose another one.", "error")
             return render_template("register.html", form=form, active_page="register")
 
-        existing_email = User.query.filter_by(email=email).first()
+        existing_email = User.query.filter(func.lower(User.email) == email).first()
         if existing_email:
-            flash("This email is already registered.", "error")
+            flash("This email is already registered. Please log in instead.", "error")
             return render_template("register.html", form=form, active_page="register")
 
         user = User(username=username, email=email)
@@ -73,7 +82,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        flash("Account created successfully. Please log in.", "success")
+        flash("Account created successfully. Please log in to continue.", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html", form=form, active_page="register")
@@ -84,5 +93,5 @@ def register():
 def logout():
     """Log the current user out and redirect to feed."""
     logout_user()
-    flash("You have been logged out.", "success")
+    flash("You have been logged out successfully.", "success")
     return redirect(url_for("feed"))

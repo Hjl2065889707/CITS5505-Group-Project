@@ -2,82 +2,69 @@
 
 {% block title %}Register | CatchLog{% endblock %}
 
-{% block content %}
-<div style="max-width: 420px; margin: 80px auto; padding: 24px;">
-  <h1 style="text-align: center; margin-bottom: 8px;">Create account</h1>
-  <p style="text-align: center; color: #64748b; margin-bottom: 24px;">
-    Join CatchLog and start sharing your catches.
-  </p>
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %}
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div style="margin-bottom: 16px;">
-        {% for category, message in messages %}
-          <div
-            style="
-              padding: 10px 12px;
-              margin-bottom: 8px;
-              border-radius: 8px;
-              background: {% if category == 'error' %}#fee2e2{% else %}#dcfce7{% endif %};
-              color: {% if category == 'error' %}#991b1b{% else %}#166534{% endif %};
-            "
-          >
-            {{ message }}
-          </div>
+{% block content %}
+<section class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Create account</h1>
+      <p>Join CatchLog and start sharing your catches.</p>
+    </div>
+
+    <form class="auth-form" method="POST" action="{{ url_for('register') }}">
+      {{ form.hidden_tag() }}
+
+      <div class="auth-field">
+        {{ form.username.label(class="auth-label") }}
+        {{ form.username(class="auth-input", placeholder="Username") }}
+
+        {% for error in form.username.errors %}
+          <p class="auth-error">{{ error }}</p>
         {% endfor %}
       </div>
-    {% endif %}
-  {% endwith %}
 
-  <form method="POST" action="{{ url_for('register') }}">
-    {{ form.hidden_tag() }}
+      <div class="auth-field">
+        {{ form.email.label(class="auth-label") }}
+        {{ form.email(class="auth-input", placeholder="Email address") }}
 
-    <div style="margin-bottom: 16px;">
-      {{ form.username.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
-      {{ form.username(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
+        {% for error in form.email.errors %}
+          <p class="auth-error">{{ error }}</p>
+        {% endfor %}
+      </div>
 
-      {% for error in form.username.errors %}
-        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
-      {% endfor %}
+      <div class="auth-field">
+        {{ form.password.label(class="auth-label") }}
+        {{ form.password(class="auth-input", placeholder="Password") }}
+
+        {% for error in form.password.errors %}
+          <p class="auth-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <div class="auth-field">
+        {{ form.confirm_password.label(class="auth-label") }}
+        {{ form.confirm_password(class="auth-input", placeholder="Confirm password") }}
+
+        {% for error in form.confirm_password.errors %}
+          <p class="auth-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      {{ form.submit(class="auth-submit") }}
+    </form>
+
+    <div class="auth-links">
+      <p>
+        Already have an account?
+        <a href="{{ url_for('login') }}">Log in</a>
+      </p>
+      <p>
+        <a href="{{ url_for('feed') }}">← Back to Feed</a>
+      </p>
     </div>
-
-    <div style="margin-bottom: 16px;">
-      {{ form.email.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
-      {{ form.email(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
-
-      {% for error in form.email.errors %}
-        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
-      {% endfor %}
-    </div>
-
-    <div style="margin-bottom: 16px;">
-      {{ form.password.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
-      {{ form.password(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
-
-      {% for error in form.password.errors %}
-        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
-      {% endfor %}
-    </div>
-
-    <div style="margin-bottom: 16px;">
-      {{ form.confirm_password.label(style="display:block; margin-bottom:6px; font-weight:600;") }}
-      {{ form.confirm_password(style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px;") }}
-
-      {% for error in form.confirm_password.errors %}
-        <p style="color:#dc2626; margin-top:6px;">{{ error }}</p>
-      {% endfor %}
-    </div>
-
-    {{ form.submit(style="width:100%; padding:11px 16px; border:none; border-radius:999px; background:#0f766e; color:white; font-weight:700; cursor:pointer;") }}
-  </form>
-
-  <p style="text-align:center; margin-top:18px;">
-    Already have an account?
-    <a href="{{ url_for('login') }}">Log in</a>
-  </p>
-
-  <p style="text-align:center; margin-top:8px;">
-    <a href="{{ url_for('feed') }}">← Back to Feed</a>
-  </p>
-</div>
+  </div>
+</section>
 {% endblock %}
