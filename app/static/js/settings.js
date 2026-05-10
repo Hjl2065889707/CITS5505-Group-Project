@@ -1,73 +1,231 @@
+/**
+ * settings.js — Logic for the Settings page.
+ *
+ * Handles:
+ *   - Avatar upload (preview + API)
+ *   - Profile update (username + bio)
+ *   - Password change
+ *   - Logout
+ *   - Toast notifications
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    // ---------------------------------------------------------
-    // DOM Elements Selection
-    // ---------------------------------------------------------
-    const avatarInput = document.getElementById('avatarUpload');
-    const avatarPreview = document.getElementById('avatarPreview');
-    const saveBtn = document.querySelector('.save-btn');
-    const logoutBtn = document.querySelector('.logout-btn');
+  // ── DOM Elements ──
+  const avatarInput = document.getElementById('avatarUpload');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const saveProfileBtn = document.getElementById('saveProfileBtn');
+  const changePasswordBtn = document.getElementById('changePasswordBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-    // ---------------------------------------------------------
-    // Avatar Upload Logic
-    // ---------------------------------------------------------
-    if (avatarInput && avatarPreview) {
-        avatarInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            
-            if (file) {
-                // Add an additional check to assure only image types are processed
-                if (!file.type.startsWith('image/')) {
-                    console.error('Error: Selected file is not an image.');
-                    alert('Please select a valid image file (PNG, JPG, etc).');
-                    return;
-                }
+  // ── Avatar Upload ──
+  if (avatarInput && avatarPreview) {
+    avatarInput.addEventListener('change', handleAvatarUpload);
+  }
 
-                // Use FileReader to display the image locally for preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    avatarPreview.src = e.target.result;
-                    console.log('Success: Avatar image replaced in UI preview.');
-                    
-                    // TODO: Implement backend upload logic later
-                    // 1. Create a FormData instance and append the 'file' object.
-                    // 2. Fetch/POST to backend API (e.g., /api/user/avatar).
-                    // 3. Handle loading state and gracefully handle upload failure.
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
+  // ── Save Profile ──
+  if (saveProfileBtn) {
+    saveProfileBtn.addEventListener('click', handleSaveProfile);
+  }
 
-    // ---------------------------------------------------------
-    // Save Changes Logic
-    // ---------------------------------------------------------
-    if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            const username = document.getElementById('username').value;
-            const bio = document.getElementById('bio').value;
+  // ── Change Password ──
+  if (changePasswordBtn) {
+    changePasswordBtn.addEventListener('click', handleChangePassword);
+  }
 
-            console.log('Action: Save Changes clicked.');
-            console.log(`Payload ready for backend -> Username: "${username}", Bio: "${bio}"`);
-
-            // TODO: Implement profile update logic later
-            // 1. Validate username and bio inputs locally.
-            // 2. Send JSON payload to backend PUT/PATCH endpoint (e.g., /api/user/profile).
-            // 3. Display success/error UI toast message based on backend response.
-        });
-    }
-
-    // ---------------------------------------------------------
-    // Logout Logic
-    // ---------------------------------------------------------
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            console.log('Action: Logout button clicked.');
-            
-            // TODO: Implement proper logout logic later
-            // 1. Alert/Confirm dialog to ensure the user really wants to log out.
-            // 2. Fetch POST to /api/auth/logout to clear server-side session cookies.
-            // 3. Clear local storage/session storage (tokens, user cache).
-            // 4. Redirect user back to the landing page or login page (window.location.href = '/login').
-        });
-    }
+  // ── Logout ──
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', handleLogout);
+  }
 });
+
+
+// ── Avatar Upload ────────────────────────────────────────────────────
+
+async function handleAvatarUpload(event) {
+  const file = event.target.files[0];
+  const preview = document.getElementById('avatarPreview');
+
+  if (!file) return;
+
+  // Client-side type check
+  if (!file.type.startsWith('image/')) {
+    showToast('Please select a valid image file.', 'error');
+    return;
+  }
+
+  // Client-side size check (5 MB)
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Image must be under 5MB.', 'error');
+    return;
+  }
+
+  // Show local preview immediately
+  const reader = new FileReader();
+  reader.onload = (e) => { preview.src = e.target.result; };
+  reader.readAsDataURL(file);
+
+  // Upload to server
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  try {
+    const response = await fetch('/api/users/me/avatar', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showToast(data.error || 'Failed to upload avatar.', 'error');
+      return;
+    }
+
+    showToast('Avatar updated!', 'success');
+
+  } catch (error) {
+    console.error('Avatar upload error:', error);
+    showToast('Failed to upload avatar.', 'error');
+  }
+}
+
+
+// ── Save Profile ─────────────────────────────────────────────────────
+
+async function handleSaveProfile() {
+  const btn = document.getElementById('saveProfileBtn');
+  const username = document.getElementById('username').value.trim();
+  const bio = document.getElementById('bio').value.trim();
+
+  // Client-side validation
+  if (username.length < 3 || username.length > 50) {
+    showToast('Username must be 3-50 characters.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  try {
+    const response = await fetch('/api/users/me', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, bio })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      // Handle field-specific errors
+      const errorMsg = typeof data.error === 'object'
+        ? Object.values(data.error).join(', ')
+        : data.error;
+      showToast(errorMsg || 'Failed to save changes.', 'error');
+      return;
+    }
+
+    showToast('Profile updated!', 'success');
+
+  } catch (error) {
+    console.error('Save profile error:', error);
+    showToast('Failed to save changes.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save Changes';
+  }
+}
+
+
+// ── Change Password ──────────────────────────────────────────────────
+
+async function handleChangePassword() {
+  const btn = document.getElementById('changePasswordBtn');
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  // Client-side validation
+  if (!currentPassword) {
+    showToast('Please enter your current password.', 'error');
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    showToast('New password must be at least 6 characters.', 'error');
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    showToast('New passwords do not match.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Changing...';
+
+  try {
+    const response = await fetch('/api/users/me/password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showToast(data.error || 'Failed to change password.', 'error');
+      return;
+    }
+
+    showToast('Password changed successfully!', 'success');
+
+    // Clear the fields
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+
+  } catch (error) {
+    console.error('Change password error:', error);
+    showToast('Failed to change password.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Change Password';
+  }
+}
+
+
+// ── Logout ───────────────────────────────────────────────────────────
+
+function handleLogout() {
+  if (confirm('Are you sure you want to log out?')) {
+    window.location.href = '/logout';
+  }
+}
+
+
+// ── Toast ────────────────────────────────────────────────────────────
+
+let toastTimeout = null;
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+
+  // Clear any existing timeout
+  if (toastTimeout) clearTimeout(toastTimeout);
+
+  // Reset classes
+  toast.className = 'toast';
+  toast.classList.add(`toast--${type}`);
+  toast.textContent = message;
+
+  // Trigger show
+  requestAnimationFrame(() => {
+    toast.classList.add('show');
+  });
+
+  // Auto-hide after 3 seconds
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
