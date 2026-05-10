@@ -17,7 +17,8 @@ import json
 from pathlib import Path
 
 from flask import jsonify
-from app import app
+from app import app, db
+from app.models import Post, PostImage, Comment, PostLike, User
 
 # ---------- Temporary mock-data paths (remove after DB migration) ----------
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -60,7 +61,78 @@ def api_saved_posts():
 # def api_create_post(): ...
 
 
-# ===== Map (Chrommanito) — TODO ========================================
+# ===== Map (Chrommanito) ========================================
 
-# @app.route("/api/posts/map")
-# def api_map_posts(): ...
+@app.route("/api/posts/map")
+def api_map_posts():
+    """Return posts that have valid location data for the map page."""
+
+    posts = (
+        Post.query
+        .filter(Post.latitude.isnot(None), Post.longitude.isnot(None))
+        .order_by(Post.created_at.desc())
+        .all()
+    )
+
+    result = []
+
+    for post in posts:
+        # Images
+        post_images = (
+            PostImage.query
+            .filter_by(post_id=post.id)
+            .order_by(PostImage.display_order.asc())
+            .all()
+        )
+        photos = [image.image_url for image in post_images]
+
+        # Comments
+        post_comments = (
+            Comment.query
+            .filter_by(post_id=post.id)
+            .order_by(Comment.created_at.asc())
+            .all()
+        )
+
+        comments = []
+        for comment in post_comments:
+            comment_user = User.query.get(comment.user_id)
+
+            comments.append({
+                "id": str(comment.id),
+                "username": comment_user.username if comment_user else "Unknown",
+                "text": comment.content,
+                "createdAt": comment.created_at.isoformat() if comment.created_at else "",
+            })
+
+        # Likes count
+        likes_count = PostLike.query.filter_by(post_id=post.id).count()
+
+        result.append({
+            "id": str(post.id),
+            "author": {
+                "userId": str(post.user.id),
+                "username": post.user.username,
+                "avatarUrl": post.user.avatar_url or "/static/img/default-avatar.png",
+            },
+            "content": post.content,
+            "photos": photos,
+            "catchDetails": {
+                "species": post.species or "",
+                "weight": f"{post.weight_kg} kg" if post.weight_kg is not None else "",
+                "bait": post.bait or "",
+                "location": {
+                    "name": post.location_name or "",
+                    "latitude": post.latitude,
+                    "longitude": post.longitude,
+                },
+            },
+            "metrics": {
+                "likes": likes_count,
+                "commentsCount": len(comments),
+            },
+            "createdAt": post.created_at.isoformat() if post.created_at else "",
+            "comments": comments,
+        })
+
+    return jsonify(result)

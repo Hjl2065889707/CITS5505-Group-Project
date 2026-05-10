@@ -1,5 +1,3 @@
-import { posts } from "./data.js";
-
 import { openSidebar, closeSidebar, showEmptySidebar } from "./sidebar.js";
 
 import { groupPosts } from "./utils.js";
@@ -44,6 +42,7 @@ L.tileLayer(
 
 // Sidebar
 
+let posts = [];
 let lastOpenedGroup = null;
 
 const sidebar = document.getElementById("sidebar");
@@ -89,12 +88,33 @@ function renderMarkersDynamic() {
   });
 }
 
-renderMarkersDynamic();
+async function loadMapPosts() {
+  try {
+    const response = await fetch("/api/posts/map");
+
+    if (!response.ok) {
+      throw new Error(`Failed to load map posts: ${response.status}`);
+    }
+
+    posts = await response.json();
+    renderMarkersDynamic();
+  } catch (error) {
+    console.error("Map posts load failed:", error);
+    showEmptySidebar(sidebar, closeSidebar);
+    sidebar.querySelector(".sidebar-feed").innerHTML = `
+      <p style="padding: 10px; color: #666;">
+        Failed to load map posts.
+      </p>
+    `;
+    updateTabDirection();
+  }
+}
 
 map.on("zoomend", renderMarkersDynamic);
-
 
 // Click map → close
 map.on("click", () => {
   closeSidebarWithUI();
 });
+
+loadMapPosts();
