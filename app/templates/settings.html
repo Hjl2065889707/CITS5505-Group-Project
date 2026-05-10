@@ -1,101 +1,131 @@
-{% extends "base.html" %} {% block title %}Settings | CatchLog{% endblock %} {%
-block styles %}
-<!-- Use Inter font for a modern look -->
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
-/>
-<!-- FontAwesome for icons -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-/>
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/settings.css') }}"
-/>
-{% endblock %} {% block content %}
+{% extends "base.html" %}
+
+{% block title %}Settings | CatchLog{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- Toast notification -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <div class="settings-container">
   <!-- Header -->
   <header class="settings-header">
-    <a class="icon-button back-button" href="{{ url_for('profile') }}">
+    <a class="icon-button back-button" href="{{ url_for('profile') }}" aria-label="Back to profile">
       <i class="fa-solid fa-arrow-left"></i>
     </a>
     <h1>Settings</h1>
-    <!-- Placeholder for center-aligning title -->
     <div class="header-placeholder"></div>
   </header>
 
   <!-- Main Content -->
   <div class="settings-content">
-    <!-- Edit Profile Form -->
-    <form class="edit-profile-form">
-      <!-- Avatar Section -->
-      <div class="form-group avatar-group">
+
+    <!-- ── Profile Section ── -->
+    <section class="settings-section">
+      <h2 class="settings-section-title">Profile</h2>
+
+      <!-- Avatar -->
+      <div class="avatar-group">
         <div class="avatar-wrapper">
           <img
-            src="https://ui-avatars.com/api/?name=Master+Angler&background=0ea5e9&color=fff&size=200"
+            src="{{ user.avatar_url or url_for('static', filename='img/default-avatar.png') }}"
             alt="Profile avatar"
             class="profile-pic"
             id="avatarPreview"
           />
-          <!-- Upload Overlay Icon -->
-          <label
-            for="avatarUpload"
-            class="avatar-edit-overlay"
-            aria-label="Change Avatar"
-          >
+          <label for="avatarUpload" class="avatar-edit-overlay" aria-label="Change Avatar">
             <i class="fa-solid fa-pen"></i>
           </label>
-          <!-- Hidden file input for future implementation -->
           <input
             type="file"
             id="avatarUpload"
-            accept="image/png, image/jpeg, image/jpg"
+            accept="image/png, image/jpeg, image/jpg, image/webp"
             hidden
           />
         </div>
-        <p class="avatar-hint">Update your profile picture</p>
+        <p class="avatar-hint">Click to update your photo</p>
       </div>
 
-      <!-- Username Section -->
+      <!-- Username -->
       <div class="form-group">
         <label for="username">Username</label>
         <input
           type="text"
           id="username"
-          value="MasterAngler99"
+          value="{{ user.username }}"
           placeholder="Enter your username"
+          minlength="3"
+          maxlength="50"
         />
       </div>
 
-      <!-- Personal Bio Section -->
+      <!-- Email (read-only) -->
       <div class="form-group">
-        <label for="bio">Personal Bio</label>
-        <textarea
-          id="bio"
-          rows="5"
-          placeholder="Tell the forum about yourself, your favorite fishing gear or locations..."
-        >
-A passionate angler focusing mostly on catch-and-release fly fishing. Found often by the rivers during the weekends.</textarea
-        >
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          value="{{ user.email }}"
+          readonly
+        />
+        <span class="field-hint">Email cannot be changed.</span>
       </div>
 
-      <!-- Confirm Action -->
-      <button type="button" class="save-btn">Save Changes</button>
-    </form>
+      <!-- Bio -->
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea
+          id="bio"
+          rows="4"
+          maxlength="500"
+          placeholder="Tell others about yourself..."
+        >{{ user.bio or '' }}</textarea>
+      </div>
+
+      <button type="button" class="save-btn" id="saveProfileBtn">Save Changes</button>
+    </section>
 
     <div class="section-divider"></div>
 
-    <!-- Logout Section -->
+    <!-- ── Security Section ── -->
+    <section class="settings-section">
+      <h2 class="settings-section-title">Security</h2>
+
+      <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password" />
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" placeholder="At least 6 characters" minlength="6" />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" placeholder="Repeat new password" />
+      </div>
+
+      <button type="button" class="change-password-btn" id="changePasswordBtn">Change Password</button>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ── Danger Zone ── -->
     <div class="danger-zone">
-      <button type="button" class="logout-btn">
+      <button type="button" class="logout-btn" id="logoutBtn">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
         Log Out
       </button>
     </div>
+
   </div>
 </div>
-{% endblock %} {% block scripts %}
+{% endblock %}
+
+{% block scripts %}
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 {% endblock %}
