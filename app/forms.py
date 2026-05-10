@@ -91,7 +91,3 @@ class RegisterForm(FlaskForm):
 # TODO: CreatePostForm
 
 
-# ===== Settings Forms (Hjl) =======================================
-
-
-# TODO: SettingsForm
