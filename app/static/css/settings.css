@@ -1,137 +1,149 @@
-/* ======= Base Styles & Variables ======= */
-:root {
-  --bg-color: #f4f6f8;
-  --card-bg: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --border-color: #cbd5e1;
-  --primary-color: #0ea5e9; /* Fishing theme color (blue) */
-  --primary-hover: #0284c7;
-  --danger-color: #ef4444;
-  --danger-hover: #fee2e2;
-  --input-bg: #f8fafc;
-  --transition-speed: 0.2s;
-  --border-radius: 12px;
-}
+/* ========== Settings Page Styles ========== */
+/* Uses design system variables from base.css — NO private :root overrides */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ======= Layout ======= */
+/* ── Layout ── */
 .settings-container {
-  max-width: 600px;
+  max-width: 640px;
   margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--card-bg);
+  background-color: var(--color-surface);
 }
 
 @media (min-width: 640px) {
   .settings-container {
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-10);
     min-height: auto;
-    border-radius: 16px;
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
   }
 }
 
-/* ======= Header ======= */
+/* ── Header ── */
 .settings-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-color);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  background-color: var(--card-bg);
+  background-color: var(--color-surface);
   z-index: 10;
 }
+
 @media (min-width: 640px) {
   .settings-header {
-    border-radius: 16px 16px 0 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 }
 
 .settings-header h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
 }
 
 .icon-button {
   background: none;
   border: none;
-  color: var(--text-primary);
-  font-size: 1.25rem;
+  color: var(--color-text);
+  font-size: 18px;
   cursor: pointer;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  transition: background-color var(--transition-speed);
-}
-.icon-button:hover {
-  background-color: var(--input-bg);
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-base), color var(--transition-base);
+  text-decoration: none;
 }
 
-/* Placeholder balances the back button flex space for centering */
+.icon-button:hover {
+  background-color: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
 .header-placeholder {
   width: 40px;
 }
 
-/* ======= Content & Forms ======= */
+/* ── Content ── */
 .settings-content {
-  padding: 24px;
+  padding: var(--space-6);
   flex: 1;
 }
 
-.edit-profile-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ── Toast Notification ── */
+.toast {
+  position: fixed;
+  top: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-inverse);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base), transform var(--transition-base);
 }
 
-/* --- Avatar Upload Group --- */
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.toast--success {
+  background-color: var(--color-success);
+}
+
+.toast--error {
+  background-color: var(--color-error);
+}
+
+/* ── Form Sections ── */
+.settings-section {
+  margin-bottom: var(--space-8);
+}
+
+.settings-section-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Avatar ── */
 .avatar-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-5);
 }
 
 .avatar-wrapper {
   position: relative;
   width: 100px;
   height: 100px;
-  margin-bottom: 12px;
-  border-radius: 50%;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-full);
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--color-border);
 }
 
 .profile-pic {
@@ -153,109 +165,181 @@ body {
   justify-content: center;
   opacity: 0;
   cursor: pointer;
-  transition: opacity var(--transition-speed);
+  transition: opacity var(--transition-base);
 }
+
 .avatar-edit-overlay i {
-  font-size: 1.5rem;
+  font-size: 20px;
 }
+
 .avatar-wrapper:hover .avatar-edit-overlay {
   opacity: 1;
 }
 
 .avatar-hint {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
 }
 
-/* --- Form Fields --- */
+/* ── Form Fields ── */
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: var(--space-5);
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
 }
 
 .form-group label {
-  font-size: 0.9rem;
+  font-size: 14px;
   font-weight: 500;
-  margin-bottom: 8px;
-  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
 }
 
 .form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
 .form-group textarea {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--input-bg);
-  font-family: inherit;
-  font-size: 1rem;
-  color: var(--text-primary);
-  transition:
-    border-color var(--transition-speed),
-    box-shadow var(--transition-speed),
-    background-color var(--transition-speed);
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-muted);
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
-.form-group input[type="text"]:focus,
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: var(--color-border-strong);
+}
+
+.form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-  background-color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+  background-color: var(--color-bg);
+}
+
+.form-group input:read-only {
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+}
+
+.form-group input:read-only:focus {
+  border-color: transparent;
+  box-shadow: none;
+  background-color: var(--color-surface-muted);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-muted);
 }
 
 .form-group textarea {
   resize: vertical;
   min-height: 100px;
+  line-height: 1.6;
 }
 
-/* --- Save Action --- */
+.field-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+/* ── Buttons ── */
 .save-btn {
-  margin-top: 10px;
-  background-color: var(--primary-color);
-  color: white;
+  width: 100%;
+  margin-top: var(--space-3);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
   border: none;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color var(--transition-speed);
+  transition: background-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .save-btn:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--color-primary-dark);
+  box-shadow: var(--shadow-sm);
 }
 
-/* ======= Layout Divider ======= */
+.save-btn:active {
+  transform: translateY(1px);
+}
+
+.save-btn:disabled {
+  background-color: var(--color-border-strong);
+  cursor: not-allowed;
+}
+
+.change-password-btn {
+  width: 100%;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.change-password-btn:hover {
+  background-color: var(--color-primary-light);
+}
+
+.change-password-btn:disabled {
+  border-color: var(--color-border-strong);
+  color: var(--color-border-strong);
+  cursor: not-allowed;
+}
+
+/* ── Section Divider ── */
 .section-divider {
   height: 1px;
-  background-color: var(--border-color);
-  margin: 32px 0;
+  background-color: var(--color-border);
+  margin: var(--space-2) 0;
 }
 
-/* ======= Logout Button ======= */
+/* ── Danger Zone ── */
 .danger-zone {
-  margin-bottom: 24px;
+  margin-top: var(--space-6);
 }
 
 .logout-btn {
   width: 100%;
-  padding: 14px;
+  padding: var(--space-3) var(--space-5);
   background-color: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 8px;
-  font-size: 1rem;
+  color: var(--color-error);
+  border: 1.5px solid var(--color-error);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: all var(--transition-speed);
+  gap: var(--space-2);
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 .logout-btn:hover {
-  background-color: var(--danger-hover);
+  background-color: rgba(239, 68, 68, 0.06);
 }
