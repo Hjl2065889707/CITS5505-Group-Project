@@ -28,9 +28,19 @@
         <a href="{{ url_for('settings') }}" class="settings-btn" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </a>
+        {% elif current_user.is_authenticated %}
+        <button class="follow-btn {% if is_following %}following{% endif %}" data-user-id="{{ user.id }}">
+          {% if is_following %}Following{% else %}Follow{% endif %}
+        </button>
         {% endif %}
       </div>
       <div class="user-id">ID: {{ user.id }}</div>
+      
+      <div class="follow-stats">
+        <span class="stat"><strong id="followersCount">{{ followers_count }}</strong> followers</span>
+        <span class="stat"><strong>{{ following_count }}</strong> following</span>
+      </div>
+
       <div class="bio">{{ user.bio or "Say something about yourself..." }}</div>
     </div>
   </section>

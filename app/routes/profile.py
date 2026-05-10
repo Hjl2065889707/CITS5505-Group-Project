@@ -35,10 +35,18 @@ def profile(user_id=None):
     saved_post_ids = [sp.post_id for sp in SavedPost.query.filter_by(user_id=target_user.id).all()]
     saved_posts = Post.query.filter(Post.id.in_(saved_post_ids)).all() if saved_post_ids else []
 
+    # Follow stats
+    is_following = False
+    if current_user.is_authenticated and current_user.id != target_user.id:
+        is_following = current_user.is_following(target_user)
+
     return render_template("profile.html",
                            user=target_user,
                            my_posts=my_posts,
                            saved_posts=saved_posts,
+                           is_following=is_following,
+                           followers_count=target_user.followers_count(),
+                           following_count=target_user.following_count(),
                            active_page="profile")
 
 
