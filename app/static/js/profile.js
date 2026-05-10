@@ -95,15 +95,24 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
 
-          modalList.innerHTML = users
-            .map(
-              (u) => `
-              <a href="/profile/${u.id}" class="follow-user-card">
-                <img src="${u.avatarUrl}" alt="${u.username}" />
-                <span class="follow-user-name">${u.username}</span>
-              </a>`
-            )
-            .join("");
+          modalList.innerHTML = "";
+          users.forEach((u) => {
+            const card = document.createElement("a");
+            card.href = `/profile/${u.id}`;
+            card.className = "follow-user-card";
+
+            const img = document.createElement("img");
+            img.src = u.avatarUrl;
+            img.alt = u.username;
+
+            const name = document.createElement("span");
+            name.className = "follow-user-name";
+            name.textContent = u.username; // textContent is XSS-safe
+
+            card.appendChild(img);
+            card.appendChild(name);
+            modalList.appendChild(card);
+          });
         } catch (err) {
           modalList.innerHTML =
             '<p class="empty-state">Failed to load list.</p>';
