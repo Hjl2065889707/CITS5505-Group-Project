@@ -40,6 +40,9 @@ def profile(user_id=None):
 
 @app.route("/settings")
 def settings():
-    """Show settings page."""
-    # TODO: pass SettingsForm, handle POST to save changes
-    return render_template("settings.html", active_page="profile")
+    """Show settings page for the current user."""
+    # TODO: Replace with @login_required + current_user once Auth is integrated
+    user = db.session.get(User, 1)
+    if not user:
+        abort(404)
+    return render_template("settings.html", user=user, active_page="profile")
