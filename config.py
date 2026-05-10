@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+os.makedirs(os.path.join(basedir, "instance"), exist_ok=True)
 
 
 class Config:

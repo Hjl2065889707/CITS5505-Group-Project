@@ -1,8 +1,8 @@
 [
   {
-    "id": "post_001",
+    "id": 1,
     "author": {
-      "userId": "user_101",
+      "userId": 1,
       "username": "BassHunter99",
       "avatarUrl": "https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg"
     },
@@ -10,26 +10,23 @@
     "photos": [
       "https://images.pexels.com/photos/3220790/pexels-photo-3220790.jpeg"
     ],
-    "catchDetails": {
-      "species": "Largemouth Bass",
-      "weight": "4.5 lbs",
-      "bait": "Plastic Worm",
-      "location": {
-        "name": "Swan River, Perth",
-        "latitude": -31.95,
-        "longitude": 115.86
-      }
-    },
+    "category": "Catch Report",
+    "species": "Largemouth Bass",
+    "weightKg": 2.04,
+    "bait": "Plastic Worm",
+    "locationName": "Swan River, Perth",
+    "latitude": -31.95,
+    "longitude": 115.86,
     "metrics": {
       "likes": 24,
-      "commentsCount": 5
+      "comments": 5
     },
     "createdAt": "2026-03-30T08:30:00Z"
   },
   {
-    "id": "post_002",
+    "id": 2,
     "author": {
-      "userId": "user_102",
+      "userId": 1,
       "username": "OceanExplorer",
       "avatarUrl": "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg"
     },
@@ -38,26 +35,23 @@
       "https://images.pexels.com/photos/2132007/pexels-photo-2132007.jpeg",
       "https://images.pexels.com/photos/17275414/pexels-photo-17275414.jpeg"
     ],
-    "catchDetails": {
-      "species": "Yellowfin Tuna",
-      "weight": "32 kg",
-      "bait": "Live Squid",
-      "location": {
-        "name": "Rottnest Island Trench",
-        "latitude": -32.0,
-        "longitude": 115.5
-      }
-    },
+    "category": "Catch Report",
+    "species": "Yellowfin Tuna",
+    "weightKg": 32,
+    "bait": "Live Squid",
+    "locationName": "Rottnest Island Trench",
+    "latitude": -32.0,
+    "longitude": 115.5,
     "metrics": {
       "likes": 156,
-      "commentsCount": 18
+      "comments": 18
     },
     "createdAt": "2026-03-31T06:15:00Z"
   },
   {
-    "id": "post_003",
+    "id": 3,
     "author": {
-      "userId": "user_103",
+      "userId": 1,
       "username": "QuietAngler",
       "avatarUrl": "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg"
     },
@@ -68,19 +62,16 @@
       "https://images.pexels.com/photos/17250336/pexels-photo-17250336.jpeg",
       "https://images.pexels.com/photos/17250336/pexels-photo-17250336.jpeg"
     ],
-    "catchDetails": {
-      "species": "Rainbow Trout",
-      "weight": "1.2 lbs",
-      "bait": "Fly",
-      "location": {
-        "name": "Serpentine Dam",
-        "latitude": -32.4,
-        "longitude": 116.1
-      }
-    },
+    "category": "Catch Report",
+    "species": "Rainbow Trout",
+    "weightKg": 0.54,
+    "bait": "Fly",
+    "locationName": "Serpentine Dam",
+    "latitude": -32.4,
+    "longitude": 116.1,
     "metrics": {
       "likes": 8,
-      "commentsCount": 1
+      "comments": 1
     },
     "createdAt": "2026-03-31T10:45:00Z"
   }

@@ -3,6 +3,7 @@
 {% block title %}Create Post | CatchLog{% endblock %}
 
 {% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="{{ url_for('static', filename='css/create-post.css') }}" />
 {% endblock %}
 
@@ -43,20 +44,67 @@
   </div>
 
   <div class="form-field">
+    <label>Map Point</label>
+    <div id="locationMap" class="location-map"></div>
+    <p id="selectedCoordinates" class="selected-coordinates">
+      No map point selected.
+    </p>
+  </div>
+
+  <div class="form-field">
     <label for="postCategory">Category</label>
     <select id="postCategory" class="category-select">
       <option disabled selected>Select Category</option>
-      <option>Bass</option>
-      <option>Trout</option>
-      <option>Gear</option>
+      <option>Catch Report</option>
+      <option>Gear Review</option>
       <option>Question</option>
+      <option>General</option>
     </select>
   </div>
 
-  <button class="post-btn">Post</button>
+  <details class="catch-details">
+    <summary>Catch Details</summary>
+
+    <div class="catch-details__fields">
+      <div class="form-field">
+        <label for="postSpecies">Species</label>
+        <input
+          type="text"
+          id="postSpecies"
+          class="text-input"
+          placeholder="e.g. Largemouth Bass"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="postWeight">Weight (kg)</label>
+        <input
+          type="number"
+          id="postWeight"
+          class="text-input"
+          min="0"
+          step="0.01"
+          placeholder="e.g. 2.04"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="postBait">Bait</label>
+        <input
+          type="text"
+          id="postBait"
+          class="text-input"
+          placeholder="e.g. Plastic Worm"
+        />
+      </div>
+    </div>
+  </details>
+
+  <button class="post-btn" data-feed-url="{{ url_for('feed') }}">Post</button>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="{{ url_for('static', filename='js/create-post.js') }}"></script>
 {% endblock %}

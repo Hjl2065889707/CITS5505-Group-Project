@@ -1,8 +1,8 @@
 [
   {
-    "id": "post_004",
+    "id": 6,
     "author": {
-      "userId": "user_205",
+      "userId": 4,
       "username": "GearJunkie",
       "avatarUrl": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
     },
@@ -10,40 +10,38 @@
     "photos": [
       "https://images.pexels.com/photos/8536858/pexels-photo-8536858.jpeg"
     ],
-    "catchDetails": {
-      "species": null,
-      "weight": null,
-      "bait": "Stickbait",
-      "location": null
-    },
+    "category": "Gear Review",
+    "species": null,
+    "weightKg": null,
+    "bait": "Stickbait",
+    "locationName": null,
+    "latitude": null,
+    "longitude": null,
     "metrics": {
       "likes": 341,
-      "commentsCount": 56
+      "comments": 56
     },
     "createdAt": "2026-03-28T14:20:00Z"
   },
   {
-    "id": "post_005",
+    "id": 7,
     "author": {
-      "userId": "user_309",
+      "userId": 5,
       "username": "NightFisher",
       "avatarUrl": "https://images.pexels.com/photos/775358/pexels-photo-775358.jpeg"
     },
     "content": "Does anyone know a good spot for squidding around Fremantle during winter nights?",
     "photos": [],
-    "catchDetails": {
-      "species": "Squid",
-      "weight": null,
-      "bait": "Squid Jig",
-      "location": {
-        "name": "Fremantle Port",
-        "latitude": -32.05,
-        "longitude": 115.74
-      }
-    },
+    "category": "Question",
+    "species": "Squid",
+    "weightKg": null,
+    "bait": "Squid Jig",
+    "locationName": "Fremantle Port",
+    "latitude": -32.05,
+    "longitude": 115.74,
     "metrics": {
       "likes": 12,
-      "commentsCount": 4
+      "comments": 4
     },
     "createdAt": "2026-03-29T21:05:00Z"
   }
