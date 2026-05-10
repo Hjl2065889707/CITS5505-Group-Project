@@ -2,10 +2,51 @@
 
 {% block title %}Login | CatchLog{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+{% endblock %}
+
 {% block content %}
-<div style="max-width:400px;margin:80px auto;text-align:center;">
-  <h1>Login</h1>
-  <p style="color:#64748b;">TODO — Oliver will build this page.</p>
-  <a href="{{ url_for('feed') }}">← Back to Feed</a>
-</div>
+<section class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Log in</h1>
+      <p>Welcome back to CatchLog.</p>
+    </div>
+
+    <form class="auth-form" method="POST" action="{{ url_for('login') }}">
+      {{ form.hidden_tag() }}
+
+      <div class="auth-field">
+        {{ form.username_or_email.label(class="auth-label") }}
+        {{ form.username_or_email(class="auth-input", placeholder="Username or email") }}
+
+        {% for error in form.username_or_email.errors %}
+          <p class="auth-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <div class="auth-field">
+        {{ form.password.label(class="auth-label") }}
+        {{ form.password(class="auth-input", placeholder="Password") }}
+
+        {% for error in form.password.errors %}
+          <p class="auth-error">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      {{ form.submit(class="auth-submit") }}
+    </form>
+
+    <div class="auth-links">
+      <p>
+        Don't have an account?
+        <a href="{{ url_for('register') }}">Create one</a>
+      </p>
+      <p>
+        <a href="{{ url_for('feed') }}">← Back to Feed</a>
+      </p>
+    </div>
+  </div>
+</section>
 {% endblock %}
