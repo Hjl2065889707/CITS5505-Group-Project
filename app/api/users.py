@@ -3,10 +3,11 @@
 Owner: Hjl2065889707
 
 Security notes:
+  - All endpoints require authentication via @login_required.
   - All endpoints validate input server-side (zero-trust).
   - Avatar files are saved locally with secure_filename().
   - Password change requires the current password to be verified first.
-  - Authentication: falls back to demo_user (ID 1) until Auth is integrated.
+  - CSRF: will be enforced globally via Flask-WTF CSRFProtect in a future PR.
 """
 
 import os
