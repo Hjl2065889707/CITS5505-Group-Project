@@ -24,7 +24,7 @@
     <div class="user-details">
       <div class="username-row">
         <span class="username">{{ user.username }}</span>
-        {% if current_user and user.id == current_user.id %}
+        {% if current_user.is_authenticated and user.id == current_user.id %}
         <a href="{{ url_for('settings') }}" class="settings-btn" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </a>
@@ -38,9 +38,9 @@
   <section id="user-posts">
     <div class="posts-navbar">
       <button class="nav-tab active" data-target="my-posts">
-        {% if current_user and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
+        {% if current_user.is_authenticated and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
       </button>
-      {% if current_user and user.id == current_user.id %}
+      {% if current_user.is_authenticated and user.id == current_user.id %}
       <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
       {% endif %}
     </div>
@@ -55,7 +55,7 @@
       {% endif %}
     </div>
 
-    {% if current_user and user.id == current_user.id %}
+    {% if current_user.is_authenticated and user.id == current_user.id %}
     <div id="saved-posts" class="tab-content">
       {% if saved_posts %}
         {% for post in saved_posts %}

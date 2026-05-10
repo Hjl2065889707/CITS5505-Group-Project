@@ -13,7 +13,7 @@ import os
 import time
 
 from flask import jsonify, request, abort, current_app
-from flask_login import current_user
+from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from app import app, db
@@ -21,16 +21,6 @@ from app.models import User
 
 ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 MAX_AVATAR_SIZE = 5 * 1024 * 1024  # 5 MB
-
-
-def _get_current_user():
-    """Return the current user object.
-    Falls back to demo_user (ID 1) while Auth is not yet integrated.
-    TODO: Replace with @login_required once Auth branch is merged.
-    """
-    if current_user and current_user.is_authenticated:
-        return current_user
-    return db.session.get(User, 1)
 
 
 def _allowed_image(filename):
@@ -41,11 +31,10 @@ def _allowed_image(filename):
 # ── Update Profile ────────────────────────────────────────────────────
 
 @app.route("/api/users/me", methods=["PUT"])
+@login_required
 def update_profile():
     """Update the current user's username and/or bio."""
-    user = _get_current_user()
-    if not user:
-        abort(401)
+    user = current_user
 
     data = request.get_json(silent=True)
     if not data:
@@ -104,11 +93,10 @@ def update_profile():
 # ── Upload Avatar ─────────────────────────────────────────────────────
 
 @app.route("/api/users/me/avatar", methods=["POST"])
+@login_required
 def upload_avatar():
     """Upload and update the current user's avatar image."""
-    user = _get_current_user()
-    if not user:
-        abort(401)
+    user = current_user
 
     if 'avatar' not in request.files:
         return jsonify({"error": "No file provided"}), 400
@@ -151,11 +139,10 @@ def upload_avatar():
 # ── Change Password ───────────────────────────────────────────────────
 
 @app.route("/api/users/me/password", methods=["PUT"])
+@login_required
 def change_password():
     """Change the current user's password."""
-    user = _get_current_user()
-    if not user:
-        abort(401)
+    user = current_user
 
     data = request.get_json(silent=True)
     if not data:
