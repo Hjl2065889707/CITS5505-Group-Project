@@ -1,0 +1,177 @@
+/**
+ * post-card.js — Interactive logic for the Post Card component.
+ *
+ * Uses Event Delegation: we listen on the document body to catch clicks
+ * on any like/save button, even if the post card was loaded dynamically.
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Event Delegation for action buttons
+    document.body.addEventListener("click", handlePostCardClick);
+    
+    // Initialize carousels for any post cards currently on the page
+    initAllCarousels();
+  });
+  
+  /**
+   * Handle clicks on Like or Save buttons inside any post card.
+   */
+  function handlePostCardClick(event) {
+    const likeBtn = event.target.closest(".like-btn");
+    const saveBtn = event.target.closest(".save-btn");
+  
+    if (likeBtn) {
+      event.preventDefault(); // Prevent default if it happens to be a link
+      toggleInteraction(likeBtn, "like");
+    }
+    
+    if (saveBtn) {
+      event.preventDefault();
+      toggleInteraction(saveBtn, "save");
+    }
+  }
+  
+  /**
+   * Generic function to toggle an interaction (like or save) via the API.
+   * @param {HTMLElement} button - The button element that was clicked.
+   * @param {string} type - "like" or "save"
+   */
+  async function toggleInteraction(button, type) {
+    const postId = button.dataset.postId;
+    if (!postId) return;
+  
+    try {
+      const response = await fetch(`/api/posts/${postId}/${type}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+      });
+  
+      if (response.status === 401) {
+        // Not logged in — redirect to login page
+        window.location.href = "/login";
+        return;
+      }
+  
+      if (!response.ok) {
+        console.error(`Failed to toggle ${type}`);
+        return;
+      }
+  
+      const data = await response.json();
+      updateButtonUI(button, type, data);
+  
+    } catch (error) {
+      console.error(`Error toggling ${type}:`, error);
+    }
+  }
+  
+  /**
+   * Update the UI of the button based on the API response.
+   */
+  function updateButtonUI(button, type, data) {
+    const icon = button.querySelector("i");
+    const countSpan = button.querySelector(`.${type}-count`);
+  
+    if (type === "like") {
+      const isLiked = data.liked;
+      
+      // Update icon classes
+      if (isLiked) {
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        button.classList.add("action-btn--active");
+        button.setAttribute("aria-pressed", "true");
+      } else {
+        icon.classList.remove("fa-solid");
+        icon.classList.add("fa-regular");
+        button.classList.remove("action-btn--active");
+        button.setAttribute("aria-pressed", "false");
+      }
+  
+      // Update count
+      if (countSpan && data.likesCount !== undefined) {
+        countSpan.textContent = data.likesCount;
+      }
+    } 
+    else if (type === "save") {
+      const isSaved = data.saved;
+      
+      if (isSaved) {
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        button.classList.add("action-btn--active");
+        button.setAttribute("aria-pressed", "true");
+      } else {
+        icon.classList.remove("fa-solid");
+        icon.classList.add("fa-regular");
+        button.classList.remove("action-btn--active");
+        button.setAttribute("aria-pressed", "false");
+      }
+    }
+  }
+  
+  /**
+   * Carousel Initialization Logic
+   * (Adapted from existing post.js to work on multiple carousels)
+   */
+  function initAllCarousels() {
+    const carousels = document.querySelectorAll('.carousel-container');
+    carousels.forEach(container => {
+      initSingleCarousel(container);
+    });
+  }
+  
+  function initSingleCarousel(container) {
+    const track = container.querySelector(".carousel-track");
+    const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+    const nextBtn = container.querySelector(".next-btn");
+    const prevBtn = container.querySelector(".prev-btn");
+    const indicator = container.querySelector(".carousel-indicator");
+  
+    if (!track || slides.length <= 1) return; // No need for controls
+  
+    const updateUI = () => {
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      const currentIndex = Math.round(track.scrollLeft / slideWidth);
+  
+      if (indicator) {
+        indicator.textContent = `${currentIndex + 1}/${slides.length}`;
+      }
+  
+      if (prevBtn) {
+        if (currentIndex === 0) prevBtn.classList.add('hidden');
+        else prevBtn.classList.remove('hidden');
+      }
+  
+      if (nextBtn) {
+        if (currentIndex === slides.length - 1) nextBtn.classList.add('hidden');
+        else nextBtn.classList.remove('hidden');
+      }
+    };
+  
+    track.addEventListener('scroll', () => {
+      clearTimeout(track.scrollTimeout);
+      track.scrollTimeout = setTimeout(updateUI, 50);
+    });
+  
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent bubbling if card is clickable
+        const slideWidth = slides[0].getBoundingClientRect().width;
+        track.scrollBy({ left: slideWidth, behavior: 'smooth' });
+      });
+    }
+  
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const slideWidth = slides[0].getBoundingClientRect().width;
+        track.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+      });
+    }
+  
+    updateUI();
+  }
+  

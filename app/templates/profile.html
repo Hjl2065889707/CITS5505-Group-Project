@@ -1,46 +1,78 @@
-{% extends "base.html" %} {% block title %}Profile | CatchLog{% endblock %} {%
-block styles %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/profile.css') }}"
-/>
-{% endblock %} {% block content %}
+{% extends "base.html" %} 
+
+{% block title %}Profile | CatchLog{% endblock %} 
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+<!-- We need the post-card CSS for our components -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post-card.css') }}" />
+{% endblock %} 
+
+{% block content %}
+{# Import our reusable post card macro #}
+{% from "components/_post_card.html" import post_card %}
+
 <div id="profile-container">
   <section id="user-info">
     <div class="avatar-wrapper">
       <img
-        src="https://images.pexels.com/photos/13747516/pexels-photo-13747516.jpeg"
-        alt="user-image"
+        src="{{ user.avatar_url or url_for('static', filename='img/default-avatar.png') }}"
+        alt="{{ user.username }}"
         class="avatar"
       />
     </div>
     <div class="user-details">
       <div class="username-row">
-        <span class="username">User-name</span>
-        <a href="{{ url_for('settings') }}" class="settings-btn">⚙️</a>
+        <span class="username">{{ user.username }}</span>
+        {% if current_user and user.id == current_user.id %}
+        <a href="{{ url_for('settings') }}" class="settings-btn" aria-label="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+        {% endif %}
       </div>
-      <div class="user-id">ID: 1234567</div>
-      <div class="bio">Say something about yourself...</div>
+      <div class="user-id">ID: {{ user.id }}</div>
+      <div class="bio">{{ user.bio or "Say something about yourself..." }}</div>
     </div>
   </section>
 
   <section id="user-posts">
     <div class="posts-navbar">
-      <button class="nav-tab active" data-target="my-posts">My Posts</button>
+      <button class="nav-tab active" data-target="my-posts">
+        {% if current_user and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
+      </button>
+      {% if current_user and user.id == current_user.id %}
       <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
+      {% endif %}
     </div>
 
     <div id="my-posts" class="tab-content active">
-      <!-- My posts grid/list will go here -->
-      <p>You haven't posted anything yet.</p>
+      {% if my_posts %}
+        {% for post in my_posts %}
+          {{ post_card(post, variant="full") }}
+        {% endfor %}
+      {% else %}
+        <p class="empty-state">You haven't posted anything yet.</p>
+      {% endif %}
     </div>
 
+    {% if current_user and user.id == current_user.id %}
     <div id="saved-posts" class="tab-content">
-      <!-- Saved posts grid/list will go here -->
-      <p>No saved posts to show.</p>
+      {% if saved_posts %}
+        {% for post in saved_posts %}
+          {{ post_card(post, variant="full") }}
+        {% endfor %}
+      {% else %}
+        <p class="empty-state">No saved posts to show.</p>
+      {% endif %}
     </div>
+    {% endif %}
   </section>
 </div>
-{% endblock %} {% block scripts %}
+{% endblock %} 
+
+{% block scripts %}
+<!-- Profile tab logic -->
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<!-- Post card interaction logic (carousel, like, save) -->
+<script src="{{ url_for('static', filename='js/post-card.js') }}"></script>
 {% endblock %}
