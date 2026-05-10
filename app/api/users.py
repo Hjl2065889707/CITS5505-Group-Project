@@ -18,7 +18,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
 from app import app, db
-from app.models import User
+from app.models import User, Follow
 
 ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 MAX_AVATAR_SIZE = 5 * 1024 * 1024  # 5 MB
@@ -169,3 +169,37 @@ def change_password():
     db.session.commit()
 
     return jsonify({"success": True})
+
+
+# ── Follow / Unfollow ─────────────────────────────────────────────────
+
+@app.route("/api/users/<int:user_id>/follow", methods=["POST"])
+@login_required
+def toggle_follow(user_id):
+    """Toggle follow status for a user."""
+    target_user = db.session.get(User, user_id)
+    if not target_user:
+        abort(404)
+
+    if current_user.id == target_user.id:
+        return jsonify({"error": "You cannot follow yourself"}), 400
+
+    existing_follow = current_user.following.filter_by(followed_id=target_user.id).first()
+
+    if existing_follow:
+        # Unfollow
+        db.session.delete(existing_follow)
+        following = False
+    else:
+        # Follow
+        new_follow = Follow(follower_id=current_user.id, followed_id=target_user.id)
+        db.session.add(new_follow)
+        following = True
+
+    db.session.commit()
+
+    return jsonify({
+        "following": following,
+        "followersCount": target_user.followers_count()
+    })
+
