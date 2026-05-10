@@ -203,3 +203,43 @@ def toggle_follow(user_id):
         "followersCount": target_user.followers_count()
     })
 
+
+# ── Followers / Following lists ───────────────────────────────────────
+
+def _serialize_user_brief(user):
+    """Minimal user object for list display."""
+    return {
+        "id": user.id,
+        "username": user.username,
+        "avatarUrl": user.avatar_url or "/static/img/default-avatar.png"
+    }
+
+
+@app.route("/api/users/<int:user_id>/followers")
+@login_required
+def get_followers(user_id):
+    """Return list of users who follow the given user."""
+    target_user = db.session.get(User, user_id)
+    if not target_user:
+        abort(404)
+
+    followers = [
+        _serialize_user_brief(f.follower)
+        for f in target_user.followers.all()
+    ]
+    return jsonify(followers)
+
+
+@app.route("/api/users/<int:user_id>/following")
+@login_required
+def get_following(user_id):
+    """Return list of users the given user is following."""
+    target_user = db.session.get(User, user_id)
+    if not target_user:
+        abort(404)
+
+    following = [
+        _serialize_user_brief(f.followed)
+        for f in target_user.following.all()
+    ]
+    return jsonify(following)

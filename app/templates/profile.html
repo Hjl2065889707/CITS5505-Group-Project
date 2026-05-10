@@ -37,8 +37,12 @@
       <div class="user-id">ID: {{ user.id }}</div>
       
       <div class="follow-stats">
-        <span class="stat"><strong id="followersCount">{{ followers_count }}</strong> followers</span>
-        <span class="stat"><strong>{{ following_count }}</strong> following</span>
+        <a href="#" class="stat" data-list="followers" data-user-id="{{ user.id }}">
+          <strong id="followersCount">{{ followers_count }}</strong> followers
+        </a>
+        <a href="#" class="stat" data-list="following" data-user-id="{{ user.id }}">
+          <strong>{{ following_count }}</strong> following
+        </a>
       </div>
 
       <div class="bio">{{ user.bio or "Say something about yourself..." }}</div>
@@ -77,6 +81,19 @@
     </div>
     {% endif %}
   </section>
+</div>
+
+<!-- Follow List Modal -->
+<div id="followModal" class="follow-modal-overlay" style="display:none;">
+  <div class="follow-modal">
+    <div class="follow-modal-header">
+      <h3 id="followModalTitle">Followers</h3>
+      <button id="followModalClose" class="follow-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <div id="followModalList" class="follow-modal-list">
+      <!-- user cards rendered by JS -->
+    </div>
+  </div>
 </div>
 {% endblock %} 
 
