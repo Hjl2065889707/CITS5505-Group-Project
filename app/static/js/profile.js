@@ -1,3 +1,9 @@
+// Reload page when restored from browser back-forward cache (bfcache)
+// so that follow state is always fresh from the server.
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted) location.reload();
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   // ── Tab switching ──
   const navTabs = document.querySelectorAll(".nav-tab");
