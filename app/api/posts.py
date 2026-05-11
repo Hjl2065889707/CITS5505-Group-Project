@@ -16,7 +16,7 @@ GET  /api/saved-posts    — mock saved posts
 import json
 from pathlib import Path
 
-from flask import jsonify
+from flask import jsonify, render_template_string
 from app import app, db
 from app.models import Post, PostImage, Comment, PostLike, User
 
@@ -74,65 +74,21 @@ def api_map_posts():
         .all()
     )
 
+    macro_template = """
+    {% from 'components/_post_card.html' import post_card %}
+    {{ post_card(post, variant='compact') }}
+    """
+
     result = []
 
     for post in posts:
-        # Images
-        post_images = (
-            PostImage.query
-            .filter_by(post_id=post.id)
-            .order_by(PostImage.display_order.asc())
-            .all()
-        )
-        photos = [image.image_url for image in post_images]
-
-        # Comments
-        post_comments = (
-            Comment.query
-            .filter_by(post_id=post.id)
-            .order_by(Comment.created_at.asc())
-            .all()
-        )
-
-        comments = []
-        for comment in post_comments:
-            comment_user = User.query.get(comment.user_id)
-
-            comments.append({
-                "id": str(comment.id),
-                "username": comment_user.username if comment_user else "Unknown",
-                "text": comment.content,
-                "createdAt": comment.created_at.isoformat() if comment.created_at else "",
-            })
-
-        # Likes count
-        likes_count = PostLike.query.filter_by(post_id=post.id).count()
+        html_string = render_template_string(macro_template, post=post)
 
         result.append({
             "id": str(post.id),
-            "author": {
-                "userId": str(post.user.id),
-                "username": post.user.username,
-                "avatarUrl": post.user.avatar_url or "/static/img/default-avatar.png",
-            },
-            "content": post.content,
-            "photos": photos,
-            "catchDetails": {
-                "species": post.species or "",
-                "weight": f"{post.weight_kg} kg" if post.weight_kg is not None else "",
-                "bait": post.bait or "",
-                "location": {
-                    "name": post.location_name or "",
-                    "latitude": post.latitude,
-                    "longitude": post.longitude,
-                },
-            },
-            "metrics": {
-                "likes": likes_count,
-                "commentsCount": len(comments),
-            },
-            "createdAt": post.created_at.isoformat() if post.created_at else "",
-            "comments": comments,
+            "latitude": post.latitude,
+            "longitude": post.longitude,
+            "html": html_string,
         })
 
     return jsonify(result)
