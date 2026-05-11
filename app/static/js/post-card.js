@@ -115,6 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
         icon.classList.add("fa-regular");
         button.classList.remove("action-btn--active");
         button.setAttribute("aria-pressed", "false");
+        
+        // Dispatch a custom event so the parent page (e.g., profile.js) can handle list updates
+        button.dispatchEvent(new CustomEvent("postSavedStateChanged", {
+          bubbles: true,
+          detail: { postId: button.dataset.postId, isSaved: false }
+        }));
       }
     }
   }
