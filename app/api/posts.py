@@ -60,13 +60,6 @@ def api_saved_posts():
     return jsonify(data)
 
 
-def _get_current_user_id():
-    """Return the active user, falling back to the seeded demo user in dev."""
-    if current_user and current_user.is_authenticated:
-        return current_user.id
-    return 1
-
-
 def _clean_optional_text(value, max_length):
     if value is None:
         return None
@@ -188,8 +181,7 @@ def api_create_post():
     if category not in ALLOWED_CATEGORIES:
         return jsonify({"error": "Please select a valid category."}), 400
 
-    user_id = _get_current_user_id()
-    if db.session.get(User, user_id) is None:
+    if not current_user.is_authenticated:
         return jsonify({"error": "Please log in before creating a post."}), 401
 
     try:
@@ -201,7 +193,7 @@ def api_create_post():
         longitude = _clean_optional_float(data.get("longitude"), "longitude")
 
         post = Post(
-            user_id=user_id,
+            user_id=current_user.id,
             content=content.strip(),
             category=category,
             species=_clean_optional_text(data.get("species"), 120),

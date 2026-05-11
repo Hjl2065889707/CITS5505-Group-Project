@@ -48,6 +48,17 @@ body {
   margin: 20px auto;
 }
 
+.feed-post-item[hidden],
+.feed-empty-message[hidden] {
+  display: none;
+}
+
+.feed-empty-message {
+  text-align: center;
+  color: #8e8e8e;
+  padding: 20px;
+}
+
 .feed-card {
   border: 1px solid #dbdbdb;
   border-radius: 8px;
