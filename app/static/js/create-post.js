@@ -131,6 +131,11 @@ document.querySelector(".post-btn").addEventListener("click", async () => {
 
     const result = await response.json().catch(() => ({}));
 
+    if (response.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
+
     if (!response.ok) {
       alert(result.error || "Unable to submit this post. Please try again.");
       return;

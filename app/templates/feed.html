@@ -1,9 +1,11 @@
 {% extends "base.html" %}
+{% from "components/_post_card.html" import post_card %}
 
 {% block title %}Feed | CatchLog{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/feed.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post-card.css') }}" />
 {% endblock %}
 
 {% block content %}
@@ -32,10 +34,21 @@
 
 <!-- Feed posts -->
 <div class="feed-container" id="feedContainer">
-  <!-- JS will render posts here -->
+  {% for post in posts %}
+    <div
+      class="feed-post-item"
+      data-category="{{ post.category or 'General' }}"
+      data-search="{{ (post.content ~ ' ' ~ (post.user.username if post.user else '') ~ ' ' ~ (post.species or '') ~ ' ' ~ (post.location_name or '')) | lower }}"
+    >
+      {{ post_card(post) }}
+    </div>
+  {% else %}
+    <p class="feed-empty-message">No posts found</p>
+  {% endfor %}
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/post-card.js') }}"></script>
 <script src="{{ url_for('static', filename='js/feed.js') }}"></script>
 {% endblock %}

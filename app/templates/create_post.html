@@ -16,16 +16,17 @@
   <h2>Create a New Post</h2>
 
   <div class="form-field">
-    <label for="postText">Post</label>
+    <label for="postText">Post <span class="field-required">Required</span></label>
     <textarea
       id="postText"
       class="post-text"
       placeholder="Share your fishing experience or tips..."
+      required
     ></textarea>
   </div>
 
   <div class="form-field upload-field">
-    <label for="imageInput">Upload Images</label>
+    <label for="imageInput">Upload Images <span class="field-optional">Optional</span></label>
     <input type="file" id="imageInput" multiple />
   </div>
 
@@ -34,7 +35,7 @@
   </div>
 
   <div class="form-field">
-    <label for="postLocation">Location</label>
+    <label for="postLocation">Location <span class="field-optional">Optional</span></label>
     <input
       type="text"
       id="postLocation"
@@ -44,7 +45,7 @@
   </div>
 
   <div class="form-field">
-    <label>Map Point</label>
+    <label>Map Point <span class="field-optional">Optional</span></label>
     <div id="locationMap" class="location-map"></div>
     <p id="selectedCoordinates" class="selected-coordinates">
       No map point selected.
@@ -52,9 +53,9 @@
   </div>
 
   <div class="form-field">
-    <label for="postCategory">Category</label>
-    <select id="postCategory" class="category-select">
-      <option disabled selected>Select Category</option>
+    <label for="postCategory">Category <span class="field-required">Required</span></label>
+    <select id="postCategory" class="category-select" required>
+      <option value="" disabled selected>Select Category</option>
       <option>Catch Report</option>
       <option>Gear Review</option>
       <option>Question</option>
@@ -67,7 +68,7 @@
 
     <div class="catch-details__fields">
       <div class="form-field">
-        <label for="postSpecies">Species</label>
+        <label for="postSpecies">Species <span class="field-optional">Optional</span></label>
         <input
           type="text"
           id="postSpecies"
@@ -77,7 +78,7 @@
       </div>
 
       <div class="form-field">
-        <label for="postWeight">Weight (kg)</label>
+        <label for="postWeight">Weight (kg) <span class="field-optional">Optional</span></label>
         <input
           type="number"
           id="postWeight"
@@ -89,7 +90,7 @@
       </div>
 
       <div class="form-field">
-        <label for="postBait">Bait</label>
+        <label for="postBait">Bait <span class="field-optional">Optional</span></label>
         <input
           type="text"
           id="postBait"
