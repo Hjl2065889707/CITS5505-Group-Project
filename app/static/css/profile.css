@@ -62,6 +62,49 @@
   color: var(--color-text);
 }
 
+/* Follow Stats & Button */
+.follow-stats {
+  display: flex;
+  gap: var(--space-4);
+  font-size: 16px;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.follow-stats .stat strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.follow-btn {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+}
+
+.follow-btn:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.follow-btn.following {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.follow-btn.following:hover {
+  background: rgba(255, 0, 0, 0.05);
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
 .bio {
   line-height: 1.5;
 }
@@ -114,4 +157,105 @@
 
 .tab-content.active {
   display: block;
+}
+
+/* ── Follow stats as clickable links ── */
+.follow-stats a.stat {
+  text-decoration: none;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.follow-stats a.stat:hover {
+  opacity: 0.7;
+}
+
+/* ── Follow List Modal ── */
+.follow-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.follow-modal {
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  width: 400px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.follow-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.follow-modal-header h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.follow-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.follow-modal-close:hover {
+  color: var(--color-text);
+}
+
+.follow-modal-list {
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+}
+
+.follow-modal-list .empty-state {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* Individual user card in the modal */
+.follow-user-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: background var(--transition-fast);
+}
+
+.follow-user-card:hover {
+  background: var(--color-bg-elevated);
+}
+
+.follow-user-card img {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.follow-user-card .follow-user-name {
+  font-weight: 600;
+  font-size: 14px;
 }

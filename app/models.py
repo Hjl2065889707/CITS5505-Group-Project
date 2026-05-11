@@ -36,6 +36,18 @@ class User(UserMixin, db.Model):
     likes = db.relationship("PostLike", backref="user", lazy=True)
     saved_posts = db.relationship("SavedPost", backref="user", lazy=True)
 
+    # Follow relationships (self-referential many-to-many via Follow table)
+    following = db.relationship(
+        "Follow", foreign_keys="Follow.follower_id",
+        backref=db.backref("follower", lazy="joined"), lazy="dynamic"
+    )
+    followers = db.relationship(
+        "Follow", foreign_keys="Follow.followed_id",
+        backref=db.backref("followed", lazy="joined"), lazy="dynamic"
+    )
+
+    # ── Password helpers ──
+
     def set_password(self, password):
         """Hash and store the user's password."""
         self.password_hash = generate_password_hash(password)
@@ -43,6 +55,20 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         """Verify a plaintext password against the stored hash."""
         return check_password_hash(self.password_hash, password)
+
+    # ── Follow helpers ──
+
+    def is_following(self, user):
+        """Check if this user is following the given user."""
+        return self.following.filter_by(followed_id=user.id).first() is not None
+
+    def followers_count(self):
+        """Return the number of followers."""
+        return self.followers.count()
+
+    def following_count(self):
+        """Return the number of users this user is following."""
+        return self.following.count()
 
 
 # =====================

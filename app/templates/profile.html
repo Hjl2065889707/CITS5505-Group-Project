@@ -24,13 +24,27 @@
     <div class="user-details">
       <div class="username-row">
         <span class="username">{{ user.username }}</span>
-        {% if current_user and user.id == current_user.id %}
+        {% if current_user.is_authenticated and user.id == current_user.id %}
         <a href="{{ url_for('settings') }}" class="settings-btn" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </a>
+        {% elif current_user.is_authenticated %}
+        <button class="follow-btn {% if is_following %}following{% endif %}" data-user-id="{{ user.id }}">
+          {% if is_following %}Following{% else %}Follow{% endif %}
+        </button>
         {% endif %}
       </div>
       <div class="user-id">ID: {{ user.id }}</div>
+      
+      <div class="follow-stats">
+        <a href="#" class="stat" data-list="followers" data-user-id="{{ user.id }}">
+          <strong id="followersCount">{{ followers_count }}</strong> followers
+        </a>
+        <a href="#" class="stat" data-list="following" data-user-id="{{ user.id }}">
+          <strong>{{ following_count }}</strong> following
+        </a>
+      </div>
+
       <div class="bio">{{ user.bio or "Say something about yourself..." }}</div>
     </div>
   </section>
@@ -38,9 +52,9 @@
   <section id="user-posts">
     <div class="posts-navbar">
       <button class="nav-tab active" data-target="my-posts">
-        {% if current_user and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
+        {% if current_user.is_authenticated and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
       </button>
-      {% if current_user and user.id == current_user.id %}
+      {% if current_user.is_authenticated and user.id == current_user.id %}
       <button class="nav-tab" data-target="saved-posts">Saved Posts</button>
       {% endif %}
     </div>
@@ -55,7 +69,7 @@
       {% endif %}
     </div>
 
-    {% if current_user and user.id == current_user.id %}
+    {% if current_user.is_authenticated and user.id == current_user.id %}
     <div id="saved-posts" class="tab-content">
       {% if saved_posts %}
         {% for post in saved_posts %}
@@ -67,6 +81,19 @@
     </div>
     {% endif %}
   </section>
+</div>
+
+<!-- Follow List Modal -->
+<div id="followModal" class="follow-modal-overlay" style="display:none;">
+  <div class="follow-modal">
+    <div class="follow-modal-header">
+      <h3 id="followModalTitle">Followers</h3>
+      <button id="followModalClose" class="follow-modal-close" aria-label="Close">&times;</button>
+    </div>
+    <div id="followModalList" class="follow-modal-list">
+      <!-- user cards rendered by JS -->
+    </div>
+  </div>
 </div>
 {% endblock %} 
 
