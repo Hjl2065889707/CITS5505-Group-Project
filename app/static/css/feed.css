@@ -73,6 +73,21 @@ body {
   white-space: pre-line;
 }
 
+.feed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.feed-meta span {
+  background: #efefef;
+  border-radius: 999px;
+  color: #262626;
+  font-size: 12px;
+  padding: 5px 8px;
+}
+
 
 .feed-image-grid {
   display: grid;

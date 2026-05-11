@@ -51,6 +51,18 @@ body {
   font-family: inherit;
 }
 
+.text-input,
+.location-input,
+.category-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #dbdbdb;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+}
+
 .form-field input[type="file"] {
   font-size: 14px;
 }
@@ -104,15 +116,36 @@ body {
 }
 
 /* Input fields */
-.location-input,
-.category-select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
+.catch-details {
+  margin: 0 0 16px;
   border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.catch-details summary {
+  padding: 12px;
+  cursor: pointer;
   font-size: 14px;
-  font-family: inherit;
-  background: white;
+  font-weight: 600;
+}
+
+.catch-details__fields {
+  padding: 0 12px 4px;
+}
+
+.location-map {
+  width: 100%;
+  height: 260px;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.selected-coordinates {
+  color: #666;
+  font-size: 12px;
+  margin: -4px 0 0;
 }
 
 /* Submit button */
