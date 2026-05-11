@@ -59,6 +59,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
+      // Safety: if response is not JSON (e.g. HTML login redirect), go to login
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        window.location.href = "/login";
+        return;
+      }
+
       const data = await response.json();
       updateButtonUI(button, type, data);
   

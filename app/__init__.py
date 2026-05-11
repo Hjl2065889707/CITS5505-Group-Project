@@ -6,7 +6,7 @@ Route and model imports are placed at the **bottom** to avoid circular
 dependencies, following the recommended Flask package pattern.
 """
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -37,6 +37,14 @@ def load_user(user_id):
     from app.models import User
 
     return db.session.get(User, int(user_id))
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    """Return JSON 401 for API requests, redirect to login for page requests."""
+    if request.path.startswith("/api/"):
+        return jsonify({"error": "Authentication required"}), 401
+    return redirect(url_for("login"))
 
 
 # ---------------------------------------------------------------------------

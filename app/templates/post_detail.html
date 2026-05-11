@@ -76,7 +76,7 @@
 
     <!-- Action Bar -->
     <div class="post-card__actions">
-      {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else 1 %}
+      {% set current_user_id = current_user.id if current_user.is_authenticated else None %}
       {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
       {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
 
@@ -135,6 +135,7 @@
   </section>
 
   <!-- Fixed Comment Input Area -->
+  {% if current_user.is_authenticated %}
   <div class="comment-input-area">
     <form id="comment-form" data-post-id="{{ post.id }}">
       <input type="text" id="comment-text" placeholder="Add a comment..."
@@ -144,6 +145,11 @@
       </button>
     </form>
   </div>
+  {% else %}
+  <div class="comment-input-area">
+    <p class="login-prompt"><a href="{{ url_for('login') }}">Log in</a> to leave a comment</p>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
 
