@@ -14,7 +14,7 @@ function createMarkerIcon(count) {
 // Group Rendering
 export function renderMarkers(layer, groups, onMarkerClick) {
   groups.forEach(group => {
-    const { latitude, longitude } = group[0].catchDetails.location;
+    const { latitude, longitude } = group[0];
 
     const marker = L.marker([latitude, longitude], {
       icon: createMarkerIcon(group.length)
