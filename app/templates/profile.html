@@ -10,7 +10,7 @@
 
 {% block content %}
 {# Import our reusable post card macro #}
-{% from "components/_post_card.html" import post_card %}
+{% from "components/_post_card.html" import post_card with context %}
 
 <div id="profile-container">
   <section id="user-info">

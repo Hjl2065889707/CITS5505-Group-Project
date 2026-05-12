@@ -59,6 +59,13 @@ async function handleCommentSubmit(event) {
       throw new Error(errData.error || `Failed to post comment: ${response.statusText}`);
     }
     
+    // Safety: if response is not JSON (e.g. HTML login redirect), go to login
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      window.location.href = "/login";
+      return;
+    }
+
     const newComment = await response.json();
     
     // Clear input
@@ -148,6 +155,11 @@ async function handleCommentDelete(button) {
     const response = await fetch(`/api/posts/${postId}/comments/${commentId}`, {
       method: "DELETE"
     });
+
+    if (response.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
 
     if (response.status === 403) {
       alert("You can only delete your own comments.");

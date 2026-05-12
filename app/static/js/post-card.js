@@ -59,6 +59,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
+      // Safety: if response is not JSON (e.g. HTML login redirect), go to login
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        window.location.href = "/login";
+        return;
+      }
+
       const data = await response.json();
       updateButtonUI(button, type, data);
   
@@ -108,6 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
         icon.classList.add("fa-regular");
         button.classList.remove("action-btn--active");
         button.setAttribute("aria-pressed", "false");
+        
+        // Dispatch a custom event so the parent page (e.g., profile.js) can handle list updates
+        button.dispatchEvent(new CustomEvent("postSavedStateChanged", {
+          bubbles: true,
+          detail: { postId: button.dataset.postId, isSaved: false }
+        }));
       }
     }
   }

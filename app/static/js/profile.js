@@ -138,4 +138,30 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // ── Decoupled Post Card Event Listener ──
+  // Listen for custom events dispatched by the post-card component
+  document.addEventListener("postSavedStateChanged", (e) => {
+    const { isSaved } = e.detail;
+    if (!isSaved) {
+      // Find the card that triggered the event
+      const postCard = e.target.closest(".post-card");
+      if (!postCard) return;
+
+      // Only animate and remove if the card is inside the "Saved Posts" tab
+      const savedPostsTab = postCard.closest("#saved-posts");
+      if (savedPostsTab) {
+        postCard.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        postCard.style.opacity = "0";
+        postCard.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          postCard.remove();
+          // Show empty state if no posts left
+          if (!savedPostsTab.querySelector(".post-card")) {
+            savedPostsTab.innerHTML = '<p class="empty-state">No saved posts to show.</p>';
+          }
+        }, 300);
+      }
+    }
+  });
 });
