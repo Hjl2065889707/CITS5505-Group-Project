@@ -10,13 +10,18 @@ function updateTabDirection() {
 }
 
 function openSidebarWithUI(group) {
+  lastOpenedGroup = group;
+  selectedPostId = group[0].id;
   openSidebar(group, sidebar, closeSidebar);
   updateTabDirection();
+  renderMarkersDynamic();
 }
 
 function closeSidebarWithUI() {
   closeSidebar(sidebar);
+  selectedPostId = null;
   updateTabDirection();
+  renderMarkersDynamic();
 }
 
 
@@ -44,6 +49,7 @@ L.tileLayer(
 
 let posts = [];
 let lastOpenedGroup = null;
+let selectedPostId = null;
 
 const sidebar = document.getElementById("sidebar");
 
@@ -57,7 +63,9 @@ sidebarTab.addEventListener("click", () => {
   }
 
   if (lastOpenedGroup) {
-    openSidebarWithUI(lastOpenedGroup);
+  selectedPostId = lastOpenedGroup[0].id;
+  openSidebarWithUI(lastOpenedGroup);
+  renderMarkersDynamic();
   } else {
     showEmptySidebar(sidebar, closeSidebar);
     updateTabDirection(); 
@@ -83,9 +91,11 @@ function renderMarkersDynamic() {
 
   renderMarkers(markerLayer, groups, (group) => {
     lastOpenedGroup = group;
+    selectedPostId = group[0].id;
     openSidebar(group, sidebar, closeSidebar);
     updateTabDirection();
-  });
+    renderMarkersDynamic();
+  }, selectedPostId);
 }
 
 async function loadMapPosts() {
