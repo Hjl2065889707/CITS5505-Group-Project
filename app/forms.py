@@ -12,7 +12,7 @@ from wtforms import (
     SelectField,
     SubmitField,
 )
-from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional
+from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, NumberRange
 
 
 # ===== Auth Forms (Oliver) ========================================
@@ -88,6 +88,77 @@ class RegisterForm(FlaskForm):
 # ===== Post Forms (Felix) =========================================
 
 
-# TODO: CreatePostForm
+class CreatePostForm(FlaskForm):
+    """Form definition for creating a post."""
 
+    content = TextAreaField(
+        "Post",
+        validators=[
+            DataRequired(message="Please write something before posting."),
+            Length(max=2000, message="Post content must be under 2000 characters."),
+        ],
+    )
+
+    category = SelectField(
+        "Category",
+        choices=[
+            ("Catch Report", "Catch Report"),
+            ("Gear Review", "Gear Review"),
+            ("Question", "Question"),
+            ("General", "General"),
+        ],
+        validators=[
+            DataRequired(message="Please select a category."),
+        ],
+    )
+
+    species = StringField(
+        "Species",
+        validators=[
+            Optional(),
+            Length(max=120, message="Species must be under 120 characters."),
+        ],
+    )
+
+    weight_kg = FloatField(
+        "Weight (kg)",
+        validators=[
+            Optional(),
+            NumberRange(min=0, message="Weight cannot be negative."),
+        ],
+    )
+
+    bait = StringField(
+        "Bait",
+        validators=[
+            Optional(),
+            Length(max=120, message="Bait must be under 120 characters."),
+        ],
+    )
+
+    location_name = StringField(
+        "Location",
+        validators=[
+            Optional(),
+            Length(max=120, message="Location must be under 120 characters."),
+        ],
+    )
+
+    latitude = FloatField(
+        "Latitude",
+        validators=[
+            Optional(),
+            NumberRange(min=-90, max=90, message="Latitude must be between -90 and 90."),
+        ],
+    )
+
+    longitude = FloatField(
+        "Longitude",
+        validators=[
+            Optional(),
+            NumberRange(min=-180, max=180, message="Longitude must be between -180 and 180."),
+        ],
+    )
+
+    submit = SubmitField("Post")
 
