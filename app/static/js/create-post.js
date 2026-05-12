@@ -13,13 +13,20 @@ function initLocationMap() {
 
   const coordinatesEl = document.getElementById("selectedCoordinates");
   const locationInput = document.getElementById("postLocation");
-  const map = L.map(mapEl).setView([-31.9523, 115.8613], 12);
+  const map = L.map(mapEl, {
+    zoomControl: false
+  }).setView([-31.9523, 115.8613], 12);
   let marker = null;
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors",
-    maxZoom: 19
-  }).addTo(map);
+  L.control.zoom({ position: "topright" }).addTo(map);
+
+  L.tileLayer(
+    "https://tiles.stadiamaps.com/tiles/stamen_toner_dark/{z}/{x}/{y}{r}.png",
+    {
+      attribution: "&copy; OpenStreetMap contributors &copy; Stadia Maps",
+      maxZoom: 20
+    }
+  ).addTo(map);
 
   map.on("click", (event) => {
     selectedLatitude = Number(event.latlng.lat.toFixed(6));
