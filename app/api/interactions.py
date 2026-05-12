@@ -3,51 +3,37 @@
 Owner: Hjl2065889707
 
 Security notes:
+  - All endpoints require authentication via @login_required.
   - All endpoints validate resource existence (404 if not found).
   - Comment content is type-checked and length-limited server-side.
-  - Authentication: currently falls back to demo_user (ID 1) because
-    the Auth module is not yet integrated. Once Auth is merged,
-    replace _get_current_user_id() with @login_required decorator.
-  - CSRF: will be enforced globally via Flask-WTF CSRFProtect once
-    the Auth branch is merged. See __init__.py TODO.
+  - CSRF: will be enforced globally via Flask-WTF CSRFProtect in a future PR.
 """
 
 from flask import jsonify, request, abort
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app import app, db
-from app.models import Post, PostLike, SavedPost, Comment, User
+from app.models import Post, PostLike, SavedPost, Comment
 
 # --- Constants ---
 MAX_COMMENT_LENGTH = 2000  # Server-enforced max characters per comment
 
 
-def _get_current_user_id():
-    """Return the current user's ID.
-
-    Falls back to 1 (demo_user) while Auth is not yet integrated.
-    TODO: Replace with @login_required once Auth branch is merged.
-    """
-    if current_user and current_user.is_authenticated:
-        return current_user.id
-    return 1
-
-
 # ── Like ──────────────────────────────────────────────────────────────
 
 @app.route("/api/posts/<int:post_id>/like", methods=["POST"])
+@login_required
 def toggle_like(post_id):
-    user_id = _get_current_user_id()
     post = db.session.get(Post, post_id)
     if not post:
         abort(404)
 
-    existing_like = PostLike.query.filter_by(user_id=user_id, post_id=post_id).first()
+    existing_like = PostLike.query.filter_by(user_id=current_user.id, post_id=post_id).first()
 
     if existing_like:
         db.session.delete(existing_like)
         liked = False
     else:
-        new_like = PostLike(user_id=user_id, post_id=post_id)
+        new_like = PostLike(user_id=current_user.id, post_id=post_id)
         db.session.add(new_like)
         liked = True
 
@@ -60,19 +46,19 @@ def toggle_like(post_id):
 # ── Save ──────────────────────────────────────────────────────────────
 
 @app.route("/api/posts/<int:post_id>/save", methods=["POST"])
+@login_required
 def toggle_save(post_id):
-    user_id = _get_current_user_id()
     post = db.session.get(Post, post_id)
     if not post:
         abort(404)
 
-    existing_save = SavedPost.query.filter_by(user_id=user_id, post_id=post_id).first()
+    existing_save = SavedPost.query.filter_by(user_id=current_user.id, post_id=post_id).first()
 
     if existing_save:
         db.session.delete(existing_save)
         saved = False
     else:
-        new_save = SavedPost(user_id=user_id, post_id=post_id)
+        new_save = SavedPost(user_id=current_user.id, post_id=post_id)
         db.session.add(new_save)
         saved = True
 
@@ -83,8 +69,8 @@ def toggle_save(post_id):
 # ── Comment (Create) ──────────────────────────────────────────────────
 
 @app.route("/api/posts/<int:post_id>/comments", methods=["POST"])
+@login_required
 def add_comment(post_id):
-    user_id = _get_current_user_id()
     post = db.session.get(Post, post_id)
     if not post:
         abort(404)
@@ -109,35 +95,31 @@ def add_comment(post_id):
             "error": f"Comment too long. Maximum {MAX_COMMENT_LENGTH} characters."
         }), 400
 
-    comment = Comment(user_id=user_id, post_id=post_id, content=content)
+    comment = Comment(user_id=current_user.id, post_id=post_id, content=content)
     db.session.add(comment)
     db.session.commit()
-
-    # Fetch user details for the response
-    user = db.session.get(User, user_id)
 
     return jsonify({
         "id": comment.id,
         "content": comment.content,
         "createdAt": comment.created_at.isoformat(),
-        "userId": user.id,
-        "username": user.username,
-        "avatarUrl": user.avatar_url or "/static/img/default-avatar.png"
+        "userId": current_user.id,
+        "username": current_user.username,
+        "avatarUrl": current_user.avatar_url or "/static/img/default-avatar.png"
     }), 201
 
 
 # ── Comment (Delete) ─────────────────────────────────────────────────
 
 @app.route("/api/posts/<int:post_id>/comments/<int:comment_id>", methods=["DELETE"])
+@login_required
 def delete_comment(post_id, comment_id):
-    user_id = _get_current_user_id()
-
     comment = db.session.get(Comment, comment_id)
     if not comment or comment.post_id != post_id:
         abort(404)
 
     # Authorization: only the comment author can delete their own comment
-    if comment.user_id != user_id:
+    if comment.user_id != current_user.id:
         return jsonify({"error": "You can only delete your own comments"}), 403
 
     db.session.delete(comment)

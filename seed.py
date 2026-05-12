@@ -35,6 +35,18 @@ def parse_weight(value: Optional[str]) -> Optional[float]:
     return float(match.group()) if match else None
 
 
+def get_location(post_data):
+    """Read location from the unified mock shape, with legacy fallback."""
+    catch_details = post_data.get("catchDetails") or {}
+    legacy_location = catch_details.get("location") or {}
+
+    return {
+        "name": post_data.get("locationName") or legacy_location.get("name"),
+        "latitude": post_data.get("latitude", legacy_location.get("latitude")),
+        "longitude": post_data.get("longitude", legacy_location.get("longitude")),
+    }
+
+
 with app.app_context():
     db.drop_all()
     db.create_all()
@@ -54,8 +66,9 @@ with app.app_context():
         posts_data = json.load(f)
 
     for post_data in posts_data:
-        catch_details = post_data.get("catchDetails", {})
-        location = catch_details.get("location", {})
+        catch_details = post_data.get("catchDetails") or {}
+        location = get_location(post_data)
+        weight_value = post_data.get("weightKg", catch_details.get("weight"))
 
         post = Post(
             user_id=demo_user.id,
@@ -63,10 +76,10 @@ with app.app_context():
             location_name=location.get("name"),
             latitude=location.get("latitude"),
             longitude=location.get("longitude"),
-            species=catch_details.get("species"),
-            weight_kg=parse_weight(catch_details.get("weight")),
-            bait=catch_details.get("bait"),
-            category=post_data.get("category"),
+            species=post_data.get("species", catch_details.get("species")),
+            weight_kg=parse_weight(weight_value),
+            bait=post_data.get("bait", catch_details.get("bait")),
+            category=post_data.get("category", "General"),
             created_at=parse_date(post_data.get("createdAt")),
         )
 

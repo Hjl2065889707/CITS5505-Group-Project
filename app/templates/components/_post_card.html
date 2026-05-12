@@ -80,9 +80,8 @@
   {# ── Footer: Actions ── #}
   {% if show_actions %}
   <div class="post-card__actions">
-    {# We determine if the current user liked/saved this post. 
-       Fallback to user ID 1 (demo_user) since Auth is not yet fully implemented. #}
-    {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else 1 %}
+  {# Determine if the current user liked/saved this post #}
+    {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else None %}
     {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
     {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
 

@@ -48,6 +48,17 @@ body {
   margin: 20px auto;
 }
 
+.feed-post-item[hidden],
+.feed-empty-message[hidden] {
+  display: none;
+}
+
+.feed-empty-message {
+  text-align: center;
+  color: #8e8e8e;
+  padding: 20px;
+}
+
 .feed-card {
   border: 1px solid #dbdbdb;
   border-radius: 8px;
@@ -71,6 +82,21 @@ body {
 .feed-content {
   padding: 10px;
   white-space: pre-line;
+}
+
+.feed-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.feed-meta span {
+  background: #efefef;
+  border-radius: 999px;
+  color: #262626;
+  font-size: 12px;
+  padding: 5px 8px;
 }
 
 
