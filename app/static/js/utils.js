@@ -24,14 +24,14 @@ export function groupPosts(posts, threshold = 50) {
     for (let group of groups) {
       const dist = getDistance(
         {
-            lat: post.catchDetails.location.latitude,
-            lng: post.catchDetails.location.longitude
+          lat: post.latitude,
+          lng: post.longitude
         },
         {
-            lat: group[0].catchDetails.location.latitude,
-            lng: group[0].catchDetails.location.longitude
+          lat: group[0].latitude,
+          lng: group[0].longitude
         }
-        );
+      );
 
       if (dist < threshold) {
         group.push(post);

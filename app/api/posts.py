@@ -19,7 +19,7 @@ import re
 import uuid
 from pathlib import Path
 
-from flask import jsonify, request
+from flask import jsonify, request, render_template_string
 from flask_login import current_user
 from sqlalchemy import or_
 
@@ -230,15 +230,34 @@ def api_create_post():
 
 
 
-# ===== Map (Chrommanito) — TODO ========================================
+# ===== Map (Chrommanito) ========================================
 
 @app.route("/api/posts/map")
 def api_map_posts():
-    """Return posts that can be shown as map markers."""
+    """Return posts that have valid location data for the map page."""
+
     posts = (
         Post.query
         .filter(Post.latitude.isnot(None), Post.longitude.isnot(None))
         .order_by(Post.created_at.desc())
         .all()
     )
-    return jsonify([_serialize_post(post) for post in posts])
+
+    macro_template = """
+    {% from 'components/_post_card.html' import post_card %}
+    {{ post_card(post, variant='compact') }}
+    """
+
+    result = []
+
+    for post in posts:
+        html_string = render_template_string(macro_template, post=post)
+
+        result.append({
+            "id": str(post.id),
+            "latitude": post.latitude,
+            "longitude": post.longitude,
+            "html": html_string,
+        })
+
+    return jsonify(result)
