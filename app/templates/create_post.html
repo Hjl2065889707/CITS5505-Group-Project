@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="create-container">
-  <button onclick="location.href = '{{ url_for('feed') }}'" class="back-btn">
+  <button onclick="location.href = '{{ url_for('main.feed') }}'" class="back-btn">
     ← Back
   </button>
 
@@ -101,7 +101,7 @@
     </div>
   </details>
 
-  <button class="post-btn" data-feed-url="{{ url_for('feed') }}">Post</button>
+  <button class="post-btn" data-feed-url="{{ url_for('main.feed') }}">Post</button>
 </div>
 {% endblock %}
 

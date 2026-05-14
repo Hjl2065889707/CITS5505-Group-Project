@@ -6,13 +6,14 @@ Security notes:
   - All endpoints require authentication via @login_required.
   - All endpoints validate resource existence (404 if not found).
   - Comment content is type-checked and length-limited server-side.
-  - CSRF: will be enforced globally via Flask-WTF CSRFProtect in a future PR.
 """
 
-from flask import jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
-from app import app, db
+from app import db
 from app.models import Post, PostLike, SavedPost, Comment
+
+api_interactions_bp = Blueprint("api_interactions", __name__)
 
 # --- Constants ---
 MAX_COMMENT_LENGTH = 2000  # Server-enforced max characters per comment
@@ -20,7 +21,7 @@ MAX_COMMENT_LENGTH = 2000  # Server-enforced max characters per comment
 
 # ── Like ──────────────────────────────────────────────────────────────
 
-@app.route("/api/posts/<int:post_id>/like", methods=["POST"])
+@api_interactions_bp.route("/posts/<int:post_id>/like", methods=["POST"])
 @login_required
 def toggle_like(post_id):
     post = db.session.get(Post, post_id)
@@ -45,7 +46,7 @@ def toggle_like(post_id):
 
 # ── Save ──────────────────────────────────────────────────────────────
 
-@app.route("/api/posts/<int:post_id>/save", methods=["POST"])
+@api_interactions_bp.route("/posts/<int:post_id>/save", methods=["POST"])
 @login_required
 def toggle_save(post_id):
     post = db.session.get(Post, post_id)
@@ -68,7 +69,7 @@ def toggle_save(post_id):
 
 # ── Comment (Create) ──────────────────────────────────────────────────
 
-@app.route("/api/posts/<int:post_id>/comments", methods=["POST"])
+@api_interactions_bp.route("/posts/<int:post_id>/comments", methods=["POST"])
 @login_required
 def add_comment(post_id):
     post = db.session.get(Post, post_id)
@@ -111,7 +112,7 @@ def add_comment(post_id):
 
 # ── Comment (Delete) ─────────────────────────────────────────────────
 
-@app.route("/api/posts/<int:post_id>/comments/<int:comment_id>", methods=["DELETE"])
+@api_interactions_bp.route("/posts/<int:post_id>/comments/<int:comment_id>", methods=["DELETE"])
 @login_required
 def delete_comment(post_id, comment_id):
     comment = db.session.get(Comment, comment_id)

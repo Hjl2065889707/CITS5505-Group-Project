@@ -36,7 +36,7 @@ def create_app(config_class=None):
     csrf.init_app(app)
 
     # Redirect target when @login_required fails
-    login_manager.login_view = "login"
+    login_manager.login_view = "auth.login"
 
     # ── Flask-Login callbacks ──
 
@@ -51,7 +51,7 @@ def create_app(config_class=None):
         """Return JSON 401 for API requests, redirect to login for page requests."""
         if request.path.startswith("/api/"):
             return jsonify({"error": "Authentication required"}), 401
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     # ── Error handlers ──
 
@@ -59,17 +59,22 @@ def create_app(config_class=None):
     def page_not_found(_error):
         return render_template("404.html", active_page=""), 404
 
+    # ── Register Blueprints ──
+
+    from app.routes.main import main_bp
+    from app.routes.auth import auth_bp
+    from app.routes.post import post_bp
+    from app.routes.profile import profile_bp
+    from app.api.posts import api_posts_bp
+    from app.api.interactions import api_interactions_bp
+    from app.api.users import api_users_bp
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(post_bp)
+    app.register_blueprint(profile_bp)
+    app.register_blueprint(api_posts_bp, url_prefix="/api")
+    app.register_blueprint(api_interactions_bp, url_prefix="/api")
+    app.register_blueprint(api_users_bp, url_prefix="/api")
+
     return app
-
-
-# ---------------------------------------------------------------------------
-# Module-level app instance for backward compatibility.
-# Route files still use `from app import app` + `@app.route(...)`.
-# This will be removed after Blueprint migration (Step 2).
-# ---------------------------------------------------------------------------
-app = create_app()
-
-# Import routes & models at the bottom so their @app.route decorators register.
-from app.routes import main, auth, post, profile  # noqa: E402, F401
-from app.api import posts, interactions, users     # noqa: E402, F401
-from app import models                             # noqa: E402, F401

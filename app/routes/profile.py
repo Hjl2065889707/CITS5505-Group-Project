@@ -3,14 +3,16 @@
 Owner: Hjl2065889707
 """
 
-from flask import render_template, abort
+from flask import Blueprint, render_template, redirect, url_for, abort
 from flask_login import current_user, login_required
-from app import app, db
+from app import db
 from app.models import User, Post, SavedPost
 
+profile_bp = Blueprint("profile", __name__)
 
-@app.route("/profile")
-@app.route("/profile/<int:user_id>")
+
+@profile_bp.route("/profile")
+@profile_bp.route("/profile/<int:user_id>")
 def profile(user_id=None):
     """Show a user's profile page. If user_id is None, show current user."""
     # Determine who we are viewing
@@ -20,8 +22,7 @@ def profile(user_id=None):
         target_user = current_user
     else:
         # Not logged in and no user_id specified → redirect to login
-        from flask import redirect, url_for
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
     if not target_user:
         abort(404)
@@ -50,9 +51,8 @@ def profile(user_id=None):
                            active_page="profile")
 
 
-@app.route("/settings")
+@profile_bp.route("/settings")
 @login_required
 def settings():
     """Show settings page for the current user."""
     return render_template("settings.html", user=current_user, active_page="profile")
-

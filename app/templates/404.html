@@ -40,7 +40,7 @@
         </p>
 
         <div class="error-actions">
-          <a class="primary-btn" href="{{ url_for('feed') }}">
+          <a class="primary-btn" href="{{ url_for('main.feed') }}">
             <span aria-hidden="true">🐟</span>
             Back to Feed
           </a>
@@ -55,19 +55,19 @@
           <p class="quick-links-title">Where would you like to go?</p>
 
           <div class="quick-link-grid">
-            <a class="quick-link-card" href="{{ url_for('feed') }}">
+            <a class="quick-link-card" href="{{ url_for('main.feed') }}">
               <span class="quick-link-icon" aria-hidden="true">📰</span>
               <strong>Feed</strong>
               <span>See latest catches.</span>
             </a>
 
-            <a class="quick-link-card" href="{{ url_for('map_page') }}">
+            <a class="quick-link-card" href="{{ url_for('main.map_page') }}">
               <span class="quick-link-icon" aria-hidden="true">📍</span>
               <strong>Map</strong>
               <span>Explore nearby spots.</span>
             </a>
 
-            <a class="quick-link-card" href="{{ url_for('profile') }}">
+            <a class="quick-link-card" href="{{ url_for('profile.profile') }}">
               <span class="quick-link-icon" aria-hidden="true">👤</span>
               <strong>Profile</strong>
               <span>View your logs.</span>
@@ -86,7 +86,7 @@
         </p>
       </div>
 
-      <a href="{{ url_for('feed') }}">Return Home →</a>
+      <a href="{{ url_for('main.feed') }}">Return Home →</a>
     </section>
   </section>
 {% endblock %}

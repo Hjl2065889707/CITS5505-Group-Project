@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const res = await fetch(`/api/users/${userId}/follow`, {
           method: "POST",
+          headers: {
+            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+          },
         });
         if (!res.ok) throw new Error("Request failed");
         const data = await res.json();

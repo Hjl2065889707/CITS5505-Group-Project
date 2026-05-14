@@ -3,13 +3,15 @@
 Owner: Oliver24258175
 """
 
-from flask import flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func
 
-from app import app, db
+from app import db
 from app.forms import LoginForm, RegisterForm
 from app.models import User
+
+auth_bp = Blueprint("auth", __name__)
 
 
 def is_safe_redirect_url(target):
@@ -17,11 +19,11 @@ def is_safe_redirect_url(target):
     return target and target.startswith("/") and not target.startswith("//")
 
 
-@app.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     """User login page."""
     if current_user.is_authenticated:
-        return redirect(url_for("feed"))
+        return redirect(url_for("main.feed"))
 
     form = LoginForm()
 
@@ -46,16 +48,16 @@ def login():
         if is_safe_redirect_url(next_page):
             return redirect(next_page)
 
-        return redirect(url_for("feed"))
+        return redirect(url_for("main.feed"))
 
     return render_template("login.html", form=form, active_page="login")
 
 
-@app.route("/register", methods=["GET", "POST"])
+@auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     """User registration page."""
     if current_user.is_authenticated:
-        return redirect(url_for("feed"))
+        return redirect(url_for("main.feed"))
 
     form = RegisterForm()
 
@@ -83,15 +85,15 @@ def register():
         db.session.commit()
 
         flash("Account created successfully. Please log in to continue.", "success")
-        return redirect(url_for("login"))
+        return redirect(url_for("auth.login"))
 
     return render_template("register.html", form=form, active_page="register")
 
 
-@app.route("/logout")
+@auth_bp.route("/logout")
 @login_required
 def logout():
     """Log the current user out and redirect to feed."""
     logout_user()
     flash("You have been logged out successfully.", "success")
-    return redirect(url_for("feed"))
+    return redirect(url_for("main.feed"))

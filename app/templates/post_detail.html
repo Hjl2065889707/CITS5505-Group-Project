@@ -11,7 +11,7 @@
 {% block content %}
 <!-- Page Navigation Bar -->
 <header class="top-nav">
-  <a href="{{ url_for('feed') }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
+  <a href="{{ url_for('main.feed') }}" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
   <h1 class="nav-title">Post</h1>
 </header>
 
@@ -20,13 +20,13 @@
   <article class="post-card" data-post-id="{{ post.id }}">
     
     <div class="post-card__header">
-      <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}">
+      <a href="{{ url_for('profile.profile', user_id=post.user.id) if post.user else '#' }}">
         <img src="{{ post.user.avatar_url if post.user and post.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
              alt="{{ post.user.username if post.user else 'Unknown' }}" 
              class="post-card__avatar" />
       </a>
       <div class="post-card__meta">
-        <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}" class="post-card__username">
+        <a href="{{ url_for('profile.profile', user_id=post.user.id) if post.user else '#' }}" class="post-card__username">
           {{ post.user.username if post.user else 'Unknown User' }}
         </a>
         <time class="post-card__time" datetime="{{ post.created_at.isoformat() if post.created_at else '' }}">
@@ -106,14 +106,14 @@
       {% if comments %}
         {% for comment in comments %}
           <div class="comment-item">
-            <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}">
+            <a href="{{ url_for('profile.profile', user_id=comment.user.id) if comment.user else '#' }}">
               <img src="{{ comment.user.avatar_url if comment.user and comment.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
                    alt="Avatar" class="comment-avatar" />
             </a>
             <div class="comment-body">
               <div class="comment-header">
                 <div class="comment-header-left">
-                  <a href="{{ url_for('profile', user_id=comment.user.id) if comment.user else '#' }}" class="comment-username">
+                  <a href="{{ url_for('profile.profile', user_id=comment.user.id) if comment.user else '#' }}" class="comment-username">
                     {{ comment.user.username if comment.user else 'Unknown' }}
                   </a>
                   <span class="comment-time">{{ comment.created_at.strftime('%b %d, %H:%M') if comment.created_at else '' }}</span>
@@ -147,7 +147,7 @@
   </div>
   {% else %}
   <div class="comment-input-area">
-    <p class="login-prompt"><a href="{{ url_for('login') }}">Log in</a> to leave a comment</p>
+    <p class="login-prompt"><a href="{{ url_for('auth.login') }}">Log in</a> to leave a comment</p>
   </div>
   {% endif %}
 </div>

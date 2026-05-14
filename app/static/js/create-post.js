@@ -131,7 +131,8 @@ document.querySelector(".post-btn").addEventListener("click", async () => {
     const response = await fetch("/api/posts", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
       },
       body: JSON.stringify(postData)
     });
