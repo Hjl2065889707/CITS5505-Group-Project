@@ -24,6 +24,7 @@ def create_app(config_class=None):
     """Application factory — create and configure the Flask app."""
     if config_class is None:
         from config import Config
+
         config_class = Config
 
     app = Flask(__name__)
@@ -44,6 +45,7 @@ def create_app(config_class=None):
     def load_user(user_id):
         """Flask-Login callback — load user from session cookie."""
         from app.models import User
+
         return db.session.get(User, int(user_id))
 
     @login_manager.unauthorized_handler
@@ -51,7 +53,8 @@ def create_app(config_class=None):
         """Return JSON 401 for API requests, redirect to login for page requests."""
         if request.path.startswith("/api/"):
             return jsonify({"error": "Authentication required"}), 401
-        return redirect(url_for("auth.login"))
+
+        return redirect(url_for("auth.login", next=request.full_path or request.path))
 
     # ── Error handlers ──
 

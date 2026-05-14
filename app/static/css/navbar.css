@@ -92,6 +92,21 @@
   background-color: #176342;
 }
 
+/* Logout is a POST form for better session safety. Keep it visually identical to the login button. */
+.site-navbar__logout-form {
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-navbar__logout-form .site-navbar__login {
+  border: none;
+  font-family: inherit;
+  line-height: normal;
+  cursor: pointer;
+}
+
 .site-navbar__toggle {
   display: none;
   border: 1px solid #dbdbdb;
