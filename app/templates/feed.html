@@ -9,42 +9,48 @@
 {% endblock %}
 
 {% block content %}
-<div class="create-post-bar">
-  <button
-    class="create-post-btn"
-    onclick="location.href = '{{ url_for('main.create_post') }}'"
-  >
-    + Create Post
-  </button>
-</div>
+<div class="feed-page">
+  <div class="feed-shell">
+    <div class="feed-toolbar">
+      <div>
+        <p class="feed-kicker">Community Feed</p>
+        <h1>Latest CatchLog Posts</h1>
+      </div>
 
-<!-- Search bar -->
-<div class="search-bar">
-  <input type="text" placeholder="Search posts..." id="searchInput" />
-</div>
-
-<!-- Tag filter -->
-<div class="tag-filter">
-  <button class="tag active">All</button>
-  <button class="tag">Catch Report</button>
-  <button class="tag">Gear Review</button>
-  <button class="tag">Question</button>
-  <button class="tag">General</button>
-</div>
-
-<!-- Feed posts -->
-<div class="feed-container" id="feedContainer">
-  {% for post in posts %}
-    <div
-      class="feed-post-item"
-      data-category="{{ post.category or 'General' }}"
-      data-search="{{ (post.content ~ ' ' ~ (post.user.username if post.user else '') ~ ' ' ~ (post.species or '') ~ ' ' ~ (post.location_name or '')) | lower }}"
-    >
-      {{ post_card(post) }}
+      <a href="{{ url_for('main.create_post') }}" class="create-post-btn">
+        + Create Post
+      </a>
     </div>
-  {% else %}
-    <p class="feed-empty-message">No posts found</p>
-  {% endfor %}
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search posts..." id="searchInput" />
+    </div>
+
+    <!-- Tag filter -->
+    <div class="tag-filter" aria-label="Post category filter">
+      <button class="tag active">All</button>
+      <button class="tag">Catch Report</button>
+      <button class="tag">Gear Review</button>
+      <button class="tag">Question</button>
+      <button class="tag">General</button>
+    </div>
+
+    <!-- Feed posts -->
+    <div class="feed-container" id="feedContainer">
+      {% for post in posts %}
+        <div
+          class="feed-post-item"
+          data-category="{{ post.category or 'General' }}"
+          data-search="{{ (post.content ~ ' ' ~ (post.user.username if post.user else '') ~ ' ' ~ (post.species or '') ~ ' ' ~ (post.location_name or '')) | lower }}"
+        >
+          {{ post_card(post) }}
+        </div>
+      {% else %}
+        <p class="feed-empty-message">No posts found</p>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 {% endblock %}
 
