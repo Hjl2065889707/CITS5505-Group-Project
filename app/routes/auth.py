@@ -90,7 +90,7 @@ def register():
     return render_template("register.html", form=form, active_page="register")
 
 
-@auth_bp.route("/logout")
+@auth_bp.route("/logout", methods=["POST"])
 @login_required
 def logout():
     """Log the current user out and redirect to feed."""
