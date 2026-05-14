@@ -3,12 +3,14 @@
 Owner: Hjl2065889707
 """
 
-from flask import render_template, abort
-from app import app, db
+from flask import Blueprint, render_template, abort
+from app import db
 from app.models import Post, Comment
 
+post_bp = Blueprint("post", __name__)
 
-@app.route("/posts/<int:post_id>")
+
+@post_bp.route("/posts/<int:post_id>")
 def post_detail(post_id):
     """Show a single post with its details and comments."""
     post = db.session.get(Post, post_id)

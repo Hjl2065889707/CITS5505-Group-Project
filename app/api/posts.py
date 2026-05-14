@@ -2,62 +2,29 @@
 
 ===== CRUD (Felix) =====
 GET  /api/posts          — list posts (with ?category= and ?q= filters)
-POST /api/posts          — create a new post (TODO)
+POST /api/posts          — create a new post
 
 ===== Map (Chrommanito) =====
 GET  /api/posts/map      — posts that have location data
-
-===== Legacy (temporary — remove after DB migration) =====
-GET  /api/feed-posts     — mock feed data
-GET  /api/my-posts       — mock user posts
-GET  /api/saved-posts    — mock saved posts
 """
 
-import json
 import base64
 import re
 import uuid
 from pathlib import Path
 
-from flask import jsonify, request, render_template_string
+from flask import Blueprint, jsonify, request, render_template_string, current_app
 from flask_login import current_user
 from sqlalchemy import or_
 
-from app import app, db
+from app import db
 from app.models import Post, PostImage, User
 
-# ---------- Temporary mock-data paths (remove after DB migration) ----------
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-FEED_POSTS_FILE = BASE_DIR / "mockdata" / "feedPosts.json"
+api_posts_bp = Blueprint("api_posts", __name__)
+
 ALLOWED_CATEGORIES = {"Catch Report", "Gear Review", "Question", "General"}
 DATA_URL_RE = re.compile(r"^data:image/(png|jpe?g|gif|webp);base64,(.+)$", re.I)
 MAX_INLINE_IMAGE_BYTES = 2 * 1024 * 1024
-
-
-@app.route("/api/feed-posts")
-def api_feed_posts():
-    """Return feed posts as JSON for the frontend JS (legacy mock)."""
-    with FEED_POSTS_FILE.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-    return jsonify(data)
-
-
-@app.route("/api/my-posts")
-def api_my_posts():
-    """Return user's own posts as JSON (legacy mock)."""
-    path = BASE_DIR / "mockdata" / "myPosts.json"
-    with path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-    return jsonify(data)
-
-
-@app.route("/api/saved-posts")
-def api_saved_posts():
-    """Return user's saved posts as JSON (legacy mock)."""
-    path = BASE_DIR / "mockdata" / "savedPosts.json"
-    with path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-    return jsonify(data)
 
 
 def _clean_optional_text(value, max_length):
@@ -102,7 +69,7 @@ def _store_image_url_or_data_url(value):
     if len(image_bytes) > MAX_INLINE_IMAGE_BYTES:
         raise ValueError("Each uploaded image must be under 2 MB.")
 
-    upload_dir = Path(app.config["UPLOAD_FOLDER"])
+    upload_dir = Path(current_app.config["UPLOAD_FOLDER"])
     upload_dir.mkdir(parents=True, exist_ok=True)
 
     filename = f"post-{uuid.uuid4().hex}.{extension}"
@@ -140,7 +107,7 @@ def _serialize_post(post):
 # ===== CRUD (Felix) =====================================================
 
 
-@app.route("/api/posts")
+@api_posts_bp.route("/posts")
 def api_list_posts():
     """Return database posts in the unified Feed/Create Post JSON shape."""
     category = request.args.get("category")
@@ -166,7 +133,7 @@ def api_list_posts():
     return jsonify([_serialize_post(post) for post in posts])
 
 
-@app.route("/api/posts", methods=["POST"])
+@api_posts_bp.route("/posts", methods=["POST"])
 def api_create_post():
     """Create a post from the Create Post page."""
     data = request.get_json(silent=True)
@@ -232,7 +199,7 @@ def api_create_post():
 
 # ===== Map (Chrommanito) ========================================
 
-@app.route("/api/posts/map")
+@api_posts_bp.route("/posts/map")
 def api_map_posts():
     """Return posts that have valid location data for the map page."""
 

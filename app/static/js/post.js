@@ -44,7 +44,8 @@ async function handleCommentSubmit(event) {
     const response = await fetch(`/api/posts/${postId}/comments`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
       },
       body: JSON.stringify({ content: text })
     });
@@ -153,7 +154,10 @@ async function handleCommentDelete(button) {
 
   try {
     const response = await fetch(`/api/posts/${postId}/comments/${commentId}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+      }
     });
 
     if (response.status === 401) {

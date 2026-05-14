@@ -8,7 +8,9 @@ from typing import Optional
 
 from werkzeug.security import generate_password_hash
 
-from app import app, db
+from app import create_app, db
+
+app = create_app()
 from app.models import User, Post, PostImage, Comment, PostLike, SavedPost
 
 

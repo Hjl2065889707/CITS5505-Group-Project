@@ -1,6 +1,4 @@
-"""Import all API sub-modules so their @app.route decorators register."""
-
-from app.api import posts, interactions, users  # noqa: F401
+"""API sub-package — Blueprints are registered in create_app()."""
 
 
 # ---------------------------------------------------------------------------

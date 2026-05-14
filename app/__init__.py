@@ -1,63 +1,80 @@
 """
 CatchLog — Flask application package.
 
-Initialises the Flask app, database, login manager, and migration engine.
-Route and model imports are placed at the **bottom** to avoid circular
-dependencies, following the recommended Flask package pattern.
+Uses the Application Factory pattern (create_app) so that different
+configurations can be passed for development, testing, etc.
 """
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from config import Config
+from flask_wtf.csrf import CSRFProtect
 
 # ---------------------------------------------------------------------------
 # Extension instances (created here so route / model files can import them)
 # ---------------------------------------------------------------------------
 db = SQLAlchemy()
 login_manager = LoginManager()
-login_manager.login_view = "login"  # redirect target when @login_required fails
 migrate = Migrate()
-
-# ---------------------------------------------------------------------------
-# Application instance
-# ---------------------------------------------------------------------------
-app = Flask(__name__)
-app.config.from_object(Config)
-
-db.init_app(app)
-login_manager.init_app(app)
-migrate.init_app(app, db)
+csrf = CSRFProtect()
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    """Flask-Login callback — load user from session cookie."""
-    from app.models import User
+def create_app(config_class=None):
+    """Application factory — create and configure the Flask app."""
+    if config_class is None:
+        from config import Config
+        config_class = Config
 
-    return db.session.get(User, int(user_id))
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
+    # Initialise extensions with this app instance
+    db.init_app(app)
+    login_manager.init_app(app)
+    migrate.init_app(app, db)
+    csrf.init_app(app)
 
-@login_manager.unauthorized_handler
-def unauthorized():
-    """Return JSON 401 for API requests, redirect to login for page requests."""
-    if request.path.startswith("/api/"):
-        return jsonify({"error": "Authentication required"}), 401
-    return redirect(url_for("login"))
+    # Redirect target when @login_required fails
+    login_manager.login_view = "auth.login"
 
+    # ── Flask-Login callbacks ──
 
-# ---------------------------------------------------------------------------
-# Error handlers
-# ---------------------------------------------------------------------------
-@app.errorhandler(404)
-def page_not_found(_error):
-    return render_template("404.html", active_page=""), 404
+    @login_manager.user_loader
+    def load_user(user_id):
+        """Flask-Login callback — load user from session cookie."""
+        from app.models import User
+        return db.session.get(User, int(user_id))
 
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        """Return JSON 401 for API requests, redirect to login for page requests."""
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "Authentication required"}), 401
+        return redirect(url_for("auth.login"))
 
-# ---------------------------------------------------------------------------
-# Import routes & models at bottom (avoids circular imports)
-# ---------------------------------------------------------------------------
-from app.routes import main, auth, post, profile  # noqa: E402, F401
-from app.api import posts, interactions, users     # noqa: E402, F401
-from app import models                             # noqa: E402, F401
+    # ── Error handlers ──
+
+    @app.errorhandler(404)
+    def page_not_found(_error):
+        return render_template("404.html", active_page=""), 404
+
+    # ── Register Blueprints ──
+
+    from app.routes.main import main_bp
+    from app.routes.auth import auth_bp
+    from app.routes.post import post_bp
+    from app.routes.profile import profile_bp
+    from app.api.posts import api_posts_bp
+    from app.api.interactions import api_interactions_bp
+    from app.api.users import api_users_bp
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(post_bp)
+    app.register_blueprint(profile_bp)
+    app.register_blueprint(api_posts_bp, url_prefix="/api")
+    app.register_blueprint(api_interactions_bp, url_prefix="/api")
+    app.register_blueprint(api_users_bp, url_prefix="/api")
+
+    return app

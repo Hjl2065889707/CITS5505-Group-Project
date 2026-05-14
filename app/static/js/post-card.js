@@ -44,7 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(`/api/posts/${postId}/${type}`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
         }
       });
   

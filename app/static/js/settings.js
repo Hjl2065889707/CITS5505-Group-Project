@@ -71,6 +71,9 @@ async function handleAvatarUpload(event) {
   try {
     const response = await fetch('/api/users/me/avatar', {
       method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+      },
       body: formData
     });
 
@@ -109,7 +112,10 @@ async function handleSaveProfile() {
   try {
     const response = await fetch('/api/users/me', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+      },
       body: JSON.stringify({ username, bio })
     });
 
@@ -166,7 +172,10 @@ async function handleChangePassword() {
   try {
     const response = await fetch('/api/users/me/password', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+      },
       body: JSON.stringify({ currentPassword, newPassword })
     });
 

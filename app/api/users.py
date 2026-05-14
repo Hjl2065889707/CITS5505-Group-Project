@@ -7,18 +7,19 @@ Security notes:
   - All endpoints validate input server-side (zero-trust).
   - Avatar files are saved locally with secure_filename().
   - Password change requires the current password to be verified first.
-  - CSRF: will be enforced globally via Flask-WTF CSRFProtect in a future PR.
 """
 
 import os
 import time
 
-from flask import jsonify, request, abort, current_app
+from flask import Blueprint, jsonify, request, abort, current_app
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-from app import app, db
+from app import db
 from app.models import User, Follow
+
+api_users_bp = Blueprint("api_users", __name__)
 
 ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 MAX_AVATAR_SIZE = 5 * 1024 * 1024  # 5 MB
@@ -31,7 +32,7 @@ def _allowed_image(filename):
 
 # ── Update Profile ────────────────────────────────────────────────────
 
-@app.route("/api/users/me", methods=["PUT"])
+@api_users_bp.route("/users/me", methods=["PUT"])
 @login_required
 def update_profile():
     """Update the current user's username and/or bio."""
@@ -93,7 +94,7 @@ def update_profile():
 
 # ── Upload Avatar ─────────────────────────────────────────────────────
 
-@app.route("/api/users/me/avatar", methods=["POST"])
+@api_users_bp.route("/users/me/avatar", methods=["POST"])
 @login_required
 def upload_avatar():
     """Upload and update the current user's avatar image."""
@@ -139,7 +140,7 @@ def upload_avatar():
 
 # ── Change Password ───────────────────────────────────────────────────
 
-@app.route("/api/users/me/password", methods=["PUT"])
+@api_users_bp.route("/users/me/password", methods=["PUT"])
 @login_required
 def change_password():
     """Change the current user's password."""
@@ -173,7 +174,7 @@ def change_password():
 
 # ── Follow / Unfollow ─────────────────────────────────────────────────
 
-@app.route("/api/users/<int:user_id>/follow", methods=["POST"])
+@api_users_bp.route("/users/<int:user_id>/follow", methods=["POST"])
 @login_required
 def toggle_follow(user_id):
     """Toggle follow status for a user."""
@@ -215,7 +216,7 @@ def _serialize_user_brief(user):
     }
 
 
-@app.route("/api/users/<int:user_id>/followers")
+@api_users_bp.route("/users/<int:user_id>/followers")
 @login_required
 def get_followers(user_id):
     """Return list of users who follow the given user."""
@@ -230,7 +231,7 @@ def get_followers(user_id):
     return jsonify(followers)
 
 
-@app.route("/api/users/<int:user_id>/following")
+@api_users_bp.route("/users/<int:user_id>/following")
 @login_required
 def get_following(user_id):
     """Return list of users the given user is following."""

@@ -11,13 +11,13 @@
   
   {# ── Header: Avatar, Username, Date ── #}
   <div class="post-card__header">
-    <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}">
+    <a href="{{ url_for('profile.profile', user_id=post.user.id) if post.user else '#' }}">
       <img src="{{ post.user.avatar_url if post.user and post.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
            alt="{{ post.user.username if post.user else 'Unknown' }}" 
            class="post-card__avatar" />
     </a>
     <div class="post-card__meta">
-      <a href="{{ url_for('profile', user_id=post.user.id) if post.user else '#' }}" class="post-card__username">
+      <a href="{{ url_for('profile.profile', user_id=post.user.id) if post.user else '#' }}" class="post-card__username">
         {{ post.user.username if post.user else 'Unknown User' }}
       </a>
       <time class="post-card__time" datetime="{{ post.created_at.isoformat() if post.created_at else '' }}">
@@ -28,7 +28,7 @@
 
   {# ── Content ── #}
   <div class="post-card__body">
-    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="post-card__content-link">{{ post.content }}</a>
+    <a href="{{ url_for('post.post_detail', post_id=post.id) }}" class="post-card__content-link">{{ post.content }}</a>
   </div>
 
   {# ── Images (Carousel) ── #}
@@ -37,7 +37,7 @@
     {% if variant == "compact" %}
       {# Compact view: just show the first image #}
       <div class="post-card__images post-card__images--single">
-        <a href="{{ url_for('post_detail', post_id=post.id) }}">
+        <a href="{{ url_for('post.post_detail', post_id=post.id) }}">
           <img src="{{ images[0].image_url }}" alt="Catch photo" class="carousel-image" loading="lazy" />
         </a>
       </div>
@@ -52,7 +52,7 @@
         <div class="carousel-track">
           {% for img in images %}
             <div class="carousel-slide">
-              <a href="{{ url_for('post_detail', post_id=post.id) }}" style="display:block; width:100%; height:100%;">
+              <a href="{{ url_for('post.post_detail', post_id=post.id) }}" style="display:block; width:100%; height:100%;">
                 <img src="{{ img.image_url }}" alt="Catch photo {{ loop.index }}" class="carousel-image" loading="lazy" />
               </a>
             </div>
@@ -91,7 +91,7 @@
       <span class="like-count">{{ post.likes | length }}</span>
     </button>
     
-    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="action-btn comment-btn" aria-label="Comment">
+    <a href="{{ url_for('post.post_detail', post_id=post.id) }}" class="action-btn comment-btn" aria-label="Comment">
       <i class="fa-regular fa-comment"></i>
       <span class="comment-count">{{ post.comments | length }}</span>
     </a>
