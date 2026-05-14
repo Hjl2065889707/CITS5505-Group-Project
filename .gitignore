@@ -17,8 +17,6 @@ venv/
 instance/
 *.db
 
-# Flask-Migrate (generated per-environment)
-migrations/
 
 # User uploads (generated at runtime)
 app/static/uploads/*
