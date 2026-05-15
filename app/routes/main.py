@@ -5,16 +5,26 @@ Owner: Felix-Ma1209
 
 from flask import Blueprint, render_template
 from flask_login import login_required
-from app.models import Post
+from app.api.posts import FEED_PAGE_SIZE, build_posts_query
 
 main_bp = Blueprint("main", __name__)
 
 
 @main_bp.route("/")
 def feed():
-    """Home page — show all posts."""
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    return render_template("feed.html", posts=posts, active_page="feed")
+    """Home page — show the first page of posts."""
+    page = build_posts_query().paginate(
+        page=1,
+        per_page=FEED_PAGE_SIZE,
+        error_out=False,
+    )
+    return render_template(
+        "feed.html",
+        posts=page.items,
+        has_more_posts=page.has_next,
+        feed_page_size=FEED_PAGE_SIZE,
+        active_page="feed",
+    )
 
 
 @main_bp.route("/create-post")

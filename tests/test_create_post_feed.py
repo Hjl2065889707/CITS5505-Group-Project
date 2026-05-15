@@ -1,6 +1,9 @@
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 from app import create_app, db
+from app.api.posts import FEED_PAGE_SIZE
 from app.models import Post, User
 from config import TestConfig
 
@@ -147,3 +150,57 @@ def test_feed_renders_database_posts(client, app):
     assert b"Feed visible pytest post" in response.data
     assert b"Bream" in response.data
     assert b"Canning River" in response.data
+
+
+def test_feed_route_renders_only_first_page(client, app):
+    with app.app_context():
+        user = User.query.filter_by(username="tester").one()
+        base_time = datetime(2026, 5, 15, tzinfo=timezone.utc)
+        for index in range(FEED_PAGE_SIZE + 2):
+            db.session.add(Post(
+                user_id=user.id,
+                content=f"Paged feed post {index}",
+                category="General",
+                created_at=base_time + timedelta(minutes=index),
+            ))
+        db.session.commit()
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert b"Paged feed post 11" in response.data
+    assert b"Paged feed post 1" in response.data
+    assert b"Paged feed post 0" not in response.data
+    assert b'id="loadMorePosts"' in response.data
+
+
+def test_feed_incremental_endpoint_filters_and_paginates(client, app):
+    with app.app_context():
+        user = User.query.filter_by(username="tester").one()
+        base_time = datetime(2026, 5, 15, tzinfo=timezone.utc)
+        posts = [
+            ("Recent trout catch", "Catch Report", "Trout"),
+            ("Older trout catch", "Catch Report", "Trout"),
+            ("Trout rod review", "Gear Review", "Trout"),
+            ("General bream catch", "General", "Bream"),
+        ]
+        for index, (content, category, species) in enumerate(posts):
+            db.session.add(Post(
+                user_id=user.id,
+                content=content,
+                category=category,
+                species=species,
+                created_at=base_time + timedelta(minutes=index),
+            ))
+        db.session.commit()
+
+    response = client.get(
+        "/api/posts/feed?q=trout&category=Catch+Report&page=1&per_page=1"
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["hasMore"] is True
+    assert data["total"] == 2
+    assert "Older trout catch" in data["html"]
+    assert "Trout rod review" not in data["html"]

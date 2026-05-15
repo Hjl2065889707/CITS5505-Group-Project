@@ -1,32 +1,91 @@
 let currentSearch = "";
 let currentTag = "All";
+let currentPage = 1;
+let isLoading = false;
+let latestFetchId = 0;
 
-/* Apply both filters together */
-function applyFilters() {
-  const postItems = document.querySelectorAll(".feed-post-item");
-  const emptyMessage = document.querySelector(".feed-empty-message");
-  let visibleCount = 0;
+const feedContainer = document.getElementById("feedContainer");
+const emptyMessage = document.querySelector(".feed-empty-message");
+const loadMoreButton = document.getElementById("loadMorePosts");
+const pageSize = Number(feedContainer?.dataset.pageSize || 10);
+const searchInput = document.getElementById("searchInput");
 
-  postItems.forEach(item => {
-    const matchesTag = currentTag === "All" || item.dataset.category === currentTag;
-    const matchesSearch = !currentSearch || item.dataset.search.includes(currentSearch);
-    const isVisible = matchesTag && matchesSearch;
+function setLoading(isBusy) {
+  isLoading = isBusy;
+  if (loadMoreButton) {
+    loadMoreButton.disabled = isBusy;
+    loadMoreButton.textContent = isBusy ? "Loading..." : "Load more";
+  }
+}
 
-    item.hidden = !isVisible;
-    if (isVisible) visibleCount += 1;
+function updateEmptyState(total) {
+  if (emptyMessage) {
+    emptyMessage.hidden = total !== 0;
+  }
+}
+
+async function loadPosts({ reset = false } = {}) {
+  if (!feedContainer) return;
+  if (isLoading && !reset) return;
+
+  const nextPage = reset ? 1 : currentPage + 1;
+  const currentFetchId = ++latestFetchId;
+  const params = new URLSearchParams({
+    page: String(nextPage),
+    per_page: String(pageSize),
   });
 
-  if (emptyMessage) {
-    emptyMessage.hidden = visibleCount !== 0;
+  if (currentSearch) {
+    params.set("q", currentSearch);
+  }
+  if (currentTag !== "All") {
+    params.set("category", currentTag);
+  }
+
+  setLoading(true);
+  if (reset) {
+    feedContainer.style.opacity = "0.5";
+  }
+
+  try {
+    const response = await fetch(`/api/posts/feed?${params.toString()}`);
+    if (!response.ok) {
+      throw new Error("Failed to load posts");
+    }
+
+    const data = await response.json();
+    if (reset && currentFetchId !== latestFetchId) return;
+
+    if (reset) {
+      feedContainer.innerHTML = "";
+      feedContainer.style.opacity = "1";
+    }
+
+    feedContainer.insertAdjacentHTML("beforeend", data.html);
+
+    currentPage = data.page;
+    updateEmptyState(data.total);
+
+    if (loadMoreButton) {
+      loadMoreButton.hidden = !data.hasMore;
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    if (currentFetchId === latestFetchId) {
+      setLoading(false);
+      feedContainer.style.opacity = "1";
+    }
   }
 }
 
 /* Search */
-const searchInput = document.getElementById("searchInput");
+let searchTimer;
 if (searchInput) {
   searchInput.addEventListener("input", () => {
-    currentSearch = searchInput.value.toLowerCase();
-    applyFilters();
+    currentSearch = searchInput.value.trim();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => loadPosts({ reset: true }), 250);
   });
 }
 
@@ -37,6 +96,10 @@ tagsEl.forEach(tag => {
     document.querySelector(".tag.active")?.classList.remove("active");
     tag.classList.add("active");
     currentTag = tag.innerText;
-    applyFilters();
+    loadPosts({ reset: true });
   });
 });
+
+if (loadMoreButton) {
+  loadMoreButton.addEventListener("click", () => loadPosts());
+}

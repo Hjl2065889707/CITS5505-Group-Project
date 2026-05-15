@@ -13,7 +13,14 @@ import re
 import uuid
 from pathlib import Path
 
-from flask import Blueprint, jsonify, request, render_template_string, current_app
+from flask import (
+    Blueprint,
+    current_app,
+    jsonify,
+    render_template,
+    render_template_string,
+    request,
+)
 from flask_login import current_user
 from sqlalchemy import or_
 
@@ -23,6 +30,7 @@ from app.models import Post, PostImage, User
 api_posts_bp = Blueprint("api_posts", __name__)
 
 ALLOWED_CATEGORIES = {"Catch Report", "Gear Review", "Question", "General"}
+FEED_PAGE_SIZE = 10
 DATA_URL_RE = re.compile(r"^data:image/(png|jpe?g|gif|webp);base64,(.+)$", re.I)
 MAX_INLINE_IMAGE_BYTES = 2 * 1024 * 1024
 
@@ -104,15 +112,9 @@ def _serialize_post(post):
     }
 
 
-# ===== CRUD (Felix) =====================================================
-
-
-@api_posts_bp.route("/posts")
-def api_list_posts():
-    """Return database posts in the unified Feed/Create Post JSON shape."""
-    category = request.args.get("category")
-    search = (request.args.get("q") or "").strip()
-
+def build_posts_query(category=None, search=None):
+    """Build the shared Feed/API post query with optional filters."""
+    search = (search or "").strip()
     query = Post.query
 
     if category and category != "All":
@@ -129,8 +131,51 @@ def api_list_posts():
             )
         )
 
-    posts = query.order_by(Post.created_at.desc()).all()
+    return query.order_by(Post.created_at.desc())
+
+
+# ===== CRUD (Felix) =====================================================
+
+
+@api_posts_bp.route("/posts")
+def api_list_posts():
+    """Return database posts in the unified Feed/Create Post JSON shape."""
+    category = request.args.get("category")
+    search = request.args.get("q")
+
+    posts = build_posts_query(category=category, search=search).all()
     return jsonify([_serialize_post(post) for post in posts])
+
+
+@api_posts_bp.route("/posts/feed")
+def api_feed_posts():
+    """Return one page of Feed post HTML for incremental loading."""
+    category = request.args.get("category")
+    search = request.args.get("q")
+    page_number = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", FEED_PAGE_SIZE, type=int)
+
+    page_number = max(page_number, 1)
+    per_page = min(max(per_page, 1), 25)
+
+    page = build_posts_query(category=category, search=search).paginate(
+        page=page_number,
+        per_page=per_page,
+        error_out=False,
+    )
+    html = "".join(
+        render_template("components/_feed_post_item.html", post=post)
+        for post in page.items
+    )
+
+    return jsonify(
+        {
+            "html": html,
+            "page": page.page,
+            "hasMore": page.has_next,
+            "total": page.total,
+        }
+    )
 
 
 @api_posts_bp.route("/posts", methods=["POST"])
