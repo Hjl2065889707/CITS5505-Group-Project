@@ -1,0 +1,8 @@
+{% from "components/_post_card.html" import post_card with context %}
+
+<div
+  class="feed-post-item"
+  data-category="{{ post.category or 'General' }}"
+>
+  {{ post_card(post) }}
+</div>

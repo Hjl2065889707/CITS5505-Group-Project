@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% from "components/_post_card.html" import post_card with context %}
-
 {% block title %}Feed | CatchLog{% endblock %}
 
 {% block styles %}
@@ -37,19 +35,24 @@
     </div>
 
     <!-- Feed posts -->
-    <div class="feed-container" id="feedContainer">
+    <div
+      class="feed-container"
+      id="feedContainer"
+      data-page-size="{{ feed_page_size }}"
+    >
       {% for post in posts %}
-        <div
-          class="feed-post-item"
-          data-category="{{ post.category or 'General' }}"
-          data-search="{{ (post.content ~ ' ' ~ (post.user.username if post.user else '') ~ ' ' ~ (post.species or '') ~ ' ' ~ (post.location_name or '')) | lower }}"
-        >
-          {{ post_card(post) }}
-        </div>
-      {% else %}
-        <p class="feed-empty-message">No posts found</p>
+        {% include "components/_feed_post_item.html" %}
       {% endfor %}
     </div>
+    <p class="feed-empty-message" {% if posts %}hidden{% endif %}>No posts found</p>
+    <button
+      type="button"
+      class="load-more-btn"
+      id="loadMorePosts"
+      {% if not has_more_posts %}hidden{% endif %}
+    >
+      Load more
+    </button>
   </div>
 </div>
 {% endblock %}
