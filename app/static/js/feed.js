@@ -2,6 +2,7 @@ let currentSearch = "";
 let currentTag = "All";
 let currentPage = 1;
 let isLoading = false;
+let latestFetchId = 0;
 
 const feedContainer = document.getElementById("feedContainer");
 const emptyMessage = document.querySelector(".feed-empty-message");
@@ -24,9 +25,11 @@ function updateEmptyState(total) {
 }
 
 async function loadPosts({ reset = false } = {}) {
-  if (!feedContainer || isLoading) return;
+  if (!feedContainer) return;
+  if (isLoading && !reset) return;
 
   const nextPage = reset ? 1 : currentPage + 1;
+  const currentFetchId = ++latestFetchId;
   const params = new URLSearchParams({
     page: String(nextPage),
     per_page: String(pageSize),
@@ -41,9 +44,7 @@ async function loadPosts({ reset = false } = {}) {
 
   setLoading(true);
   if (reset) {
-    feedContainer.querySelectorAll(".feed-post-item").forEach(item => {
-      item.hidden = true;
-    });
+    feedContainer.style.opacity = "0.5";
   }
 
   try {
@@ -53,6 +54,13 @@ async function loadPosts({ reset = false } = {}) {
     }
 
     const data = await response.json();
+    if (reset && currentFetchId !== latestFetchId) return;
+
+    if (reset) {
+      feedContainer.innerHTML = "";
+      feedContainer.style.opacity = "1";
+    }
+
     feedContainer.insertAdjacentHTML("beforeend", data.html);
 
     currentPage = data.page;
@@ -64,7 +72,10 @@ async function loadPosts({ reset = false } = {}) {
   } catch (error) {
     console.error(error);
   } finally {
-    setLoading(false);
+    if (currentFetchId === latestFetchId) {
+      setLoading(false);
+      feedContainer.style.opacity = "1";
+    }
   }
 }
 
