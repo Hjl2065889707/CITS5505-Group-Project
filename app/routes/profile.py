@@ -28,13 +28,20 @@ def profile(user_id=None):
         abort(404)
 
     my_posts = (
-        Post.query.filter_by(user_id=target_user.id)
+        Post.query
+        .filter_by(user_id=target_user.id, is_deleted=False)
         .order_by(Post.created_at.desc())
         .all()
     )
 
     saved_post_ids = [sp.post_id for sp in SavedPost.query.filter_by(user_id=target_user.id).all()]
-    saved_posts = Post.query.filter(Post.id.in_(saved_post_ids)).all() if saved_post_ids else []
+    saved_posts = (
+        Post.query
+        .filter(Post.id.in_(saved_post_ids), Post.is_deleted.is_(False))
+        .all()
+        if saved_post_ids
+        else []
+    )
 
     # Follow stats
     is_following = False

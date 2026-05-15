@@ -272,3 +272,12 @@
 .save-btn {
   margin-left: auto;
 }
+
+.delete-post-btn:hover {
+  color: var(--color-error);
+}
+
+.delete-post-btn:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

@@ -3,6 +3,7 @@ let currentTag = "All";
 let currentPage = 1;
 let isLoading = false;
 let latestFetchId = 0;
+let staleCleanupTimer;
 
 const feedContainer = document.getElementById("feedContainer");
 const emptyMessage = document.querySelector(".feed-empty-message");
@@ -22,6 +23,22 @@ function updateEmptyState(total) {
   if (emptyMessage) {
     emptyMessage.hidden = total !== 0;
   }
+}
+
+function markCurrentPostsStale() {
+  clearTimeout(staleCleanupTimer);
+  feedContainer.querySelectorAll(".feed-post-item").forEach(item => {
+    item.hidden = true;
+    item.dataset.feedStale = "true";
+  });
+}
+
+function cleanupStalePosts() {
+  staleCleanupTimer = setTimeout(() => {
+    feedContainer
+      .querySelectorAll('.feed-post-item[data-feed-stale="true"]')
+      .forEach(item => item.remove());
+  }, 1000);
 }
 
 async function loadPosts({ reset = false } = {}) {
@@ -44,6 +61,7 @@ async function loadPosts({ reset = false } = {}) {
 
   setLoading(true);
   if (reset) {
+    markCurrentPostsStale();
     feedContainer.style.opacity = "0.5";
   }
 
@@ -56,12 +74,11 @@ async function loadPosts({ reset = false } = {}) {
     const data = await response.json();
     if (reset && currentFetchId !== latestFetchId) return;
 
-    if (reset) {
-      feedContainer.innerHTML = "";
-      feedContainer.style.opacity = "1";
-    }
-
     feedContainer.insertAdjacentHTML("beforeend", data.html);
+    if (reset) {
+      feedContainer.style.opacity = "1";
+      cleanupStalePosts();
+    }
 
     currentPage = data.page;
     updateEmptyState(data.total);

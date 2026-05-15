@@ -25,7 +25,7 @@ MAX_COMMENT_LENGTH = 2000  # Server-enforced max characters per comment
 @login_required
 def toggle_like(post_id):
     post = db.session.get(Post, post_id)
-    if not post:
+    if not post or post.is_deleted:
         abort(404)
 
     existing_like = PostLike.query.filter_by(user_id=current_user.id, post_id=post_id).first()
@@ -50,7 +50,7 @@ def toggle_like(post_id):
 @login_required
 def toggle_save(post_id):
     post = db.session.get(Post, post_id)
-    if not post:
+    if not post or post.is_deleted:
         abort(404)
 
     existing_save = SavedPost.query.filter_by(user_id=current_user.id, post_id=post_id).first()
@@ -73,7 +73,7 @@ def toggle_save(post_id):
 @login_required
 def add_comment(post_id):
     post = db.session.get(Post, post_id)
-    if not post:
+    if not post or post.is_deleted:
         abort(404)
 
     # --- Zero-trust input validation ---
@@ -115,6 +115,10 @@ def add_comment(post_id):
 @api_interactions_bp.route("/posts/<int:post_id>/comments/<int:comment_id>", methods=["DELETE"])
 @login_required
 def delete_comment(post_id, comment_id):
+    post = db.session.get(Post, post_id)
+    if not post or post.is_deleted:
+        abort(404)
+
     comment = db.session.get(Comment, comment_id)
     if not comment or comment.post_id != post_id:
         abort(404)
