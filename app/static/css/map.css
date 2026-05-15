@@ -4,8 +4,14 @@ body {
 }
 
 #map {
-  height: 100vh;
+  height: calc(100vh - 60px);
   width: 100%;
+}
+
+.map-page {
+  position: relative;
+  height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 .custom-marker {
@@ -79,9 +85,9 @@ body {
   top: 0;
   left: -350px;
   width: 350px;
-  height: 100vh;
+  height: calc(100vh - 60px);
   background: #f5f6f8;
-  z-index: 1000;
+  z-index: 900;
   transition: left 0.3s ease;
   overflow-y: auto;
   box-shadow: 2px 0 8px rgba(0,0,0,0.1);
