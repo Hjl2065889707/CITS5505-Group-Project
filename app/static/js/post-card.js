@@ -130,6 +130,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }));
       }
     }
+    // Notify parent pages, such as the map sidebar, that this post's interaction
+    // state changed so they can refresh any cached post-card HTML.
+    button.dispatchEvent(new CustomEvent("postInteractionChanged", {
+      bubbles: true,
+      detail: {
+        type,
+        postId: button.dataset.postId,
+        ...data
+      }
+    }));
   }
 
   async function deletePost(button) {

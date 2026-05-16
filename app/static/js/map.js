@@ -120,11 +120,49 @@ async function loadMapPosts() {
   }
 }
 
+async function refreshMapPostsAndSidebar() {
+  const wasSidebarOpen = sidebar.classList.contains("open");
+
+  const previouslyOpenPostIds = lastOpenedGroup
+    ? lastOpenedGroup.map(post => String(post.id))
+    : [];
+
+  await loadMapPosts();
+
+  if (!wasSidebarOpen || previouslyOpenPostIds.length === 0) {
+    return;
+  }
+
+  const refreshedGroup = posts.filter(post =>
+    previouslyOpenPostIds.includes(String(post.id))
+  );
+
+  if (refreshedGroup.length > 0) {
+    lastOpenedGroup = refreshedGroup;
+    selectedPostId = refreshedGroup[0].id;
+    openSidebarWithUI(refreshedGroup);
+  }
+}
+
 map.on("zoomend", renderMarkersDynamic);
 
 // Click map → close
 map.on("click", () => {
   closeSidebarWithUI();
+});
+
+document.addEventListener("postInteractionChanged", async (event) => {
+  const changedPostId = String(event.detail.postId);
+
+  const changedPostIsOnMap = posts.some(post =>
+    String(post.id) === changedPostId
+  );
+
+  if (!changedPostIsOnMap) {
+    return;
+  }
+
+  await refreshMapPostsAndSidebar();
 });
 
 loadMapPosts();
