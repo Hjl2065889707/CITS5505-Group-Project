@@ -278,7 +278,7 @@ def api_map_posts():
     )
 
     macro_template = """
-    {% from 'components/_post_card.html' import post_card %}
+    {% from 'components/_post_card.html' import post_card with context %}
     {{ post_card(post, variant='compact') }}
     """
 
