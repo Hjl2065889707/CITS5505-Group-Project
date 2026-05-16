@@ -80,6 +80,8 @@ The application will be available at: **http://127.0.0.1:5001/**
 
 The project includes automated tests for both backend behaviour and browser-based user workflows.
 
+Run all test commands from the project root after installing the required dependencies.
+
 Activate your virtual environment, then run the full test suite:
 
 ```bash
