@@ -96,6 +96,8 @@ To run only the unit tests for Feed and post deletion:
 python -m pytest tests/test_create_post_feed.py tests/test_delete_post.py
 ```
 
+The Selenium tests verify browser workflows that involve creating posts and interacting with profile features.
+
 To run Selenium tests, make sure Chrome and ChromeDriver are available, then run:
 
 ```bash
