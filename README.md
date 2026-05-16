@@ -106,6 +106,8 @@ python -m pytest tests/test_selenium_create_post_feed.py tests/test_selenium_pro
 
 The Selenium tests start a live Flask server automatically during the test run.
 
+If Selenium tests fail locally, check that Chrome and ChromeDriver are installed and compatible with your system.
+
 ---
 
 ## Project Structure
