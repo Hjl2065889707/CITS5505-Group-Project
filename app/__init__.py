@@ -29,6 +29,8 @@ def create_app(config_class=None):
 
     app = Flask(__name__)
     app.config.from_object(config_class)
+    if hasattr(config_class, "init_app"):
+        config_class.init_app(app)
 
     # Initialise extensions with this app instance
     db.init_app(app)

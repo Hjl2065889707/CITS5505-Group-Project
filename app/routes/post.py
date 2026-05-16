@@ -14,7 +14,7 @@ post_bp = Blueprint("post", __name__)
 def post_detail(post_id):
     """Show a single post with its details and comments."""
     post = db.session.get(Post, post_id)
-    if not post:
+    if not post or post.is_deleted:
         abort(404)
         
     comments = (

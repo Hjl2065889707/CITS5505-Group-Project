@@ -100,6 +100,13 @@
             data-post-id="{{ post.id }}" aria-label="Save" aria-pressed="{{ 'true' if is_saved else 'false' }}">
       <i class="{{ 'fa-solid' if is_saved else 'fa-regular' }} fa-bookmark save-icon"></i>
     </button>
+
+    {% if current_user_id and post.user_id == current_user_id %}
+    <button class="action-btn delete-post-btn"
+            data-post-id="{{ post.id }}" aria-label="Delete post">
+      <i class="fa-regular fa-trash-can"></i>
+    </button>
+    {% endif %}
   </div>
   {% endif %}
 

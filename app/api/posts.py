@@ -21,7 +21,7 @@ from flask import (
     render_template_string,
     request,
 )
-from flask_login import current_user
+from flask_login import current_user, login_required
 from sqlalchemy import or_
 
 from app import db
@@ -109,13 +109,14 @@ def _serialize_post(post):
             "comments": len(post.comments),
         },
         "createdAt": post.created_at.isoformat() if post.created_at else None,
+        "isDeleted": post.is_deleted,
     }
 
 
 def build_posts_query(category=None, search=None):
     """Build the shared Feed/API post query with optional filters."""
     search = (search or "").strip()
-    query = Post.query
+    query = Post.query.filter(Post.is_deleted.is_(False))
 
     if category and category != "All":
         query = query.filter(Post.category == category)
@@ -241,6 +242,23 @@ def api_create_post():
     return jsonify(_serialize_post(post)), 201
 
 
+@api_posts_bp.route("/posts/<int:post_id>", methods=["DELETE"])
+@login_required
+def api_delete_post(post_id):
+    """Soft-delete a post owned by the current user."""
+    post = db.session.get(Post, post_id)
+    if not post or post.is_deleted:
+        return jsonify({"error": "Post not found."}), 404
+
+    if post.user_id != current_user.id:
+        return jsonify({"error": "You can only delete your own posts."}), 403
+
+    post.is_deleted = True
+    db.session.commit()
+
+    return jsonify({"deleted": True, "postId": post_id})
+
+
 
 # ===== Map (Chrommanito) ========================================
 
@@ -250,7 +268,11 @@ def api_map_posts():
 
     posts = (
         Post.query
-        .filter(Post.latitude.isnot(None), Post.longitude.isnot(None))
+        .filter(
+            Post.is_deleted.is_(False),
+            Post.latitude.isnot(None),
+            Post.longitude.isnot(None),
+        )
         .order_by(Post.created_at.desc())
         .all()
     )

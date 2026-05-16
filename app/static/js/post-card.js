@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function handlePostCardClick(event) {
     const likeBtn = event.target.closest(".like-btn");
     const saveBtn = event.target.closest(".save-btn");
+    const deleteBtn = event.target.closest(".delete-post-btn");
   
     if (likeBtn) {
       event.preventDefault(); // Prevent default if it happens to be a link
@@ -28,6 +29,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (saveBtn) {
       event.preventDefault();
       toggleInteraction(saveBtn, "save");
+    }
+
+    if (deleteBtn) {
+      event.preventDefault();
+      deletePost(deleteBtn);
     }
   }
   
@@ -123,6 +129,47 @@ document.addEventListener("DOMContentLoaded", () => {
           detail: { postId: button.dataset.postId, isSaved: false }
         }));
       }
+    }
+  }
+
+  async function deletePost(button) {
+    const postId = button.dataset.postId;
+    if (!postId) return;
+    if (!window.confirm("Delete this post?")) return;
+
+    button.disabled = true;
+
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+        }
+      });
+
+      if (response.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        alert(data.error || "Failed to delete post.");
+        return;
+      }
+
+      if (window.location.pathname === `/posts/${postId}`) {
+        window.location.href = "/";
+        return;
+      }
+
+      const postItem = button.closest(".feed-post-item") || button.closest(".post-card");
+      postItem?.remove();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert("Failed to delete post. Please try again.");
+    } finally {
+      button.disabled = false;
     }
   }
   

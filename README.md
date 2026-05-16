@@ -45,7 +45,16 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Setup the Database
+### 4. Configure Environment Variables
+
+Create a local `.env` file in the project root. This file is ignored by Git and
+stores environment-specific settings.
+
+```bash
+SECRET_KEY=replace-with-a-local-secret-key
+```
+
+### 5. Setup the Database
 
 We use Flask-Migrate and SQLite. Before running the app for the first time, you need to create the database tables and populate it with some dummy data for testing.
 
@@ -57,13 +66,37 @@ flask db upgrade
 python seed.py
 ```
 
-### 5. Run the Application
+### 6. Run the Application
 
 ```bash
 python run.py
 ```
 
 The application will be available at: **http://127.0.0.1:5001/**
+
+---
+
+## Running Tests
+
+Activate your virtual environment, then run the full test suite:
+
+```bash
+python -m pytest tests
+```
+
+To run only the unit tests for Feed and post deletion:
+
+```bash
+python -m pytest tests/test_create_post_feed.py tests/test_delete_post.py
+```
+
+To run Selenium tests, make sure Chrome and ChromeDriver are available, then run:
+
+```bash
+python -m pytest tests/test_selenium_create_post_feed.py tests/test_selenium_profile_interactions.py
+```
+
+The Selenium tests start a live Flask server automatically during the test run.
 
 ---
 
