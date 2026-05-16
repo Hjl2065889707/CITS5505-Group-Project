@@ -88,6 +88,8 @@ Activate your virtual environment, then run the full test suite:
 python -m pytest tests
 ```
 
+The unit tests focus on core feed behaviour, post creation, and post deletion.
+
 To run only the unit tests for Feed and post deletion:
 
 ```bash
