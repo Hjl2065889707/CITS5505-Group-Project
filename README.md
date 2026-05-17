@@ -1,6 +1,8 @@
-## CITS5505 Group Project
+## CITS5505 Group Project — CatchLog
 
-This repository is used for our CITS5505 Agile Web Development group project.
+**CatchLog** is a social fishing journal built for anglers to record, share, and discover fishing experiences. Users can create detailed catch reports with photos, species, weight, bait, and GPS coordinates. All posts appear on a community feed with real-time search and category filtering, and catch locations are plotted on an interactive map powered by Leaflet. The application also supports social features including likes, comments, saved posts, and a follow system so users can stay connected with fellow anglers.
+
+The site is designed as a multi-page Flask application following the MVC pattern, with server-rendered Jinja2 templates for page structure and AJAX-powered interactions for a responsive user experience.
 
 ### Group Members
 
