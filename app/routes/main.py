@@ -13,6 +13,7 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/")
 def feed():
     """Home page — show the first page of posts."""
+    # Initial render is intentionally paginated; more posts load through AJAX.
     page = build_posts_query().paginate(
         page=1,
         per_page=FEED_PAGE_SIZE,

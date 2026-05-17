@@ -26,6 +26,7 @@ function updateEmptyState(total) {
 }
 
 function markCurrentPostsStale() {
+  // Hide old results during a search/filter reset without deleting them mid-read.
   clearTimeout(staleCleanupTimer);
   feedContainer.querySelectorAll(".feed-post-item").forEach(item => {
     item.hidden = true;
@@ -34,6 +35,7 @@ function markCurrentPostsStale() {
 }
 
 function cleanupStalePosts() {
+  // Delayed cleanup avoids Selenium/user-code stale-node races while preventing leaks.
   staleCleanupTimer = setTimeout(() => {
     feedContainer
       .querySelectorAll('.feed-post-item[data-feed-stale="true"]')
@@ -46,6 +48,7 @@ async function loadPosts({ reset = false } = {}) {
   if (isLoading && !reset) return;
 
   const nextPage = reset ? 1 : currentPage + 1;
+  // Ignore out-of-order search/filter responses.
   const currentFetchId = ++latestFetchId;
   const params = new URLSearchParams({
     page: String(nextPage),

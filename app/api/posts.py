@@ -116,6 +116,7 @@ def _serialize_post(post):
 def build_posts_query(category=None, search=None):
     """Build the shared Feed/API post query with optional filters."""
     search = (search or "").strip()
+    # This central query keeps Feed, JSON API, and incremental loading consistent.
     query = Post.query.filter(Post.is_deleted.is_(False))
 
     if category and category != "All":
@@ -157,6 +158,7 @@ def api_feed_posts():
     per_page = request.args.get("per_page", FEED_PAGE_SIZE, type=int)
 
     page_number = max(page_number, 1)
+    # Cap page size so clients cannot request an excessive number of cards.
     per_page = min(max(per_page, 1), 25)
 
     page = build_posts_query(category=category, search=search).paginate(
@@ -253,6 +255,7 @@ def api_delete_post(post_id):
     if post.user_id != current_user.id:
         return jsonify({"error": "You can only delete your own posts."}), 403
 
+    # Do not physically delete related comments/images/likes; hide the post instead.
     post.is_deleted = True
     db.session.commit()
 

@@ -94,6 +94,7 @@ class Post(db.Model):
     bait = db.Column(db.String(120), nullable=True)
     category = db.Column(db.String(50), nullable=True)
 
+    # Soft delete keeps the row for audit/history while hiding it from users.
     is_deleted = db.Column(db.Boolean, nullable=False, default=False)
 
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow)
