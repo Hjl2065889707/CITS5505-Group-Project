@@ -22,7 +22,7 @@ Please follow these steps to set up your local development environment:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/Hjl2065889707/CITS5505-Group-Project
+git clone https://github.com/Hjl2065889707/CITS5505-Group-Project.git
 cd CITS5505-Group-Project
 ```
 
