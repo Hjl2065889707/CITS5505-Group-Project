@@ -1,5 +1,7 @@
+<!-- Inherit the shared layout from base.html (navbar, CSRF meta, footer) -->
 {% extends "base.html" %}
 
+<!-- Set the browser tab title -->
 {% block title %}Post Detail | CatchLog{% endblock %}
 
 {% block styles %}
@@ -74,8 +76,10 @@
     </div>
     {% endif %}
 
-    <!-- Action Bar -->
+    <!-- Action Bar: Like / Comment / Save / Delete -->
     <div class="post-card__actions">
+      <!-- Calculate if the current user has already liked/saved this post -->
+      <!-- This determines the initial button state when the page first loads -->
       {% set current_user_id = current_user.id if current_user.is_authenticated else None %}
       {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
       {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
@@ -96,6 +100,8 @@
         <i class="{{ 'fa-solid' if is_saved else 'fa-regular' }} fa-bookmark save-icon"></i>
       </button>
 
+      <!-- Only the post author can see the delete button -->
+      <!-- Backend also checks ownership, so hackers can't bypass this -->
       {% if current_user_id and post.user_id == current_user_id %}
       <button class="action-btn delete-post-btn"
               data-post-id="{{ post.id }}" aria-label="Delete post">
@@ -125,6 +131,7 @@
                   </a>
                   <span class="comment-time">{{ comment.created_at.strftime('%b %d, %H:%M') if comment.created_at else '' }}</span>
                 </div>
+          <!-- Only show delete button for the comment author (frontend guard) -->
                 {% if comment.user_id == current_user_id %}
                 <button class="comment-delete-btn" data-comment-id="{{ comment.id }}" data-post-id="{{ post.id }}" aria-label="Delete comment">
                   <i class="fa-regular fa-trash-can"></i>
@@ -142,8 +149,10 @@
   </section>
 
   <!-- Fixed Comment Input Area -->
+  <!-- Comment Input: only shown to logged-in users -->
   {% if current_user.is_authenticated %}
   <div class="comment-input-area">
+    <!-- data-post-id tells JS which post this comment belongs to -->
     <form id="comment-form" data-post-id="{{ post.id }}">
       <input type="text" id="comment-text" placeholder="Add a comment..."
              class="comment-input" autocomplete="off" required />
@@ -153,6 +162,7 @@
     </form>
   </div>
   {% else %}
+  <!-- Not logged in: show login prompt instead of comment box -->
   <div class="comment-input-area">
     <p class="login-prompt"><a href="{{ url_for('auth.login') }}">Log in</a> to leave a comment</p>
   </div>

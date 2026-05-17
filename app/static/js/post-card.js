@@ -6,7 +6,8 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Event Delegation for action buttons
+    // Event Delegation: bind ONE click listener on body to handle ALL post cards
+    // This works even for dynamically loaded cards (e.g. "Load More" in feed)
     document.body.addEventListener("click", handlePostCardClick);
     
     // Initialize carousels for any post cards currently on the page
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!postId) return;
   
     try {
+      // Send POST request with CSRF token for security
       const response = await fetch(`/api/posts/${postId}/${type}`, {
         method: "POST",
         headers: {
@@ -74,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const data = await response.json();
+      // Update the button's visual state (icon, color, count)
       updateButtonUI(button, type, data);
   
     } catch (error) {
@@ -123,15 +126,16 @@ document.addEventListener("DOMContentLoaded", () => {
         button.classList.remove("action-btn--active");
         button.setAttribute("aria-pressed", "false");
         
-        // Dispatch a custom event so the parent page (e.g., profile.js) can handle list updates
+        // Dispatch a custom event so the parent page (e.g., profile.js) can react
+        // profile.js listens for this event and removes the card from "Saved Posts" tab
         button.dispatchEvent(new CustomEvent("postSavedStateChanged", {
-          bubbles: true,
+          bubbles: true,  // bubbles: true allows the event to propagate up the DOM tree
           detail: { postId: button.dataset.postId, isSaved: false }
         }));
       }
     }
-    // Notify parent pages, such as the map sidebar, that this post's interaction
-    // state changed so they can refresh any cached post-card HTML.
+    // Notify parent pages (e.g. map sidebar) that this post's interaction changed
+    // so they can refresh any cached post-card HTML
     button.dispatchEvent(new CustomEvent("postInteractionChanged", {
       bubbles: true,
       detail: {
@@ -142,11 +146,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
   }
 
+  // Soft-delete post via API
   async function deletePost(button) {
     const postId = button.dataset.postId;
     if (!postId) return;
     if (!window.confirm("Delete this post?")) return;
 
+    // Disable button to prevent double-click
     button.disabled = true;
 
     try {
@@ -168,11 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // If we are on the deleted post's detail page, redirect to home
       if (window.location.pathname === `/posts/${postId}`) {
         window.location.href = "/";
         return;
       }
 
+      // Otherwise remove the card from the current page (feed or profile)
       const postItem = button.closest(".feed-post-item") || button.closest(".post-card");
       postItem?.remove();
     } catch (error) {
@@ -205,6 +213,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const updateUI = () => {
       const slideWidth = slides[0].getBoundingClientRect().width;
+
+      // Guard: element is inside a hidden container (width = 0)
+      if (slideWidth === 0) return;
+
       const currentIndex = Math.round(track.scrollLeft / slideWidth);
   
       if (indicator) {
@@ -245,4 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     updateUI();
   }
-  
+
+  // Expose globally so other scripts (e.g. profile.js) can re-init
+  // carousels after revealing hidden tabs (fixes the NaN width bug).
+  window.initAllCarousels = initAllCarousels;
