@@ -205,6 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const updateUI = () => {
       const slideWidth = slides[0].getBoundingClientRect().width;
+
+      // Guard: element is inside a hidden container (width = 0)
+      if (slideWidth === 0) return;
+
       const currentIndex = Math.round(track.scrollLeft / slideWidth);
   
       if (indicator) {
@@ -245,4 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
     updateUI();
   }
-  
+
+  // Expose globally so other scripts (e.g. profile.js) can re-init
+  // carousels after revealing hidden tabs.
+  window.initAllCarousels = initAllCarousels;
+

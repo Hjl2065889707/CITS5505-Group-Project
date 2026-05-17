@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
       tab.classList.add("active");
       const targetId = tab.getAttribute("data-target");
       document.getElementById(targetId).classList.add("active");
+
+      // Re-init carousels now that the hidden tab is visible
+      if (typeof window.initAllCarousels === "function") {
+        window.initAllCarousels();
+      }
     });
   });
 
