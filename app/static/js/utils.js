@@ -1,3 +1,5 @@
+// Haversine distance calculation.
+// Returns the approximate distance in metres between two latitude/longitude points.
 export function getDistance(p1, p2) {
   const R = 6371000;
   const toRad = x => x * Math.PI / 180;
@@ -15,12 +17,16 @@ export function getDistance(p1, p2) {
 }
 
 // Grouping logic
+// Groups posts that are geographically close together.
+// The threshold is in metres and changes depending on map zoom level.
 export function groupPosts(posts, threshold = 50) {
   const groups = [];
 
   posts.forEach(post => {
     let found = false;
 
+    // Compare this post with the first post in each existing group.
+    // If it is close enough, add it to that group.
     for (let group of groups) {
       const dist = getDistance(
         {

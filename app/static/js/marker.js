@@ -1,3 +1,5 @@
+// Create a custom Leaflet marker.
+// Single posts show a fish icon; grouped posts show the number of posts.
 function createMarkerIcon(count, isActive = false) {
   const content = count > 1
     ? `<span class="marker-count">${count}</span>`
@@ -15,7 +17,8 @@ function createMarkerIcon(count, isActive = false) {
   });
 }
 
-// Group Rendering
+// Create a custom Leaflet marker.
+// Single posts show a fish icon; grouped posts show the number of posts.
 export function renderMarkers(layer, groups, onMarkerClick, selectedPostId = null) {
   groups.forEach(group => {
     const { latitude, longitude } = group[0];
