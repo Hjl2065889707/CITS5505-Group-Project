@@ -21,6 +21,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, Optional, N
 class LoginForm(FlaskForm):
     """Form for existing users to log in."""
 
+    # Username or email input
     username_or_email = StringField(
         "Username or Email",
         validators=[
@@ -29,6 +30,7 @@ class LoginForm(FlaskForm):
         ],
     )
 
+    # Password input
     password = PasswordField(
         "Password",
         validators=[
@@ -36,12 +38,14 @@ class LoginForm(FlaskForm):
         ],
     )
 
+    # Login submit button
     submit = SubmitField("Log In")
 
 
 class RegisterForm(FlaskForm):
     """Form for new users to create an account."""
 
+    # Username input
     username = StringField(
         "Username",
         validators=[
@@ -54,6 +58,7 @@ class RegisterForm(FlaskForm):
         ],
     )
 
+    # Email input
     email = StringField(
         "Email",
         validators=[
@@ -63,6 +68,7 @@ class RegisterForm(FlaskForm):
         ],
     )
 
+    # Password input with minimum length validation
     password = PasswordField(
         "Password",
         validators=[
@@ -74,6 +80,7 @@ class RegisterForm(FlaskForm):
         ],
     )
 
+    # Confirm password input
     confirm_password = PasswordField(
         "Confirm Password",
         validators=[
@@ -82,6 +89,7 @@ class RegisterForm(FlaskForm):
         ],
     )
 
+    # Register submit button
     submit = SubmitField("Create Account")
 
 
@@ -161,4 +169,3 @@ class CreatePostForm(FlaskForm):
     )
 
     submit = SubmitField("Post")
-
