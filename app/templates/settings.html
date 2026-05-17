@@ -1,5 +1,7 @@
+<!-- Inherit the shared layout from base.html -->
 {% extends "base.html" %}
 
+<!-- Set the browser tab title -->
 {% block title %}Settings | CatchLog{% endblock %}
 
 {% block styles %}
@@ -7,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<!-- Toast notification -->
+<!-- Toast notification: settings.js shows this when save/upload succeeds or fails -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <div class="settings-container">
@@ -28,6 +30,8 @@
       <h2 class="settings-section-title">Profile</h2>
 
       <!-- Avatar -->
+      <!-- Clicking the avatar overlay opens the hidden file input -->
+      <!-- settings.js uses FileReader to show a local preview, then uploads via FormData -->
       <div class="avatar-group">
         <div class="avatar-wrapper">
           <img
@@ -39,6 +43,7 @@
           <label for="avatarUpload" class="avatar-edit-overlay" aria-label="Change Avatar">
             <i class="fa-solid fa-pen"></i>
           </label>
+          <!-- Hidden file input: only accepts image types -->
           <input
             type="file"
             id="avatarUpload"
@@ -63,6 +68,7 @@
       </div>
 
       <!-- Email (read-only) -->
+      <!-- Email cannot be changed after registration -->
       <div class="form-group">
         <label for="email">Email</label>
         <input

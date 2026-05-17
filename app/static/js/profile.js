@@ -11,11 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
+      // Remove active class from all tabs and contents
       navTabs.forEach((t) => t.classList.remove("active"));
       tabContents.forEach((c) => c.classList.remove("active"));
+
+      // Add active class to the clicked tab
       tab.classList.add("active");
       const targetId = tab.getAttribute("data-target");
       document.getElementById(targetId).classList.add("active");
+
+      // Fix Carousel NaN bug: Re-init carousels now that the hidden tab is visible and has a width
+      if (typeof window.initAllCarousels === "function") {
+        window.initAllCarousels();
+      }
     });
   });
 
@@ -37,17 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     followBtn.addEventListener("click", async () => {
+      // Disable button to prevent multiple clicks (Debounce)
       followBtn.disabled = true;
       try {
+        // Send POST request with CSRF token
         const res = await fetch(`/api/users/${userId}/follow`, {
           method: "POST",
           headers: {
-            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]').content
+            "X-CSRFToken": document.querySelector('meta[name="csrf-token"]')
+              .content,
           },
         });
         if (!res.ok) throw new Error("Request failed");
-        const data = await res.json();
+        const data = await res.json(); // e.g. { following: true, followersCount: 5 }
 
+        // Update button UI based on server response
         if (data.following) {
           followBtn.classList.add("following");
           followBtn.textContent = "Following";
@@ -56,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
           followBtn.textContent = "Follow";
         }
 
-        // Update followers count on the page
+        // Update followers count number on the page
         const countEl = document.getElementById("followersCount");
         if (countEl) countEl.textContent = data.followersCount;
       } catch (err) {
@@ -83,8 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalTitle.textContent =
           listType === "followers" ? "Followers" : "Following";
-        modalList.innerHTML =
-          '<p class="empty-state">Loading...</p>';
+        modalList.innerHTML = '<p class="empty-state">Loading...</p>';
         modal.style.display = "flex";
 
         try {
@@ -110,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const name = document.createElement("span");
             name.className = "follow-user-name";
-            name.textContent = u.username; // textContent is XSS-safe
+            name.textContent = u.username;
 
             card.appendChild(img);
             card.appendChild(name);
@@ -161,7 +172,8 @@ document.addEventListener("DOMContentLoaded", () => {
           postCard.remove();
           // Show empty state if no posts left
           if (!savedPostsTab.querySelector(".post-card")) {
-            savedPostsTab.innerHTML = '<p class="empty-state">No saved posts to show.</p>';
+            savedPostsTab.innerHTML =
+              '<p class="empty-state">No saved posts to show.</p>';
           }
         }, 300);
       }

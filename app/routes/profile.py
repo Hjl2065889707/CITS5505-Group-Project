@@ -11,29 +11,34 @@ from app.models import User, Post, SavedPost
 profile_bp = Blueprint("profile", __name__)
 
 
-@profile_bp.route("/profile")
-@profile_bp.route("/profile/<int:user_id>")
+@profile_bp.route("/profile")               # URL for my own profile
+@profile_bp.route("/profile/<int:user_id>") # URL for someone else's profile
 def profile(user_id=None):
     """Show a user's profile page. If user_id is None, show current user."""
-    # Determine who we are viewing
+    # Find the user to show
     if user_id is not None:
+        # View another user by ID (Use ORM to get data from database)
         target_user = db.session.get(User, user_id)
     elif current_user.is_authenticated:
+        # View my own profile
         target_user = current_user
     else:
         # Not logged in and no user_id specified → redirect to login
         return redirect(url_for('auth.login'))
 
+    # Return 404 error page if user does not exist
     if not target_user:
         abort(404)
 
+    # Get all active posts created by this user
     my_posts = (
         Post.query
         .filter_by(user_id=target_user.id, is_deleted=False)
-        .order_by(Post.created_at.desc())
+        .order_by(Post.created_at.desc()) 
         .all()
     )
 
+    # Get all active posts saved by this user
     saved_post_ids = [sp.post_id for sp in SavedPost.query.filter_by(user_id=target_user.id).all()]
     saved_posts = (
         Post.query
@@ -43,11 +48,12 @@ def profile(user_id=None):
         else []
     )
 
-    # Follow stats
+    # Check if current logged-in user is following this target user
     is_following = False
     if current_user.is_authenticated and current_user.id != target_user.id:
         is_following = current_user.is_following(target_user)
 
+    # Send all data to the HTML template to render the page
     return render_template("profile.html",
                            user=target_user,
                            my_posts=my_posts,
@@ -59,7 +65,7 @@ def profile(user_id=None):
 
 
 @profile_bp.route("/settings")
-@login_required
+@login_required # Must be logged in to see settings
 def settings():
     """Show settings page for the current user."""
     return render_template("settings.html", user=current_user, active_page="profile")
