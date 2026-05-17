@@ -47,9 +47,17 @@ L.tileLayer(
 
 // Sidebar
 
+// Tracks the posts currently loaded from the backend.
+// These are used for marker rendering and sidebar refreshes.
 let posts = [];
+
+// Stores the last marker group opened by the user.
+// This allows the sidebar tab to reopen the previous group after closing.
 let lastOpenedGroup = null;
+
+// Tracks the selected post so the matching marker can be highlighted.
 let selectedPostId = null;
+
 
 const sidebar = document.getElementById("sidebar");
 
@@ -82,6 +90,9 @@ function renderMarkersDynamic() {
 
   const zoom = map.getZoom();
 
+  // Use smaller grouping distances at higher zoom levels.
+  // When zoomed in, nearby posts should separate into individual markers.
+  // When zoomed out, nearby posts are grouped to reduce marker clutter.
   const threshold =
     zoom >= 15 ? 30 :
     zoom >= 13 ? 50 :
@@ -98,6 +109,8 @@ function renderMarkersDynamic() {
   }, selectedPostId);
 }
 
+// Load only posts with valid latitude/longitude from the backend.
+// The backend returns pre-rendered compact post-card HTML for the sidebar.
 async function loadMapPosts() {
   try {
     const response = await fetch("/api/posts/map");
@@ -120,6 +133,8 @@ async function loadMapPosts() {
   }
 }
 
+// Refresh map data after likes/saves/comments change.
+// This prevents the sidebar from reusing old cached post-card HTML.
 async function refreshMapPostsAndSidebar() {
   const wasSidebarOpen = sidebar.classList.contains("open");
 
@@ -151,6 +166,8 @@ map.on("click", () => {
   closeSidebarWithUI();
 });
 
+// post-card.js dispatches this event after a like/save interaction.
+// The map listens for it because sidebar cards are loaded as cached HTML.
 document.addEventListener("postInteractionChanged", async (event) => {
   const changedPostId = String(event.detail.postId);
 

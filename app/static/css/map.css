@@ -319,3 +319,23 @@ body {
 .like-btn.liked {
   color: #e0245e;
 }
+
+/* Mobile map layout: keep sidebar usable on small screens. */
+@media (max-width: 600px) {
+  #sidebar {
+    width: 85vw;
+    left: -85vw;
+  }
+
+  #sidebar.open + #sidebar-tab {
+    left: 85vw;
+  }
+
+  .sidebar-feed {
+    padding: 8px;
+  }
+
+  .carousel-slide {
+    height: 200px;
+  }
+}

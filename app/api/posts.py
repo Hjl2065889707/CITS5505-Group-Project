@@ -269,6 +269,8 @@ def api_delete_post(post_id):
 def api_map_posts():
     """Return posts that have valid location data for the map page."""
 
+    # Map markers should only represent visible posts with coordinates.
+    # Posts without latitude/longitude cannot be placed on the Leaflet map.
     posts = (
         Post.query
         .filter(
@@ -280,6 +282,8 @@ def api_map_posts():
         .all()
     )
 
+    # Reuse the shared post-card macro instead of rebuilding sidebar HTML in JS.
+    # This keeps the map sidebar consistent with Feed/Profile post cards.
     macro_template = """
     {% from 'components/_post_card.html' import post_card with context %}
     {{ post_card(post, variant='compact') }}
@@ -290,6 +294,7 @@ def api_map_posts():
     for post in posts:
         html_string = render_template_string(macro_template, post=post)
 
+        # Send coordinates for Leaflet and compact HTML for the sidebar.
         result.append({
             "id": str(post.id),
             "latitude": post.latitude,
