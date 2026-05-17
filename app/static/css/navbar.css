@@ -1,4 +1,4 @@
-/* Shared Site Navbar */
+/* Shared site navbar layout */
 .site-navbar {
   position: sticky;
   top: 0;
@@ -10,6 +10,7 @@
     Arial, sans-serif;
 }
 
+/* Navbar inner container */
 .site-navbar__inner {
   max-width: 960px;
   margin: 0 auto;
@@ -20,6 +21,7 @@
   gap: 16px;
 }
 
+/* Brand logo and app name */
 .site-navbar__brand {
   display: flex;
   align-items: center;
@@ -31,6 +33,7 @@
   white-space: nowrap;
 }
 
+/* Circular logo icon */
 .site-navbar__logo {
   width: 34px;
   height: 34px;
@@ -43,12 +46,14 @@
   font-size: 18px;
 }
 
+/* Main navigation links */
 .site-navbar__links {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
+/* Single navigation link */
 .site-navbar__link {
   color: #262626;
   text-decoration: none;
@@ -61,22 +66,26 @@
     color 0.2s ease;
 }
 
+/* Navigation hover state */
 .site-navbar__link:hover {
   background-color: #efefef;
 }
 
+/* Current page active link */
 .site-navbar__link.active {
   background-color: #e8f5ef;
   color: #1f7a54;
   font-weight: 700;
 }
 
+/* Right-side login/logout actions */
 .site-navbar__actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Login and logout button style */
 .site-navbar__login {
   color: white;
   background-color: #1f7a54;
@@ -88,11 +97,12 @@
   transition: background-color 0.2s ease;
 }
 
+/* Login and logout hover state */
 .site-navbar__login:hover {
   background-color: #176342;
 }
 
-/* Logout is a POST form for better session safety. Keep it visually identical to the login button. */
+/* POST logout form for safer session handling */
 .site-navbar__logout-form {
   margin: 0;
   padding: 0;
@@ -100,6 +110,7 @@
   align-items: center;
 }
 
+/* Make logout form button match navbar button */
 .site-navbar__logout-form .site-navbar__login {
   border: none;
   font-family: inherit;
@@ -107,6 +118,7 @@
   cursor: pointer;
 }
 
+/* Mobile menu toggle button */
 .site-navbar__toggle {
   display: none;
   border: 1px solid #dbdbdb;
@@ -120,6 +132,7 @@
   line-height: 1;
 }
 
+/* Mobile responsive navbar */
 @media (max-width: 700px) {
   .site-navbar__inner {
     flex-wrap: wrap;

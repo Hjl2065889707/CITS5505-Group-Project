@@ -1,3 +1,4 @@
+/* Auth page layout */
 .auth-page {
   min-height: calc(100vh - 70px);
   display: flex;
@@ -7,6 +8,7 @@
   background: #fafafa;
 }
 
+/* Login/Register card container */
 .auth-card {
   width: 100%;
   max-width: 430px;
@@ -19,6 +21,7 @@
     0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
+/* Auth page title and subtitle */
 .auth-header {
   text-align: center;
   margin-bottom: 24px;
@@ -36,24 +39,28 @@
   font-size: 15px;
 }
 
+/* Auth form layout */
 .auth-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* Form field group */
 .auth-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+/* Form label style */
 .auth-label {
   font-size: 14px;
   font-weight: 600;
   color: #1e293b;
 }
 
+/* Text input and password input style */
 .auth-input {
   width: 100%;
   padding: 11px 13px;
@@ -67,17 +74,20 @@
     box-shadow 0.2s ease;
 }
 
+/* Input focus state */
 .auth-input:focus {
   outline: none;
   border-color: #0f766e;
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
 }
 
+/* Form validation error text */
 .auth-error {
   color: #dc2626;
   font-size: 13px;
 }
 
+/* Main submit button */
 .auth-submit {
   width: 100%;
   margin-top: 4px;
@@ -94,14 +104,17 @@
     transform 0.15s ease;
 }
 
+/* Submit button hover state */
 .auth-submit:hover {
   background: #0d6560;
 }
 
+/* Submit button click feedback */
 .auth-submit:active {
   transform: translateY(1px);
 }
 
+/* Login/Register helper links */
 .auth-links {
   margin-top: 20px;
   text-align: center;
@@ -122,6 +135,7 @@
   text-decoration: underline;
 }
 
+/* Mobile layout adjustment */
 @media (max-width: 520px) {
   .auth-page {
     padding: 48px 16px;
