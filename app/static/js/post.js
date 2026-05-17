@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     commentForm.addEventListener("submit", handleCommentSubmit);
   }
 
-  // Event delegation for delete buttons (works for both server-rendered and AJAX-added comments)
+  // Use Event Delegation for delete buttons
+  // (Works for both server-rendered and newly AJAX-added comments)
   const commentList = document.getElementById("comment-list");
   if (commentList) {
     commentList.addEventListener("click", handleCommentListClick);
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ── Comment Submission ───────────────────────────────────────────────
 
 async function handleCommentSubmit(event) {
-  event.preventDefault();
+  event.preventDefault(); // Stop page refresh
   
   const form = event.target;
   const postId = form.dataset.postId;
@@ -36,11 +37,12 @@ async function handleCommentSubmit(event) {
   
   if (!text) return;
   
-  // Disable form while submitting
+  // Disable form while submitting to prevent double-post
   input.disabled = true;
   submitBtn.disabled = true;
   
   try {
+    // Send comment text as JSON to backend
     const response = await fetch(`/api/posts/${postId}/comments`, {
       method: "POST",
       headers: {
@@ -69,20 +71,20 @@ async function handleCommentSubmit(event) {
 
     const newComment = await response.json();
     
-    // Clear input
+    // Clear input box
     input.value = "";
     
-    // Dynamically insert the new comment into the DOM
+    // Dynamically insert the new comment into the HTML (without refreshing)
     appendCommentToDOM(newComment);
     
-    // Update comment count
+    // Update total comment count number
     updateCommentCount(1);
     
   } catch (error) {
     console.error("Error submitting comment:", error);
     alert(error.message || "Failed to submit comment. Please try again.");
   } finally {
-    // Re-enable form
+    // Re-enable form after success or failure
     input.disabled = false;
     submitBtn.disabled = false;
     input.focus();
@@ -208,7 +210,8 @@ function updateCommentCount(delta) {
   }
 }
 
-// Simple HTML escaper to prevent XSS if the user types HTML
+// Simple HTML escaper to prevent XSS (Cross-Site Scripting) attacks
+// Replaces malicious characters like <script> with safe text symbols &lt;script&gt;
 function escapeHTML(str) {
   return str.replace(/[&<>'"]/g, 
     tag => ({

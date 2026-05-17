@@ -1,15 +1,17 @@
-{# 
+<!--
   Post Card Macro — A reusable component for rendering a fishing post.
+  This is imported in profile.html and feed.html using:
+    from "components/_post_card.html" import post_card with context
   
   Parameters:
     post         - The Post ORM object.
     variant      - "full" (default, for Feed/Profile) or "compact" (for Map sidebar).
     show_actions - Boolean, whether to show the Like/Comment/Save buttons (default: True).
-#}
+-->
 {% macro post_card(post, variant="full", show_actions=True) %}
 <article class="post-card post-card--{{ variant }}" data-post-id="{{ post.id }}">
   
-  {# ── Header: Avatar, Username, Date ── #}
+  <!-- Header: Avatar, Username, Date -->
   <div class="post-card__header">
     <a href="{{ url_for('profile.profile', user_id=post.user.id) if post.user else '#' }}">
       <img src="{{ post.user.avatar_url if post.user and post.user.avatar_url else url_for('static', filename='img/default-avatar.png') }}"
@@ -26,23 +28,24 @@
     </div>
   </div>
 
-  {# ── Content ── #}
+  <!-- Content -->
   <div class="post-card__body">
     <a href="{{ url_for('post.post_detail', post_id=post.id) }}" class="post-card__content-link">{{ post.content }}</a>
   </div>
 
-  {# ── Images (Carousel) ── #}
+  <!-- Images (Carousel) -->
+  <!-- Sort images by display_order so they appear in the correct sequence -->
   {% set images = post.images | sort(attribute='display_order') if post.images else [] %}
   {% if images | length > 0 %}
     {% if variant == "compact" %}
-      {# Compact view: just show the first image #}
+      <!-- Compact view (Map sidebar): only show the first image, no carousel -->
       <div class="post-card__images post-card__images--single">
         <a href="{{ url_for('post.post_detail', post_id=post.id) }}">
           <img src="{{ images[0].image_url }}" alt="Catch photo" class="carousel-image" loading="lazy" />
         </a>
       </div>
     {% else %}
-      {# Full view: Carousel #}
+      <!-- Full view: Carousel with prev/next buttons (only if more than 1 image) -->
       <div class="post-card__images carousel-container">
         {% if images | length > 1 %}
           <div class="carousel-indicator">1/{{ images | length }}</div>
@@ -62,7 +65,7 @@
     {% endif %}
   {% endif %}
 
-  {# ── Catch Details Tags ── #}
+  <!-- Catch Details Tags -->
   {% if post.species or post.weight_kg or post.location_name %}
   <div class="post-card__tags">
     {% if post.species %}
@@ -77,10 +80,10 @@
   </div>
   {% endif %}
 
-  {# ── Footer: Actions ── #}
+  <!-- Footer: Actions -->
   {% if show_actions %}
   <div class="post-card__actions">
-  {# Determine if the current user liked/saved this post #}
+  <!-- Determine if the current user liked/saved this post (for initial button state) -->
     {% set current_user_id = current_user.id if current_user is defined and current_user.is_authenticated else None %}
     {% set is_liked = post.likes | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
     {% set is_saved = post.saved_by | selectattr("user_id", "equalto", current_user_id) | list | length > 0 %}
@@ -101,6 +104,8 @@
       <i class="{{ 'fa-solid' if is_saved else 'fa-regular' }} fa-bookmark save-icon"></i>
     </button>
 
+    <!-- Only the post author can see the delete button (frontend guard) -->
+    <!-- Backend also checks ownership in api/interactions.py (server guard) -->
     {% if current_user_id and post.user_id == current_user_id %}
     <button class="action-btn delete-post-btn"
             data-post-id="{{ post.id }}" aria-label="Delete post">

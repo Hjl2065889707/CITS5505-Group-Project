@@ -178,27 +178,32 @@ def change_password():
 @login_required
 def toggle_follow(user_id):
     """Toggle follow status for a user."""
+    # Find the user we want to follow
     target_user = db.session.get(User, user_id)
     if not target_user:
         abort(404)
 
+    # You cannot follow yourself
     if current_user.id == target_user.id:
         return jsonify({"error": "You cannot follow yourself"}), 400
 
+    # Check if we are already following this user
     existing_follow = current_user.following.filter_by(followed_id=target_user.id).first()
 
     if existing_follow:
-        # Unfollow
+        # We are following them -> Unfollow
         db.session.delete(existing_follow)
         following = False
     else:
-        # Follow
+        # We are not following them -> Follow
         new_follow = Follow(follower_id=current_user.id, followed_id=target_user.id)
         db.session.add(new_follow)
         following = True
 
+    # Save changes to the database
     db.session.commit()
 
+    # Return updated status and new follower count to the frontend
     return jsonify({
         "following": following,
         "followersCount": target_user.followers_count()

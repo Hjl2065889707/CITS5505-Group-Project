@@ -1,5 +1,7 @@
+<!-- Tell Jinja2 we want to use the layout from base.html -->
 {% extends "base.html" %} 
 
+<!-- Override the title block to set the page title -->
 {% block title %}Profile | CatchLog{% endblock %} 
 
 {% block styles %}
@@ -9,7 +11,7 @@
 {% endblock %} 
 
 {% block content %}
-{# Import our reusable post card macro #}
+<!-- Import the reusable post card component -->
 {% from "components/_post_card.html" import post_card with context %}
 
 <div id="profile-container">
@@ -24,10 +26,15 @@
     <div class="user-details">
       <div class="username-row">
         <span class="username">{{ user.username }}</span>
+        
+        <!-- Conditional UI rendering -->
+        <!-- If it's MY profile, show the Settings button -->
         {% if current_user.is_authenticated and user.id == current_user.id %}
         <a href="{{ url_for('profile.settings') }}" class="settings-btn" aria-label="Settings">
           <i class="fa-solid fa-gear"></i>
         </a>
+        
+        <!-- If it's SOMEONE ELSE's profile, show the Follow button -->
         {% elif current_user.is_authenticated %}
         <button class="follow-btn {% if is_following %}following{% endif %}" data-user-id="{{ user.id }}">
           {% if is_following %}Following{% else %}Follow{% endif %}
@@ -51,6 +58,7 @@
 
   <section id="user-posts">
     <div class="posts-navbar">
+      <!-- Tabs setup. 'Saved Posts' tab only shows if looking at my own profile -->
       <button class="nav-tab active" data-target="my-posts">
         {% if current_user.is_authenticated and user.id == current_user.id %}My Posts{% else %}Posts{% endif %}
       </button>
@@ -60,8 +68,10 @@
     </div>
 
     <div id="my-posts" class="tab-content active">
+      <!-- Loop through my_posts array and render each post using the macro -->
       {% if my_posts %}
         {% for post in my_posts %}
+          <!-- Call the post_card macro (like calling a function) -->
           {{ post_card(post, variant="full") }}
         {% endfor %}
       {% else %}

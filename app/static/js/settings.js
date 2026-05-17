@@ -47,24 +47,24 @@ async function handleAvatarUpload(event) {
 
   if (!file) return;
 
-  // Client-side type check
+  // Client-side validation: must be an image
   if (!file.type.startsWith('image/')) {
     showToast('Please select a valid image file.', 'error');
     return;
   }
 
-  // Client-side size check (5 MB)
+  // Client-side validation: max 5 MB size
   if (file.size > 5 * 1024 * 1024) {
     showToast('Image must be under 5MB.', 'error');
     return;
   }
 
-  // Show local preview immediately
+  // FileReader: Show local preview immediately before sending to server
   const reader = new FileReader();
   reader.onload = (e) => { preview.src = e.target.result; };
   reader.readAsDataURL(file);
 
-  // Upload to server
+  // Use FormData to send a binary file via AJAX
   const formData = new FormData();
   formData.append('avatar', file);
 
@@ -74,6 +74,8 @@ async function handleAvatarUpload(event) {
       headers: {
         'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
       },
+      // Note: Do NOT set Content-Type to application/json!
+      // Fetch will automatically set the correct boundary for FormData
       body: formData
     });
 

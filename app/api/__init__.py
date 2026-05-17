@@ -4,6 +4,7 @@
 # ---------------------------------------------------------------------------
 # Shared serialiser — used by every API module to keep the JSON shape
 # consistent across Feed, Profile, and Map.
+# Having a single function avoids duplicating JSON structure in multiple files.
 # ---------------------------------------------------------------------------
 
 def serialize_post(post, current_user=None):
@@ -12,8 +13,9 @@ def serialize_post(post, current_user=None):
     This is the **single source of truth** for the post JSON format.
     Feed, Profile, Map and all API endpoints must use this function.
     """
-    from app.models import PostImage  # lazy import to avoid circular
+    from app.models import PostImage  # lazy import to avoid circular dependency
 
+    # Sort images by display_order so carousel shows them in the right sequence
     images = sorted(post.images, key=lambda img: img.display_order)
 
     location = None
@@ -40,6 +42,7 @@ def serialize_post(post, current_user=None):
             "location": location,
         },
         "category": post.category,
+        # Check if the current logged-in user has liked/saved this post
         "metrics": {
             "likes": len(post.likes),
             "commentsCount": len(post.comments),
