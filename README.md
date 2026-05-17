@@ -78,17 +78,25 @@ The application will be available at: **http://127.0.0.1:5001/**
 
 ## Running Tests
 
+The project includes automated tests for both backend behaviour and browser-based user workflows.
+
+Run all test commands from the project root after installing the required dependencies.
+
 Activate your virtual environment, then run the full test suite:
 
 ```bash
 python -m pytest tests
 ```
 
+The unit tests focus on core feed behaviour, post creation, and post deletion.
+
 To run only the unit tests for Feed and post deletion:
 
 ```bash
 python -m pytest tests/test_create_post_feed.py tests/test_delete_post.py
 ```
+
+The Selenium tests verify browser workflows that involve creating posts and interacting with profile features.
 
 To run Selenium tests, make sure Chrome and ChromeDriver are available, then run:
 
@@ -97,6 +105,8 @@ python -m pytest tests/test_selenium_create_post_feed.py tests/test_selenium_pro
 ```
 
 The Selenium tests start a live Flask server automatically during the test run.
+
+If Selenium tests fail locally, check that Chrome and ChromeDriver are installed and compatible with your system.
 
 ---
 
